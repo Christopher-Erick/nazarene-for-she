@@ -315,8 +315,8 @@ html[data-theme="dark"] .site-header[data-on-dark="true"] {
 .menu-toggle,
 .theme-toggle {
   display: inline-flex;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 44px;
+  width: 44px;
   min-height: 44px;
   min-width: 44px;
   flex-shrink: 0;
@@ -585,12 +585,17 @@ html[data-theme="dark"] .theme-toggle {
 
 .header-cta.btn {
   display: inline-flex;
-  height: 2.5rem;
-  min-height: 2.5rem;
-  padding: 0 1.1rem;
-  font-size: 0.95rem;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  font-size: 0.78rem;
   line-height: 1;
   white-space: nowrap;
+  transform: none;
+}
+
+.header-cta.btn:hover {
+  transform: none;
 }
 
 .btn-gold {

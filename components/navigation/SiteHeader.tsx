@@ -96,7 +96,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <ThemeToggle />
           <ButtonLink href={supportCta.href} className="header-cta">
             {supportCta.label}
