@@ -1,10 +1,17 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nazarene-for-she",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-19",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "nazarene-for-she"
+    }
+  ]
 }

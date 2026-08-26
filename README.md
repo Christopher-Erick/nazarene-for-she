@@ -42,11 +42,29 @@ Structured data lives in `lib/data/` so a CMS can replace it later without redes
 
 `/api/contact` and `/api/donation` run on the Edge runtime. They validate input, apply a simple rate limit, reject cross-origin posts, and send mail when `RESEND_API_KEY` + `CONTACT_INBOX` or `CONTACT_WEBHOOK_URL` is set.
 
-## Cloudflare
+## Cloudflare (free tier) — automatic deploys
 
-1. Set `NEXT_PUBLIC_SITE_URL` to the production domain.
-2. Install `@opennextjs/cloudflare` and Wrangler when you are ready to publish.
-3. Build with OpenNext and deploy the worker defined in `wrangler.jsonc`.
+Every push to `master` (or `main`) runs GitHub Actions and deploys to **Cloudflare Workers** via OpenNext.
+
+### One-time setup
+
+1. Create a Cloudflare account (free plan is enough).
+2. In Cloudflare → **My Profile** → **API Tokens** → create a token with **Edit Cloudflare Workers**.
+3. Copy your **Account ID** from the Workers dashboard sidebar.
+4. In GitHub → repo **Settings** → **Secrets and variables** → **Actions**, add:
+   - `CLOUDFLARE_API_TOKEN`
+   - `CLOUDFLARE_ACCOUNT_ID`
+5. Optional: under **Variables**, set `NEXT_PUBLIC_SITE_URL` to your live URL (for example `https://nazarene-for-she.<subdomain>.workers.dev`).
+
+After that, any push updates the live site automatically. You can also run the workflow manually from the **Actions** tab.
+
+### Local deploy (optional)
+
+```bash
+npm run deploy
+```
+
+Requires Wrangler login (`npx wrangler login`) or the same env vars as above.
 
 Do not put payment credentials or API keys in client code.
 
