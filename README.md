@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nazarene for She
 
-## Getting Started
+Premium public website for **Nazarene for She** — a Kenyan community initiative equipping adolescent girls and young women with dignity, knowledge, mentorship, faith and practical skills.
 
-First, run the development server:
+**She Empowered, Community Inspired.**
+
+## Stack
+
+- Next.js 16 App Router + TypeScript
+- Tailwind CSS v4 design tokens
+- Zod-validated Edge API routes
+- Cloudflare Pages / Workers architecture (`wrangler.jsonc`, `open-next.config.ts`)
+
+## Local development
 
 ```bash
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What you still need to fill in
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This first version **does not invent** official facts. Marked placeholders remain until the organisation confirms them:
 
-## Learn More
+- Mission and vision wording (`lib/data/about.ts`)
+- M-Pesa, bank and M-Changa details (`lib/data/donation.ts`)
+- Contact email, phone and social URLs (environment variables)
+- Consented beneficiary stories (`lib/data/stories.ts`)
+- Additional impact statistics (`lib/data/impact.ts`)
+- Authentic photography in `public/images/` (current images are atmospheric editorial stills, not portraits of named girls)
 
-To learn more about Next.js, take a look at the following resources:
+The only verified impact figure on the site is **600+ girls currently supported**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content models
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Structured data lives in `lib/data/` so a CMS can replace it later without redesigning the interface: programs, stories, impact metrics, donation methods, partners and events.
 
-## Deploy on Vercel
+## Forms
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`/api/contact` and `/api/donation` run on the Edge runtime. They validate input, apply a simple rate limit, reject cross-origin posts, and send mail when `RESEND_API_KEY` + `CONTACT_INBOX` or `CONTACT_WEBHOOK_URL` is set.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Cloudflare
+
+1. Set `NEXT_PUBLIC_SITE_URL` to the production domain.
+2. Install `@opennextjs/cloudflare` and Wrangler when you are ready to publish.
+3. Build with OpenNext and deploy the worker defined in `wrangler.jsonc`.
+
+Do not put payment credentials or API keys in client code.
+
+## Ethics
+
+Stories, statistics, testimonials and account numbers are never fabricated. Photography on this site is atmospheric — fabric, classrooms, rooftops, kits — not images of people presented as beneficiaries.

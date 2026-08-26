@@ -1,0 +1,18 @@
+import { DonationExperience } from "@/components/donation/DonationExperience";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Support Her Future",
+  description:
+    "Give toward dignity kits, menstrual health, vocational training, entrepreneurship or general support. M-Pesa, bank and M-Changa details are published when the organisation confirms them.",
+  path: "/donate",
+});
+
+export default async function DonatePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cause?: string }>;
+}) {
+  const { cause } = await searchParams;
+  return <DonationExperience initialCause={cause} />;
+}
