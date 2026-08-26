@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { stories } from "@/lib/data/stories";
 import { Reveal } from "@/components/experience/Reveal";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 
 export function StoriesTeaser() {
   return (
@@ -40,6 +41,11 @@ export function StoriesTeaser() {
               </article>
             </Reveal>
           ))}
+        </div>
+        <div className="mt-12">
+          <ButtonLink href="/stories" variant="plum">
+            Read story frames
+          </ButtonLink>
         </div>
       </div>
     </section>

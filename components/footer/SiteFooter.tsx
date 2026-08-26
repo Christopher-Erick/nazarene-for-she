@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { footerNav } from "@/lib/data/navigation";
-import { programs } from "@/lib/data/programs";
 import { site } from "@/lib/data/site";
+import { isHttpsPublicUrl } from "@/lib/security";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const social = Object.entries(site.social).filter(([, href]) => href);
+  const social = Object.entries(site.social).filter(
+    ([, href]) => typeof href === "string" && href.length > 0 && isHttpsPublicUrl(href),
+  );
 
   return (
     <footer className="bg-plum text-ivory">
@@ -26,13 +28,7 @@ export function SiteFooter() {
 
         <div className="grid gap-10 py-12 sm:grid-cols-3">
           <FooterList title="Our story" items={footerNav.story} />
-          <FooterList
-            title="How we empower"
-            items={programs.slice(0, 5).map((program) => ({
-              href: `/programs/${program.slug}`,
-              label: program.name,
-            }))}
-          />
+          <FooterList title="How we empower" items={footerNav.work} />
           <FooterList title="Walk with her" items={footerNav.involved} />
         </div>
       </div>
@@ -45,7 +41,13 @@ export function SiteFooter() {
           <div className="flex flex-wrap gap-4">
             {social.length > 0
               ? social.map(([name, href]) => (
-                  <a key={name} href={href} className="capitalize hover:text-accent-soft">
+                  <a
+                    key={name}
+                    href={href}
+                    className="capitalize hover:text-accent-soft"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
                     {name}
                   </a>
                 ))

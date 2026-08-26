@@ -10,6 +10,7 @@ import { getProgram, programs } from "@/lib/data/programs";
 import { stories } from "@/lib/data/stories";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/data/site";
+import { escapeJsonForScript } from "@/lib/security";
 
 export function generateStaticParams() {
   return programs.map((program) => ({ slug: program.slug }));
@@ -53,7 +54,10 @@ export default async function ProgramPage({
   return (
     <>
       <TrackView event={analyticsEvents.programViewed} id={program.slug} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}
+      />
       <header className="bleed-hero relative min-h-[52vh] overflow-hidden bg-plum text-ivory">
         <Image
           src={program.visual}
@@ -101,11 +105,24 @@ export default async function ProgramPage({
           <ul className="mt-6 space-y-3">
             {related.map((story) => (
               <li key={story.slug}>
-                <Link href={`/stories/${story.slug}`}>{story.firstName}</Link>
+                <Link
+                  href={`/stories/${story.slug}`}
+                  className="text-lg text-primary underline-offset-4 hover:underline"
+                >
+                  {story.firstName}
+                </Link>
               </li>
             ))}
           </ul>
         )}
+        <div className="mt-10 flex flex-wrap gap-3">
+          <ButtonLink href="/programs" variant="ghost">
+            All programmes
+          </ButtonLink>
+          <ButtonLink href={program.cta.href} variant="plum">
+            {program.cta.label}
+          </ButtonLink>
+        </div>
       </section>
     </>
   );

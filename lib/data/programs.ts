@@ -1,3 +1,5 @@
+import { stories } from "@/lib/data/stories";
+
 export type Program = {
   slug: string;
   name: string;
@@ -6,12 +8,11 @@ export type Program = {
   explanation: string;
   impact: string;
   donationCategory: string;
-  relatedStorySlugs: string[];
   cta: { label: string; href: string };
   visual: string;
 };
 
-export const programs: Program[] = [
+const programDefs: Program[] = [
   {
     slug: "menstrual-health",
     name: "Menstrual Health & Dignity",
@@ -23,7 +24,6 @@ export const programs: Program[] = [
     impact:
       "Girls who understand their bodies can stay in class, ask for what they need, and make informed choices.",
     donationCategory: "Menstrual Health",
-    relatedStorySlugs: [],
     cta: { label: "Help her stay in school", href: "/donate?cause=menstrual-health" },
     visual: "/images/atmosphere-classroom.webp",
   },
@@ -38,7 +38,6 @@ export const programs: Program[] = [
     impact:
       "A kit is not a transaction. It is a practical way to remove a barrier between a girl and her education.",
     donationCategory: "Dignity Kits",
-    relatedStorySlugs: [],
     cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
     visual: "/images/atmosphere-dignity-kit.webp",
   },
@@ -53,7 +52,6 @@ export const programs: Program[] = [
     impact:
       "A girl with a mentor is less likely to face hard choices alone.",
     donationCategory: "Mentorship",
-    relatedStorySlugs: [],
     cta: { label: "Walk beside her", href: "/get-involved#mentor" },
     visual: "/images/atmosphere-community.webp",
   },
@@ -68,7 +66,6 @@ export const programs: Program[] = [
     impact:
       "Faith is offered as strength and belonging, not as a condition of receiving help.",
     donationCategory: "General Support",
-    relatedStorySlugs: [],
     cta: { label: "Pray with us", href: "/get-involved#pray" },
     visual: "/images/atmosphere-community.webp",
   },
@@ -83,7 +80,6 @@ export const programs: Program[] = [
     impact:
       "Skill is a form of dignity that lasts longer than a single donation.",
     donationCategory: "Vocational Training",
-    relatedStorySlugs: [],
     cta: { label: "Support her skill", href: "/donate?cause=vocational-training" },
     visual: "/images/atmosphere-atelier.webp",
   },
@@ -98,7 +94,6 @@ export const programs: Program[] = [
     impact:
       "Enterprise is how a skill becomes a future.",
     donationCategory: "Entrepreneurship",
-    relatedStorySlugs: [],
     cta: { label: "Invest in her enterprise", href: "/donate?cause=entrepreneurship" },
     visual: "/images/atmosphere-atelier.webp",
   },
@@ -113,7 +108,6 @@ export const programs: Program[] = [
     impact:
       "Skills compound. Each one she gains makes the next opportunity more reachable.",
     donationCategory: "Vocational Training",
-    relatedStorySlugs: [],
     cta: { label: "Expand her capacity", href: "/donate?cause=vocational-training" },
     visual: "/images/atmosphere-fabric.webp",
   },
@@ -128,11 +122,24 @@ export const programs: Program[] = [
     impact:
       "Independence is the point. Charity is the starting path, not the destination.",
     donationCategory: "General Support",
-    relatedStorySlugs: [],
     cta: { label: "Build her future with us", href: "/donate?cause=general" },
     visual: "/images/atmosphere-rooftops.webp",
   },
 ];
+
+/** Related stories are derived from story → program links to avoid drift. */
+export function relatedStorySlugsFor(programSlug: string) {
+  return stories
+    .filter((story) => story.relatedProgramSlugs.includes(programSlug))
+    .map((story) => story.slug);
+}
+
+export const programs = programDefs.map((program) => ({
+  ...program,
+  relatedStorySlugs: relatedStorySlugsFor(program.slug),
+}));
+
+export type ProgramWithStories = (typeof programs)[number];
 
 export function getProgram(slug: string) {
   return programs.find((program) => program.slug === slug);

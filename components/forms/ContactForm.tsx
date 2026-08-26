@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { analyticsEvents, trackEvent } from "@/lib/analytics";
 import { contactIntents } from "@/lib/validation/contact";
 
@@ -19,9 +19,12 @@ export function ContactForm({ initialIntent }: { initialIntent?: string }) {
     : "general";
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const locked = useRef(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked.current || status === "loading" || status === "success") return;
+    locked.current = true;
     setStatus("loading");
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
@@ -35,6 +38,7 @@ export function ContactForm({ initialIntent }: { initialIntent?: string }) {
       if (!response.ok || !payload.ok) {
         setStatus("error");
         setMessage(payload.message || "Something went wrong. Please try again.");
+        locked.current = false;
         return;
       }
       setStatus("success");
@@ -47,27 +51,37 @@ export function ContactForm({ initialIntent }: { initialIntent?: string }) {
     } catch {
       setStatus("error");
       setMessage("We lost the connection. Please try again when your network is stable.");
+      locked.current = false;
     }
   }
 
+  const busy = status === "loading" || status === "success";
+
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>
-      <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+      <input
+        type="text"
+        name="website"
+        className="sr-only"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
       <label className="form-field">
-        <span>Name</span>
-        <input name="name" required minLength={2} />
+        <span className="form-field-label">Name</span>
+        <input name="name" required minLength={2} disabled={busy} />
       </label>
       <label className="form-field">
-        <span>Email</span>
-        <input name="email" type="email" required />
+        <span className="form-field-label">Email</span>
+        <input name="email" type="email" required disabled={busy} />
       </label>
       <label className="form-field">
-        <span>Phone (optional)</span>
-        <input name="phone" type="tel" />
+        <span className="form-field-label">Phone (optional)</span>
+        <input name="phone" type="tel" disabled={busy} />
       </label>
       <label className="form-field">
-        <span>How can we walk together?</span>
-        <select name="intent" defaultValue={intent}>
+        <span className="form-field-label">How can we walk together?</span>
+        <select name="intent" defaultValue={intent} disabled={busy}>
           {contactIntents.map((value) => (
             <option key={value} value={value}>
               {labels[value]}
@@ -76,17 +90,19 @@ export function ContactForm({ initialIntent }: { initialIntent?: string }) {
         </select>
       </label>
       <label className="form-field">
-        <span>Organisation (optional)</span>
-        <input name="organisation" />
+        <span className="form-field-label">Organisation (optional)</span>
+        <input name="organisation" disabled={busy} />
       </label>
       <label className="form-field">
-        <span>Message</span>
-        <textarea name="message" required minLength={12} />
+        <span className="form-field-label">Message</span>
+        <textarea name="message" required minLength={12} disabled={busy} />
       </label>
-      {status === "success" ? <p className="form-success">{message}</p> : null}
-      {status === "error" ? <p className="form-failure">{message}</p> : null}
-      <button className="btn btn-plum" type="submit" disabled={status === "loading"}>
-        {status === "loading" ? "Sending…" : "Send message"}
+      <div aria-live="polite">
+        {status === "success" ? <p className="form-success">{message}</p> : null}
+        {status === "error" ? <p className="form-failure">{message}</p> : null}
+      </div>
+      <button className="btn btn-plum" type="submit" disabled={busy}>
+        {status === "loading" ? "Sending…" : status === "success" ? "Message sent" : "Send message"}
       </button>
     </form>
   );

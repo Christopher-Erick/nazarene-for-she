@@ -15,6 +15,7 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
     () => donationMethods.find((item) => item.id === method) ?? donationMethods[0],
     [method],
   );
+  const paymentReady = selectedMethod.fields.some((field) => field.value && !field.placeholder);
 
   return (
     <>
@@ -27,7 +28,11 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
       </header>
 
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-12">
-        <div className="lg:col-span-7">
+        <div className="order-1 lg:order-2 lg:col-span-5">
+          <DonationInquiryForm category={category} method={method} />
+        </div>
+
+        <div className="order-2 lg:order-1 lg:col-span-7">
           <h2 className="font-display text-3xl">Where your gift can go</h2>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {donationCategories.map((item) => (
@@ -38,7 +43,7 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
                   setCategory(item.id);
                   trackEvent(analyticsEvents.donationCtaClicked, { category: item.id });
                 }}
-                className={`border p-5 text-left transition ${
+                className={`min-h-11 border p-5 text-left transition ${
                   category === item.id
                     ? "border-primary bg-lavender"
                     : "border-line bg-surface hover:border-primary/40"
@@ -51,7 +56,14 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
             ))}
           </div>
 
-          <h2 className="mt-16 font-display text-3xl">Give through official channels</h2>
+          <h2 className="mt-16 font-display text-3xl">
+            {paymentReady ? "Give through official channels" : "Official payment details"}
+          </h2>
+          <p className="mt-3 text-sm text-muted">
+            {paymentReady
+              ? "Use only the details published here. After you transfer, send a confirmation note so the team can thank you and allocate the gift."
+              : "Payment numbers are not published yet. Use the confirmation form first — then transfer only when official M-Pesa, bank or M-Changa details appear here."}
+          </p>
           <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Donation methods">
             {donationMethods.map((item) => (
               <button
@@ -90,14 +102,7 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
                 </div>
               ))}
             </dl>
-            <p className="mt-6 text-sm text-muted">
-              Card payments can be added later without redesigning this page. Architecture is
-              ready for a processor to sit beside these methods.
-            </p>
           </div>
-        </div>
-        <div className="lg:col-span-5">
-          <DonationInquiryForm category={category} method={method} />
         </div>
       </div>
     </>
