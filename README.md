@@ -6,10 +6,10 @@ Premium public website for **Nazarene for She** — a Kenyan community initiativ
 
 ## Stack
 
-- Next.js 16 App Router + TypeScript
+- Next.js 16 App Router + TypeScript + React 19
 - Tailwind CSS v4 design tokens
-- Zod-validated Edge API routes
-- Cloudflare Pages / Workers architecture (`wrangler.jsonc`, `open-next.config.ts`)
+- Zod-validated Node runtime API routes (`/api/contact`, `/api/donation`)
+- Cloudflare Workers via OpenNext (`wrangler.jsonc`, `open-next.config.ts`)
 
 ## Local development
 
@@ -21,26 +21,40 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Quality gates
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+```
+
+Operational docs: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/SECURITY.md`](docs/SECURITY.md), [`docs/CACHING.md`](docs/CACHING.md), [`docs/SCALE.md`](docs/SCALE.md), [`docs/QA.md`](docs/QA.md), [`docs/OPEN_DECISIONS.md`](docs/OPEN_DECISIONS.md).
+
 ## What you still need to fill in
 
-This first version **does not invent** official facts. Marked placeholders remain until the organisation confirms them:
+This version **does not invent** official facts. Marked placeholders remain until the organisation confirms them:
 
 - Mission and vision wording (`lib/data/about.ts`)
 - M-Pesa, bank and M-Changa details (`lib/data/donation.ts`)
-- Contact email, phone and social URLs (environment variables)
+- Contact email, phone and social URLs (environment variables — HTTPS only in the footer)
 - Consented beneficiary stories (`lib/data/stories.ts`)
 - Additional impact statistics (`lib/data/impact.ts`)
 - Authentic photography in `public/images/` (current images are atmospheric editorial stills, not portraits of named girls)
 
 The only verified impact figure on the site is **600+ girls currently supported**.
 
-## Content models
+## Forms / mail
 
-Structured data lives in `lib/data/` so a CMS can replace it later without redesigning the interface: programs, stories, impact metrics, donation methods, partners and events.
+`/api/contact` and `/api/donation` validate input (Zod), enforce same-origin, rate-limit per isolate, reject oversized bodies, and **fail closed** (503) when mail is not configured or delivery fails.
 
-## Forms
+Configure one of:
 
-`/api/contact` and `/api/donation` run on the Edge runtime. They validate input, apply a simple rate limit, reject cross-origin posts, and send mail when `RESEND_API_KEY` + `CONTACT_INBOX` or `CONTACT_WEBHOOK_URL` is set.
+- `RESEND_API_KEY` + `CONTACT_INBOX` (+ optional `CONTACT_FROM`)
+- `CONTACT_WEBHOOK_URL` (+ recommended `CONTACT_WEBHOOK_ALLOWED_HOSTS`)
+
+Set `NEXT_PUBLIC_SITE_URL` to the canonical live origin.
 
 ## Cloudflare (free tier) — automatic deploys
 
@@ -54,7 +68,7 @@ Every push to `master` (or `main`) runs GitHub Actions and deploys to **Cloudfla
 4. In GitHub → repo **Settings** → **Secrets and variables** → **Actions**, add:
    - `CLOUDFLARE_API_TOKEN`
    - `CLOUDFLARE_ACCOUNT_ID`
-5. Optional: under **Variables**, set `NEXT_PUBLIC_SITE_URL` to your live URL (for example `https://nazarene-for-she.<subdomain>.workers.dev`).
+5. Optional: under **Variables**, set `NEXT_PUBLIC_SITE_URL` to your live URL.
 
 After that, any push updates the live site automatically. You can also run the workflow manually from the **Actions** tab.
 
