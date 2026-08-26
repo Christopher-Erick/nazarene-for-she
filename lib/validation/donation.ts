@@ -11,7 +11,7 @@ export const donationInquirySchema = z.object({
   method: z.enum(methodIds),
   amount: z.string().trim().max(40).optional().or(z.literal("")),
   message: z.string().trim().max(2000).optional().or(z.literal("")),
-  website: z.string().max(0).optional().or(z.literal("")),
+  website: z.string().max(200).optional().default(""),
 });
 
 export type DonationInquiry = z.infer<typeof donationInquirySchema>;

@@ -1,4 +1,5 @@
 import { site } from "@/lib/data/site";
+import { escapeJsonForScript } from "@/lib/security";
 
 export function JsonLd() {
   const data = {
@@ -26,7 +27,7 @@ export function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: escapeJsonForScript(data) }}
     />
   );
 }

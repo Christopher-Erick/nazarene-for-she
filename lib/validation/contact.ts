@@ -16,7 +16,8 @@ export const contactSchema = z.object({
   intent: z.enum(intentValues),
   organisation: z.string().trim().max(160).optional().or(z.literal("")),
   message: z.string().trim().min(12, "Please tell us a little more.").max(4000),
-  website: z.string().max(0).optional().or(z.literal("")),
+  /** Honeypot — bots that fill this get a silent fake success. */
+  website: z.string().max(200).optional().default(""),
 });
 
 export type ContactPayload = z.infer<typeof contactSchema>;
