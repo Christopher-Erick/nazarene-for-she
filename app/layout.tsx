@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/footer/SiteFooter";
 import { SiteHeader } from "@/components/navigation/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HashScroll } from "@/components/ui/HashScroll";
+import { ThemeScript } from "@/components/theme/ThemeScript";
 import { SkipLink } from "@/components/ui/SkipLink";
 import { site } from "@/lib/data/site";
 import "./globals.css";
@@ -68,7 +69,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#5e2063",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f1e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b0b1c" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
@@ -77,8 +82,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-KE"
+      data-theme="light"
+      suppressHydrationWarning
       className={`${outfit.variable} ${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-text font-sans">
         <JsonLd />
         <SkipLink />

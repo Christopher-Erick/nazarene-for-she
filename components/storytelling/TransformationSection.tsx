@@ -9,7 +9,7 @@ export function TransformationSection() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="bg-plum text-ivory">
+    <section className="theme-band">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <Reveal>
           <p className="section-kicker text-accent">
@@ -17,11 +17,11 @@ export function TransformationSection() {
             What transformation looks like
           </p>
           <h2 className="display-lg mt-5 max-w-4xl">A model of holistic empowerment — not a single script.</h2>
-          <p className="mt-6 max-w-2xl text-ivory/70">
+          <p className="mt-6 max-w-2xl theme-muted">
             Not every girl walks this path in the same order, or at the same pace. Choose a step.
           </p>
         </Reveal>
-        <ol className="mt-14 divide-y divide-white/10">
+        <ol className="mt-14 divide-y divide-[var(--band-line)]">
           {transformationModel.map((step, index) => (
             <li key={step.id}>
               <button
@@ -33,7 +33,7 @@ export function TransformationSection() {
               >
                 <span className="eyebrow text-accent md:col-span-2">0{index + 1}</span>
                 <h3 className="font-display text-3xl md:col-span-3">{step.title}</h3>
-                <p className="text-ivory/75 md:col-span-7">{step.body}</p>
+                <p className="theme-muted md:col-span-7">{step.body}</p>
               </button>
             </li>
           ))}

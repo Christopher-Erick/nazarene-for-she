@@ -13,13 +13,13 @@ export const metadata = pageMetadata({
 export default function GetInvolvedPage() {
   return (
     <>
-      <section className="bleed-hero bg-plum text-ivory">
+      <section className="bleed-hero theme-band">
         <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:pb-32 lg:pt-32">
           <p className="eyebrow text-accent">Get involved</p>
           <h1 className="display-lg mt-5 max-w-4xl">
             There are many ways to walk with her. Pick the one that is yours.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-ivory/75">
+          <p className="mt-6 max-w-2xl text-lg theme-muted">
             Help remove a barrier between her and her future. Whether you give, teach, pray or
             partner, you are participating in a transformation system — not a one-time rescue.
           </p>

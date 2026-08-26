@@ -9,11 +9,11 @@ const words = [
 ];
 
 export function WordRiver({ tone = "dark" }: { tone?: "dark" | "light" }) {
-  const color = tone === "dark" ? "text-ivory/18" : "text-primary/20";
+  const color = tone === "dark" ? "theme-muted opacity-40" : "text-primary/20";
   const row = [...words, ...words];
 
   return (
-    <div className={`word-river ${tone === "dark" ? "bg-plum" : "bg-background"}`} aria-hidden="true">
+    <div className={`word-river ${tone === "dark" ? "theme-band" : "bg-background"}`} aria-hidden="true">
       <div className={`word-river-track font-display ${color}`}>
         {row.map((word, index) => (
           <span key={`${word}-${index}`}>

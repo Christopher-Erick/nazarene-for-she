@@ -53,7 +53,7 @@ export function VocationalSection() {
   }, [paused]);
 
   return (
-    <section className="bg-plum text-ivory">
+    <section className="theme-band">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <Reveal>
           <p className="section-kicker text-accent">
@@ -61,7 +61,7 @@ export function VocationalSection() {
             Vocational training
           </p>
           <h2 className="display-lg mt-5 max-w-4xl">When the thread becomes a livelihood.</h2>
-          <p className="mt-6 max-w-2xl text-lg text-ivory/75">
+          <p className="mt-6 max-w-2xl text-lg theme-muted">
             Through practical vocational training in tailoring and dressmaking, girls and young
             women with limited educational or economic opportunities can acquire marketable
             skills for employment or entrepreneurship.
@@ -88,7 +88,7 @@ export function VocationalSection() {
             />
           ))}
         </div>
-        <div className="mt-4 flex gap-2" role="tablist" aria-label="Vocational path">
+        <div className="vocational-tabs mt-4" role="tablist" aria-label="Vocational path">
           {sequence.map((item, index) => (
             <button
               key={item.word}
@@ -96,10 +96,7 @@ export function VocationalSection() {
               role="tab"
               aria-selected={active === index}
               aria-label={item.word}
-              className={cn(
-                "h-1 flex-1",
-                active === index ? "bg-accent" : "bg-white/20 hover:bg-white/40",
-              )}
+              className={cn("vocational-tab", active === index && "is-active")}
               onClick={() => {
                 setActive(index);
                 setPaused(true);
@@ -122,7 +119,7 @@ export function VocationalSection() {
               >
                 <p className="eyebrow text-accent">0{index + 1}</p>
                 <h3 className="mt-3 font-display text-3xl">{item.word}</h3>
-                <p className="mt-3 text-sm text-ivory/70">{item.line}</p>
+                <p className="mt-3 text-sm theme-muted">{item.line}</p>
               </button>
             </li>
           ))}

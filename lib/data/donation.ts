@@ -86,7 +86,7 @@ export const involvementPaths = [
     title: "Donate",
     body: "Support menstrual health and dignity — and the skills that follow.",
     href: "/donate",
-    cta: "Support Her Future",
+    cta: "Support A Girl",
   },
   {
     id: "mentor",

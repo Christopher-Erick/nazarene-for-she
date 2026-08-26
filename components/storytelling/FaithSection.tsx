@@ -4,7 +4,7 @@ import { Reveal } from "@/components/experience/Reveal";
 
 export function FaithSection() {
   return (
-    <section className="bg-plum text-ivory">
+    <section className="theme-band">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:py-32">
         <Reveal>
           <div className="photo-frame relative aspect-[4/5] overflow-hidden sm:aspect-[4/3]">
@@ -23,7 +23,7 @@ export function FaithSection() {
             Faith & community
           </p>
           <h2 className="display-lg mt-5">Rooted in the Word, open to every girl.</h2>
-          <p className="mt-6 text-lg text-ivory/75">
+          <p className="mt-6 text-lg theme-muted">
             Nazarene for She is rooted in a community that gathers not only to provide
             practical support, but also to share the Word and Love of Jesus Christ.
           </p>

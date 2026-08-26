@@ -6,7 +6,7 @@ export function InvolveSection() {
   const [primary, ...rest] = involvementPaths;
 
   return (
-    <section className="bg-plum text-ivory">
+    <section className="theme-band">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <Reveal>
           <p className="section-kicker text-accent">

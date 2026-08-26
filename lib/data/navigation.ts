@@ -9,7 +9,7 @@ export const primaryNav = [
 
 export const supportCta = {
   href: "/donate",
-  label: "Support Her Future",
+  label: "Support A Girl",
 } as const;
 
 export const footerNav = {
@@ -29,7 +29,7 @@ export const footerNav = {
   ],
   involved: [
     { href: "/get-involved", label: "Ways to Walk With Her" },
-    { href: "/donate", label: "Support Her Future" },
+    { href: "/donate", label: "Support A Girl" },
     { href: "/contact", label: "Start a Conversation" },
     { href: "/get-involved#pray", label: "Pray" },
     { href: "/get-involved#mentor", label: "Mentor" },

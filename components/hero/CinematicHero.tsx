@@ -11,7 +11,8 @@ export function CinematicHero() {
           src="/images/atmosphere-rooftops.webp"
           alt="Golden hour over Kenyan urban rooftops — a landscape of homes, water tanks and evening light."
           fill
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="100vw"
           className="hero-photo object-cover object-[center_32%]"
         />
@@ -39,7 +40,7 @@ export function CinematicHero() {
         <div className="hero-actions hero-copy">
           <ButtonLink href="#reality">See Her Story</ButtonLink>
           <ButtonLink href="/donate" variant="ivory">
-            Support Her Future
+            Support A Girl
           </ButtonLink>
         </div>
 

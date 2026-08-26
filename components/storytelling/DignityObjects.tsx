@@ -11,7 +11,7 @@ export function DignityObjects() {
       {items.map((item) => (
         <li key={item.title} className="kit-card">
           <p className="font-display text-xl">{item.title}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.16em] text-ivory/55">{item.caption}</p>
+          <p className="mt-1 text-xs uppercase tracking-[0.16em] theme-muted">{item.caption}</p>
         </li>
       ))}
     </ul>

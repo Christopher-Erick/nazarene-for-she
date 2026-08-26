@@ -11,4 +11,4 @@ Product choices that cannot be fully inferred from code. Each has a
 | CMS | Stay on `lib/data/*` until content volume justifies Sanity/Contentful | Deferred |
 | Global API rate limit | Soft in-process now; add Cloudflare WAF/Rate Limiting before campaign spikes | Documented in SCALE |
 | Custom domain | Set `NEXT_PUBLIC_SITE_URL` + Cloudflare custom domain when ready | Operator |
-| Auth for donors | Out of scope until account portal is a real product need | Deferred — do not mock |
+| Default colour theme | Light chrome and cream bands; keep current plum look as explicit dark mode; photo heroes stay cinematic | Implemented |

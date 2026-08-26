@@ -68,7 +68,8 @@ export default async function StoryPage({
           src={story.portrait}
           alt={story.portraitAlt}
           fill
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover opacity-55"
         />
@@ -113,7 +114,7 @@ export default async function StoryPage({
             All stories
           </ButtonLink>
           <ButtonLink href="/donate" variant="plum">
-            Support Her Future
+            Support A Girl
           </ButtonLink>
           <ButtonLink href="/get-involved" variant="ghost">
             Get involved

@@ -14,7 +14,7 @@ export function ChoiceSection() {
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <section className="bg-plum text-ivory">
+    <section className="theme-band">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <Reveal>
           <p className="section-kicker text-accent">
@@ -27,7 +27,7 @@ export function ChoiceSection() {
           {choices.map((choice) => {
             const on = active === choice.left;
             return (
-              <li key={choice.left} className="border-t border-white/10">
+              <li key={choice.left} className="border-t border-[var(--band-line)]">
                 <button
                   type="button"
                   className="choice-row"
@@ -40,7 +40,7 @@ export function ChoiceSection() {
                 >
                   <p className="font-display text-3xl tracking-tight sm:text-5xl">
                     {choice.left}{" "}
-                    <span className={on ? "italic text-accent-soft" : "italic text-ivory/45"}>
+                    <span className={on ? "italic text-accent-soft" : "italic theme-muted"}>
                       {on ? choice.and : choice.or}
                     </span>
                   </p>

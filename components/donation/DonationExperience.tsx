@@ -19,11 +19,11 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
 
   return (
     <>
-      <header className="bleed-hero bg-plum text-ivory">
+      <header className="bleed-hero theme-band">
         <div className="mx-auto max-w-6xl px-5 pb-16 pt-28 sm:px-8 lg:pt-32">
-          <p className="eyebrow text-accent">Support her future</p>
+          <p className="eyebrow text-accent">Support a girl</p>
           <h1 className="display-lg mt-5 max-w-4xl">Help remove a barrier between her and her future.</h1>
-          <p className="mt-6 max-w-2xl text-lg text-ivory/75">{donationIntro}</p>
+          <p className="mt-6 max-w-2xl text-lg theme-muted">{donationIntro}</p>
         </div>
       </header>
 
@@ -43,7 +43,7 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
                   setCategory(item.id);
                   trackEvent(analyticsEvents.donationCtaClicked, { category: item.id });
                 }}
-                className={`min-h-11 border p-5 text-left transition ${
+                className={`donation-cause min-h-11 border p-5 text-left transition ${
                   category === item.id
                     ? "border-primary bg-lavender"
                     : "border-line bg-surface hover:border-primary/40"

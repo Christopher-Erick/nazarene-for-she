@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { primaryNav, supportCta } from "@/lib/data/navigation";
 
@@ -42,6 +43,7 @@ export function MobileMenu({
         </nav>
 
         <div className="mobile-menu-footer">
+          <ThemeToggle className="self-end" />
           <span onClick={onClose} className="contents">
             <ButtonLink href={supportCta.href} className="mobile-menu-cta">
               {supportCta.label}

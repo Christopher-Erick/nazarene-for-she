@@ -5,7 +5,7 @@ import { site } from "@/lib/data/site";
 
 export function RealitySection() {
   return (
-    <section id="reality" className="bg-plum text-ivory">
+    <section id="reality" className="theme-band">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:items-center lg:py-32">
         <Reveal>
           <p className="section-kicker text-accent">
@@ -15,7 +15,7 @@ export function RealitySection() {
           <h2 className="display-lg mt-5">
             Every month, a cycle can become a barrier to school.
           </h2>
-          <p className="mt-6 max-w-xl text-lg text-ivory/75">
+          <p className="mt-6 max-w-xl text-lg theme-muted">
             For many girls, a period is more than biology. It can interrupt education, dignity
             and opportunity — especially where products are unaffordable, unavailable, or come
             with a cost no girl should ever have to pay.
@@ -26,7 +26,7 @@ export function RealitySection() {
             <CountUp value={site.girlsSupported.value} suffix="+" />
           </p>
           <p className="mt-4 text-xl">{site.girlsSupported.label}</p>
-          <p className="mt-2 text-sm text-ivory/55">Verified organisational figure.</p>
+          <p className="mt-2 text-sm theme-muted">Verified organisational figure.</p>
         </Reveal>
       </div>
       <div className="relative mx-auto max-w-6xl px-5 pb-24 sm:px-8">
