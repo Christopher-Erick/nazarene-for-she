@@ -97,24 +97,26 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <ThemeToggle />
           <ButtonLink href={supportCta.href} className="header-cta">
             {supportCta.label}
           </ButtonLink>
-          <button
-            type="button"
-            className="menu-toggle"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((value) => !value)}
-          >
-            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-            <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
-              <span className={cn("h-px w-full bg-current transition", open && "translate-y-[7px] rotate-45")} />
-              <span className={cn("h-px w-full bg-current transition", open && "opacity-0")} />
-              <span className={cn("h-px w-full bg-current transition", open && "-translate-y-[7px] -rotate-45")} />
-            </span>
-          </button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="menu-toggle"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((value) => !value)}
+            >
+              <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+              <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
+                <span className={cn("h-px w-full bg-current transition", open && "translate-y-[7px] rotate-45")} />
+                <span className={cn("h-px w-full bg-current transition", open && "opacity-0")} />
+                <span className={cn("h-px w-full bg-current transition", open && "-translate-y-[7px] -rotate-45")} />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       </header>
