@@ -7,7 +7,11 @@ export const site = {
     "Nazarene for She equips adolescent girls and young women in Kenyan informal settlements with the information, resources, mentorship, faith and practical skills they need to navigate puberty with dignity and step into their potential.",
   tenSecondStory:
     "Nazarene for She helps girls and young women in Kenya overcome period poverty, protect their dignity, grow through mentorship and faith, develop practical skills, and build sustainable futures beyond poverty.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NODE_ENV === "production"
+      ? "https://nazarene-for-she.workers.dev"
+      : "http://localhost:3000"),
   locale: "en_KE",
   country: "Kenya",
   foundingContext: "Church of the Nazarene community initiative",

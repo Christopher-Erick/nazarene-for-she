@@ -37,3 +37,4 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
           NEXT_PUBLIC_CONTACT_EMAIL: ${{ vars.NEXT_PUBLIC_CONTACT_EMAIL }}
           NEXT_PUBLIC_CONTACT_PHONE: ${{ vars.NEXT_PUBLIC_CONTACT_PHONE }}
+        # If NEXT_PUBLIC_SITE_URL is unset, lib/data/site.ts uses a production fallback.
