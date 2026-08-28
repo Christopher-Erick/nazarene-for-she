@@ -9,6 +9,7 @@ export type Program = {
   impact: string;
   donationCategory: string;
   cta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
   visual: string;
 };
 
@@ -81,6 +82,7 @@ const programDefs: Program[] = [
       "Skill is a form of dignity that lasts longer than a single donation.",
     donationCategory: "Vocational Training",
     cta: { label: "Support her skill", href: "/donate?cause=vocational-training" },
+    secondaryCta: { label: "Wear her work", href: "/shop" },
     visual: "/images/atmosphere-atelier.webp",
   },
   {
@@ -95,6 +97,7 @@ const programDefs: Program[] = [
       "Enterprise is how a skill becomes a future.",
     donationCategory: "Entrepreneurship",
     cta: { label: "Invest in her enterprise", href: "/donate?cause=entrepreneurship" },
+    secondaryCta: { label: "Wear her work", href: "/shop" },
     visual: "/images/atmosphere-atelier.webp",
   },
   {
@@ -110,6 +113,20 @@ const programDefs: Program[] = [
     donationCategory: "Vocational Training",
     cta: { label: "Expand her capacity", href: "/donate?cause=vocational-training" },
     visual: "/images/atmosphere-fabric.webp",
+  },
+  {
+    slug: "health-awareness",
+    name: "Health Awareness",
+    eyebrow: "Knowledge",
+    summary:
+      "Community awareness of HIV/AIDS and related challenges, with specific attention to young girls.",
+    explanation:
+      "The constitution calls the organisation to increase general awareness of HIV/AIDS and its related problems, with specific attention to young girls. This sits beside menstrual health education: information that belongs to her, offered without stigma.",
+    impact:
+      "Awareness is protection. Young girls deserve facts about their health, not silence.",
+    donationCategory: "Menstrual Health",
+    cta: { label: "Support health education", href: "/donate?cause=menstrual-health" },
+    visual: "/images/atmosphere-community.webp",
   },
   {
     slug: "financial-independence",

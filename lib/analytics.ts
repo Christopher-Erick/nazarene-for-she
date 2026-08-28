@@ -4,6 +4,8 @@ export const analyticsEvents = {
   contactFormSubmitted: "contact_form_submitted",
   mentorshipInquiry: "mentorship_inquiry",
   partnershipInquiry: "partnership_inquiry",
+  atelierHeld: "atelier_held",
+  atelierRequested: "atelier_requested",
   programViewed: "program_viewed",
   storyViewed: "story_viewed",
 } as const;

@@ -89,6 +89,13 @@ export const involvementPaths = [
     cta: "Support A Girl",
   },
   {
+    id: "atelier",
+    title: "Wear her work",
+    body: "Buy a garment from the workshop. A purchase is income she can name — not only a gift on her behalf.",
+    href: "/shop",
+    cta: "Enter the atelier",
+  },
+  {
     id: "mentor",
     title: "Mentor",
     body: "Share knowledge, experience and guidance with a girl who should not walk alone.",

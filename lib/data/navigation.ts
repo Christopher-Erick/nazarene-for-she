@@ -2,6 +2,7 @@ export const primaryNav = [
   { href: "/", label: "Home", short: "Home" },
   { href: "/about", label: "Why We Exist", short: "Our Story" },
   { href: "/programs", label: "How We Empower", short: "Our Work" },
+  { href: "/shop", label: "The Atelier", short: "Atelier" },
   { href: "/impact", label: "Impact", short: "Impact" },
   { href: "/stories", label: "Stories", short: "Stories" },
   { href: "/get-involved", label: "Get Involved", short: "Get Involved" },
@@ -30,6 +31,7 @@ export const footerNav = {
   involved: [
     { href: "/get-involved", label: "Ways to Walk With Her" },
     { href: "/donate", label: "Support A Girl" },
+    { href: "/shop", label: "The Atelier" },
     { href: "/contact", label: "Start a Conversation" },
     { href: "/get-involved#pray", label: "Pray" },
     { href: "/get-involved#mentor", label: "Mentor" },

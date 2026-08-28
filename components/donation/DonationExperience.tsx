@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { DonationInquiryForm } from "@/components/donation/DonationInquiryForm";
 import { donationCategories, donationIntro, donationMethods } from "@/lib/data/donation";
@@ -24,6 +25,21 @@ export function DonationExperience({ initialCause }: { initialCause?: string }) 
           <p className="eyebrow text-accent">Support a girl</p>
           <h1 className="display-lg mt-5 max-w-4xl">Help remove a barrier between her and her future.</h1>
           <p className="mt-6 max-w-2xl text-lg theme-muted">{donationIntro}</p>
+          <div className="give-paths mt-10 max-w-2xl">
+            <p className="eyebrow text-accent">Two ways to walk with her</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <p className="give-path is-current">
+                <span className="eyebrow">Give</span>
+                <span className="mt-2 block font-display text-2xl">Support A Girl</span>
+                <span className="mt-2 block text-sm theme-muted">A gift toward pads, skill and community.</span>
+              </p>
+              <Link href="/shop" className="give-path">
+                <span className="eyebrow">Wear</span>
+                <span className="mt-2 block font-display text-2xl">Buy her work</span>
+                <span className="mt-2 block text-sm theme-muted">A garment from the workshop, sold as her income.</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
 

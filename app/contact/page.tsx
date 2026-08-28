@@ -6,8 +6,9 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Start a Conversation",
-  description:
-    "Contact Nazarene for She for partnership, mentorship, donations or general questions. Official email and phone appear when the organisation publishes them.",
+  description: site.contact.email
+    ? `Contact Nazarene for She in Kawangware, Nairobi. Email ${site.contact.email} for partnership, mentorship, donations or general questions.`
+    : "Contact Nazarene for She in Kawangware, Nairobi for partnership, mentorship, donations or general questions.",
   path: "/contact",
 });
 
@@ -36,7 +37,11 @@ export default async function ContactPage({
               <div>
                 <dt className="eyebrow text-primary">Email</dt>
                 <dd className="mt-2 text-lg">
-                  {site.contact.email || (
+                  {site.contact.email ? (
+                    <a href={`mailto:${site.contact.email}`} className="text-primary underline-offset-4 hover:underline">
+                      {site.contact.email}
+                    </a>
+                  ) : (
                     <>
                       Awaiting official address
                       <PlaceholderNote>Set NEXT_PUBLIC_CONTACT_EMAIL when ready.</PlaceholderNote>
@@ -54,6 +59,10 @@ export default async function ContactPage({
                     </>
                   )}
                 </dd>
+              </div>
+              <div>
+                <dt className="eyebrow text-primary">Postal address</dt>
+                <dd className="mt-2 text-lg text-muted">{site.contact.postalAddress}</dd>
               </div>
               <div>
                 <dt className="eyebrow text-primary">Where we work</dt>

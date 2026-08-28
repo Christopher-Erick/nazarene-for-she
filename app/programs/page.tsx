@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "How We Empower",
   description:
-    "From menstrual health and dignity kits to mentorship, discipleship, tailoring and entrepreneurship — how Nazarene for She walks with girls and young women in Kenya.",
+    "From sanitary pads to mentorship, tailoring and enterprise — how Nazarene for She walks with girls and young women in Kawangware, Nairobi.",
   path: "/programs",
 });
 

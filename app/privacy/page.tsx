@@ -20,9 +20,9 @@ export default function PrivacyPage() {
       <div className="prose-nfs mx-auto max-w-3xl px-5 pb-24 sm:px-8">
         <h2 className="font-display text-3xl">What we ask for</h2>
         <p>
-          Contact and donation-inquiry forms may collect your name, email, optional phone
-          number, organisation, and a message. We use that information to respond to your
-          inquiry.
+          Contact, donation-inquiry and atelier request forms may collect your name, email,
+          optional phone number, organisation, garment preferences, and a message. We use that
+          information to respond to your inquiry.
         </p>
         <h2 className="mt-10 font-display text-3xl">What we do not do</h2>
         <p>
@@ -36,8 +36,8 @@ export default function PrivacyPage() {
         </p>
         <h2 className="mt-10 font-display text-3xl">Contact</h2>
         <p>
-          For privacy questions, use the contact form or the official email once it is
-          published on this site.
+          For privacy questions, use the contact form
+          {site.contact.email ? ` or write to ${site.contact.email}` : ""}.
         </p>
       </div>
     </>

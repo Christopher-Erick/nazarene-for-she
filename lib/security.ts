@@ -154,3 +154,11 @@ export function isHttpsPublicUrl(value: string) {
     return false;
   }
 }
+
+/** Public org inbox only — rejects quotes, spaces, and mailto header injection. */
+export function isPublicContactEmail(value: string) {
+  const email = value.trim();
+  if (email.length < 6 || email.length > 254) return false;
+  if (/[\s"'<>\\(),;:\r\n\0]/.test(email)) return false;
+  return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+}

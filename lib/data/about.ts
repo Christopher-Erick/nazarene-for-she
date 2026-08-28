@@ -1,21 +1,23 @@
 export const aboutContent = {
   whoWeAre: {
     title: "Who we are",
-    body: "Nazarene for She is a Kenyan community-focused initiative that exists to equip adolescent girls and young women in informal settlements with the information, resources, mentorship, faith and practical skills they need to safely navigate puberty, preserve their dignity, discover their potential, and build sustainable futures.",
+    body: "Nazarene for She (NS) is a non-profit, non-partisan community-based organisation with offices in Congo, Kawangware, Nairobi County. The January 2021 constitution establishes the organisation to empower young girls through sanitary pads, vocational skills, and economic opportunity — especially where formal education has been interrupted.",
   },
   ourStory: {
     title: "Our story",
-    body: "The work began by confronting a simple injustice: a girl should never have to miss school, compromise her dignity, or depend on exploitation to manage her period. From dignity kits and menstrual health education, the mission widened — because a pad can solve today, and empowerment can change tomorrow.",
+    body: "The constitution came into force in January 2021, with registration through Nairobi County’s Community Based Services Department. The work confronts a practical injustice: a girl should not have to miss school, compromise her dignity, or lose her future for want of a pad or a skill.",
   },
   mission: {
     title: "Our mission",
-    status: "draft" as const,
-    body: "[Draft — replace with approved organisational wording.] To equip girls and young women with dignity, knowledge, faith, mentorship and marketable skills so they can remain in school, make informed choices, and build lives of independence.",
+    status: "official" as const,
+    source: "NS Constitution, January 2021, Article 2.2",
+    body: "Empowering young girls through provision of sanitary pads and economic empowerment of school dropouts.",
   },
   vision: {
     title: "Our vision",
-    status: "draft" as const,
-    body: "[Draft — replace with approved organisational wording.] A community where girls and young women are self-supporting, spiritually grounded, and free to shape their own futures — and where the initiative itself grows toward sustainability.",
+    status: "official" as const,
+    source: "NS Constitution, January 2021, Article 2.1",
+    body: "To create a self-sustaining generation of young women.",
   },
   values: {
     title: "Our values",
@@ -29,21 +31,59 @@ export const aboutContent = {
       { name: "Integrity", body: "We do not invent impact. We wait for verified numbers and consented stories." },
     ],
   },
+  objectives: {
+    title: "Our objectives",
+    status: "official" as const,
+    source: "NS Constitution, January 2021, Article 3",
+    items: [
+      {
+        name: "Skills and education",
+        body: "Improve practical skills and education so beneficiaries can become entrepreneurs, including youth with little or no chance of formal education.",
+      },
+      {
+        name: "Sanitary pads",
+        body: "Improve and promote provision of sanitary pads for every vulnerable girl in the community.",
+      },
+      {
+        name: "Health awareness",
+        body: "Increase general awareness of HIV/AIDS and related challenges, with specific attention to young girls.",
+      },
+      {
+        name: "Collaboration",
+        body: "Work with other organisations, bodies and individuals — national or international — who share this cause.",
+      },
+    ],
+  },
+  activities: {
+    title: "What we do",
+    status: "official" as const,
+    source: "NS Constitution, January 2021, Article 3.2",
+    items: [
+      "Sanitary pads distribution",
+      "Technical and soft skills training",
+      "Community mobilisation, sensitisation, training and counselling",
+    ],
+  },
   approach: {
     title: "Our approach",
-    body: "We address immediate challenges while working toward long-term transformation: Dignity → Knowledge → Confidence → Faith → Skills → Opportunity → Independence → Transformation.",
+    body: "Immediate need and longer work sit together: pads so she can stay in school today; skills, enterprise and community so she can sustain herself tomorrow. Dignity → Knowledge → Confidence → Skills → Opportunity → Independence.",
   },
   faith: {
     title: "Faith & discipleship",
-    body: "Nazarene for She is rooted in a community that gathers not only to provide practical support, but also to share the Word and Love of Jesus Christ. Discipleship, prayer and spiritual encouragement sit beside pads, training and enterprise.",
+    body: "Nazarene for She is a community-based organisation, not a denomination. The community still gathers to share the Word and Love of Jesus Christ. Discipleship, prayer and spiritual encouragement sit beside pads, training and enterprise — never as a condition of receiving help.",
   },
   community: {
     title: "Community",
-    body: "The work lives among girls, young women, mentors, churches and neighbours in Kenyan informal settlements. We do not parachute in with pity. We walk with people we know.",
+    body: "The work is based in Congo, Kawangware, Nairobi County. We walk with girls, young women, young mothers, mentors and neighbours we know — not as visitors dropping in with pity.",
   },
   sustainability: {
     title: "Sustainability",
-    body: "We are developing a model that can make the initiative increasingly self-sustainable: support, skills, enterprise, income, self-sufficiency. We do not claim that the work is already fully self-sustaining. That is the direction, not the present tense.",
+    body: "The constitution names member contributions, donations, public support, and profits from output sales among lawful sources of funds. That is the direction of the work: support, skills, enterprise, income, self-sufficiency. We do not claim the organisation is already fully self-sustaining.",
+  },
+  leadership: {
+    title: "Leadership",
+    status: "partial" as const,
+    body: "Executive officers will be published here when the organisation confirms the current committee. Personal names from older documents are not listed until that confirmation.",
   },
 };
 

@@ -17,14 +17,22 @@ export default function TermsPage() {
       <div className="prose-nfs mx-auto max-w-3xl px-5 pb-24 sm:px-8">
         <h2 className="font-display text-3xl">Content</h2>
         <p>
-          Draft mission language, unpublished payment details and placeholder stories are
-          marked as such. Do not treat placeholders as official organisational commitments.
+          Unpublished payment details and placeholder stories are marked as such. Do not
+          treat placeholders as official organisational commitments. Mission and vision on
+          this site follow the January 2021 constitution.
         </p>
         <h2 className="mt-10 font-display text-3xl">Giving</h2>
         <p>
           Donations should be made only through official details published by the
           organisation. If a field still reads as a placeholder, wait for confirmation before
           sending funds.
+        </p>
+        <h2 className="mt-10 font-display text-3xl">The Atelier</h2>
+        <p>
+          Requests for garments are inquiries, not completed sales. A price, making time and
+          official payment details will be confirmed in a reply before you should send money.
+          Atmosphere photographs show the workshop, not a specific finished piece already for
+          sale.
         </p>
         <h2 className="mt-10 font-display text-3xl">Stories</h2>
         <p>

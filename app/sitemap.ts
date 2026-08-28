@@ -1,4 +1,5 @@
 import { programs } from "@/lib/data/programs";
+import { garments } from "@/lib/data/shop";
 import { site } from "@/lib/data/site";
 import { stories } from "@/lib/data/stories";
 
@@ -11,6 +12,7 @@ export default function sitemap() {
     "/stories",
     "/get-involved",
     "/donate",
+    "/shop",
     "/contact",
     "/partnership",
     "/privacy",
@@ -26,6 +28,10 @@ export default function sitemap() {
     })),
     ...programs.map((program) => ({
       url: `${site.url}/programs/${program.slug}`,
+      lastModified: now,
+    })),
+    ...garments.map((garment) => ({
+      url: `${site.url}/shop/${garment.slug}`,
       lastModified: now,
     })),
     ...stories.map((story) => ({

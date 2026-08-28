@@ -88,10 +88,15 @@ export default async function ProgramPage({
             <p className="mt-4 text-muted">
               A gift toward {program.donationCategory.toLowerCase()} helps this chapter of the journey continue.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-col gap-3">
               <ButtonLink href={program.cta.href} variant="plum">
                 {program.cta.label}
               </ButtonLink>
+              {program.secondaryCta ? (
+                <ButtonLink href={program.secondaryCta.href} variant="ghost">
+                  {program.secondaryCta.label}
+                </ButtonLink>
+              ) : null}
             </div>
           </div>
         </aside>
@@ -123,6 +128,11 @@ export default async function ProgramPage({
           <ButtonLink href={program.cta.href} variant="plum">
             {program.cta.label}
           </ButtonLink>
+          {program.secondaryCta ? (
+            <ButtonLink href={program.secondaryCta.href} variant="ghost">
+              {program.secondaryCta.label}
+            </ButtonLink>
+          ) : null}
         </div>
       </section>
     </>

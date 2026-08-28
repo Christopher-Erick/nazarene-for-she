@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   escapeJsonForScript,
   isHttpsPublicUrl,
+  isPublicContactEmail,
   isSafeWebhookUrl,
   sanitizeHeaderValue,
 } from "./security.ts";
@@ -36,5 +37,17 @@ describe("isHttpsPublicUrl", () => {
     assert.equal(isHttpsPublicUrl("https://instagram.com/org"), true);
     assert.equal(isHttpsPublicUrl("http://instagram.com/org"), false);
     assert.equal(isHttpsPublicUrl("javascript:alert(1)"), false);
+  });
+});
+
+describe("isPublicContactEmail", () => {
+  it("accepts a normal organisational inbox", () => {
+    assert.equal(isPublicContactEmail("nazareneforshe@gmail.com"), true);
+  });
+
+  it("rejects mailto header injection and quotes", () => {
+    assert.equal(isPublicContactEmail("a@b.com\nBcc:evil@x.com"), false);
+    assert.equal(isPublicContactEmail(`a@b.com">javascript:alert(1)`), false);
+    assert.equal(isPublicContactEmail("not-an-email"), false);
   });
 });

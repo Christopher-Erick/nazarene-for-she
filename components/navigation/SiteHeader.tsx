@@ -14,7 +14,9 @@ import { DEFAULT_THEME, readTheme, type Theme } from "@/lib/theme";
 
 function isPhotoHero(pathname: string) {
   if (pathname === "/") return true;
+  if (pathname === "/shop") return true;
   if (/^\/programs\/[^/]+$/.test(pathname)) return true;
+  if (/^\/shop\/[^/]+$/.test(pathname)) return true;
   if (/^\/stories\/[^/]+$/.test(pathname)) return true;
   return false;
 }
@@ -83,7 +85,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
           {primaryNav.map((item) => (
             <Link
               key={item.href}

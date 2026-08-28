@@ -15,8 +15,8 @@ export function ClosingCta() {
           <p className="mx-auto mt-8 max-w-2xl theme-muted">{site.tenSecondStory}</p>
           <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
             <ButtonLink href="/donate">Support A Girl</ButtonLink>
-            <ButtonLink href="/contact" variant="ghost">
-              Start a Conversation
+            <ButtonLink href="/shop" variant="ghost">
+              Wear her work
             </ButtonLink>
           </div>
         </Reveal>

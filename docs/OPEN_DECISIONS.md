@@ -6,6 +6,10 @@ Product choices that cannot be fully inferred from code. Each has a
 | Decision | Recommendation (implemented unless noted) | Status |
 |----------|---------------------------------------------|--------|
 | Live payment rails | Keep placeholders until org supplies official M-Pesa/bank/M-Changa; inquiry form is the primary path | Implemented |
+| Atelier / garment shop | Made-to-order requests only until workshop photos, prices and payment rails are confirmed; no card checkout | Implemented |
+| Public contact email | `nazareneforshe@gmail.com` from the January 2021 constitution; phone still unpublished | Implemented |
+| Mission / vision | Use constitution Article 2 wording (light grammar correction only) | Implemented |
+| Photos / stories | Atmosphere images only until consented portraits and stories arrive | Waiting |
 | Mail transport | Prefer Resend (`RESEND_API_KEY` + `CONTACT_INBOX`); webhook optional with host allowlist | Operator config |
 | Analytics | Keep lightweight `trackEvent` stub; no third-party pixel until privacy review | Implemented |
 | CMS | Stay on `lib/data/*` until content volume justifies Sanity/Contentful | Deferred |

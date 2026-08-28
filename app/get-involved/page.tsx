@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Get Involved",
   description:
-    "Donate, mentor, pray, partner or give resources. Walk with Nazarene for She as girls and young women move from dignity to independence.",
+    "Donate, buy a garment from the workshop, mentor, pray, partner or give resources. Walk with Nazarene for She as girls and young women move from dignity to independence.",
   path: "/get-involved",
 });
 

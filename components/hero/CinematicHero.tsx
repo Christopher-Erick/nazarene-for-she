@@ -23,7 +23,7 @@ export function CinematicHero() {
       <div className="hero-copy-panel">
         <div className="hero-kicker flex items-center gap-4">
           <span className="hidden h-px w-10 bg-accent sm:block" aria-hidden="true" />
-          <p className="eyebrow text-accent-soft">Kenya · Informal settlements · Her future</p>
+          <p className="eyebrow text-accent-soft">Kenya · Kawangware, Nairobi · Her future</p>
         </div>
 
         <h1 className="hero-headline display-xl mt-6">
@@ -32,7 +32,7 @@ export function CinematicHero() {
         </h1>
 
         <p className="hero-copy mt-6 max-w-lg text-base leading-relaxed text-ivory/88 sm:text-lg">
-          Across Kenya&apos;s informal settlements, period poverty interrupts education,
+          In Kawangware, Nairobi, period poverty interrupts education,
           opportunity and dignity. {site.name} exists so that interruption is not the end of
           her story.
         </p>
