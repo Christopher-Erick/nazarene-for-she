@@ -38,7 +38,7 @@ export function AtelierLookbook() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
+      <div className="mx-auto max-w-6xl px-5 pt-5 pb-24 sm:px-8 sm:pt-6">
         <AtelierRequestForm />
       </div>
     </div>

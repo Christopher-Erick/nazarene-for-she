@@ -1,14 +1,78 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { categoryOrder, garments, getGarment } from "@/lib/data/shop";
-import { PieceCard } from "@/components/shop/PieceCard";
+import { useEffect, useMemo, useState } from "react";
+import { categoryOrder, garments, getGarment, type Garment } from "@/lib/data/shop";
+import { PREVIEW_FRAME_MS, PREVIEW_FRAMES, PieceCard } from "@/components/shop/PieceCard";
+
+const LARGE_BATCH = 8;
+const SMALL_BATCH = 3;
+const LARGE_BREAKPOINT = 980;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const batches: T[][] = [];
+  for (let index = 0; index < items.length; index += size) {
+    batches.push(items.slice(index, index + size));
+  }
+  return batches;
+}
+
+function useRackBatchSize() {
+  const [batchSize, setBatchSize] = useState(LARGE_BATCH);
+
+  useEffect(() => {
+    const media = window.matchMedia(`(min-width: ${LARGE_BREAKPOINT}px)`);
+    const update = () => setBatchSize(media.matches ? LARGE_BATCH : SMALL_BATCH);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return batchSize;
+}
+
+function ShowcaseRack({ batches, catalog }: { batches: Garment[][]; catalog: Garment[] }) {
+  const [batchIndex, setBatchIndex] = useState(0);
+  const safeIndex = batches.length ? batchIndex % batches.length : 0;
+  const rack = batches[safeIndex] ?? [];
+
+  useEffect(() => {
+    setBatchIndex(0);
+  }, [batches.length]);
+
+  useEffect(() => {
+    if (batches.length < 2) return;
+    const timer = window.setInterval(() => {
+      setBatchIndex((current) => (current + 1) % batches.length);
+    }, PREVIEW_FRAME_MS * PREVIEW_FRAMES);
+    return () => window.clearInterval(timer);
+  }, [batches.length]);
+
+  return (
+    <>
+      <p className="atelier-edit__meta">
+        Previewing <strong>{rack.length}</strong> of <strong>{catalog.length}</strong> pieces
+        {batches.length > 1 ? (
+          <>
+            {" "}
+            · set <strong>{safeIndex + 1}</strong> of <strong>{batches.length}</strong>
+          </>
+        ) : null}
+      </p>
+      <div className="piece-grid" data-showcase="true" aria-live="polite">
+        {rack.map((item) => (
+          <PieceCard key={item.slug} garment={item} variant="preview" />
+        ))}
+      </div>
+    </>
+  );
+}
 
 export function AtelierTable() {
   const [family, setFamily] = useState("all");
   const [query, setQuery] = useState("");
+  const batchSize = useRackBatchSize();
 
-  const rack = useMemo(() => {
+  const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return garments.filter((item) => {
       if (family !== "all" && item.slug !== family) return false;
@@ -19,6 +83,17 @@ export function AtelierTable() {
     });
   }, [family, query]);
 
+  const showcase = family === "all" && !query.trim();
+
+  const catalog = useMemo(
+    () =>
+      categoryOrder
+        .map((slug) => getGarment(slug))
+        .filter((item): item is Garment => Boolean(item)),
+    [],
+  );
+
+  const batches = useMemo(() => chunk(catalog, batchSize), [catalog, batchSize]);
   const chosen = family === "all" ? null : getGarment(family);
   const searching = Boolean(query.trim());
 
@@ -58,7 +133,29 @@ export function AtelierTable() {
         </div>
 
         <div className="rack-tools__filters">
-          <p id="rack-filter-label">Filter by</p>
+          <label className="rack-tools__filter-label" htmlFor="rack-family">
+            Filter by
+          </label>
+          <select
+            id="rack-family"
+            className="rack-tools__select"
+            value={family}
+            onChange={(event) => setFamily(event.target.value)}
+          >
+            <option value="all">All pieces</option>
+            {categoryOrder.map((slug) => {
+              const item = getGarment(slug);
+              if (!item) return null;
+              return (
+                <option key={item.slug} value={item.slug}>
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+          <p id="rack-filter-label" className="rack-tools__filter-heading">
+            Filter by
+          </p>
           <div className="rack-tools__list" role="group" aria-labelledby="rack-filter-label">
             <button
               type="button"
@@ -87,29 +184,35 @@ export function AtelierTable() {
         </div>
       </div>
 
-      <p className="atelier-edit__meta">
-        {rack.length === 0 ? (
-          "No pieces match that search."
-        ) : chosen && !searching ? (
-          <>
-            Showing <strong>{chosen.name}</strong>
-          </>
-        ) : (
-          <>
-            Showing <strong>{rack.length}</strong> {rack.length === 1 ? "piece" : "pieces"}
-            {searching ? " matching your search" : ""}
-          </>
-        )}
-      </p>
-
-      {rack.length === 0 ? (
-        <p className="atelier-edit__hint">Try another word, or choose All pieces.</p>
+      {showcase ? (
+        <ShowcaseRack batches={batches} catalog={catalog} />
       ) : (
-        <div className="piece-grid">
-          {rack.map((item, index) => (
-            <PieceCard key={item.slug} garment={item} index={index} variant="preview" />
-          ))}
-        </div>
+        <>
+          <p className="atelier-edit__meta">
+            {filtered.length === 0 ? (
+              "No pieces match that search."
+            ) : chosen && !searching ? (
+              <>
+                Showing <strong>{chosen.name}</strong>
+              </>
+            ) : (
+              <>
+                Showing <strong>{filtered.length}</strong>{" "}
+                {filtered.length === 1 ? "piece" : "pieces"}
+                {searching ? " matching your search" : ""}
+              </>
+            )}
+          </p>
+          {filtered.length === 0 ? (
+            <p className="atelier-edit__hint">Try another word, or choose All pieces.</p>
+          ) : (
+            <div className="piece-grid">
+              {filtered.map((item) => (
+                <PieceCard key={item.slug} garment={item} variant="preview" />
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       <p className="atelier-look-note">

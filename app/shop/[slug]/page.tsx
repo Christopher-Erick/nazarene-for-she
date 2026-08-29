@@ -66,27 +66,39 @@ export default async function GarmentPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}
       />
-      <header className="atelier-piece-hero bleed-hero relative min-h-[52vh] overflow-hidden text-ivory">
-        <Image
-          src={still.src}
-          alt={still.alt}
-          fill
-          loading="eager"
-          fetchPriority="high"
-          sizes="100vw"
-          className="object-cover opacity-45"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-plum via-plum/70 to-plum/25" />
-        <div className="relative mx-auto flex min-h-[52vh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8">
+      <header className="atelier-hero atelier-piece-hero bleed-hero">
+        <div className="atelier-hero-layer">
+          <Image
+            src={still.src}
+            alt={still.alt}
+            fill
+            loading="eager"
+            fetchPriority="high"
+            sizes="100vw"
+            className="object-cover object-[center_42%]"
+          />
+        </div>
+        <div className="atelier-hero-veil" />
+        <div className="grain" />
+        <svg className="atelier-hero-stitch" viewBox="0 0 1200 80" fill="none" aria-hidden="true">
+          <path
+            d="M0 44C120 18 220 62 340 36C460 10 560 70 700 32C840 -6 960 58 1200 24"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeDasharray="6 10"
+          />
+        </svg>
+        <div className="atelier-hero-copy">
           <span className="placeholder-chip piece-hero-chip">Placeholder</span>
           <p className="eyebrow mt-4 text-accent">
             {collection?.name} · {garment.eyebrow}
           </p>
-          <h1 className="display-lg mt-4 max-w-4xl">{garment.name}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-ivory/80">{garment.summary}</p>
+          <h1 className="display-lg mt-3 max-w-4xl text-ivory">{garment.name}</h1>
+          <p className="atelier-hero-cta">{garment.summary}</p>
         </div>
       </header>
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+      <div className="piece-rack py-16">
         <p className="atelier-lure">{garment.lure}</p>
         <h2 className="font-display mt-8 text-3xl">The piece</h2>
         <p className="mt-4 max-w-3xl text-lg text-muted">{garment.explanation}</p>
@@ -95,16 +107,16 @@ export default async function GarmentPage({
           already sewn for sale.
         </PlaceholderNote>
       </div>
-      <section className="mx-auto max-w-6xl px-5 pb-8 sm:px-8">
+      <section className="piece-rack pb-8">
         <p className="eyebrow text-primary">On this rack</p>
-        <div className="piece-grid mt-5">
+        <div className="piece-grid piece-grid--detail mt-5">
           <PieceCard garment={garment} index={0} />
           {related.map((item, index) => (
             <PieceCard key={item.slug} garment={item} index={index + 1} />
           ))}
         </div>
       </section>
-      <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
+      <section className="piece-rack pb-24">
         <div className="flex flex-wrap gap-3">
           <ButtonLink href={`${shop.path}#lookbook`} variant="ghost">
             All pieces

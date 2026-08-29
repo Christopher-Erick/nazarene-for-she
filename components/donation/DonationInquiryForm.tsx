@@ -6,11 +6,17 @@ import { analyticsEvents, trackEvent } from "@/lib/analytics";
 type Status = "idle" | "loading" | "success" | "error";
 
 export function DonationInquiryForm({
-  category,
-  method,
+  category = "general",
+  method = "mchanga",
+  id,
+  variant = "landing",
+  onSuccess,
 }: {
-  category: string;
-  method: string;
+  category?: string;
+  method?: string;
+  id?: string;
+  variant?: "landing" | "wizard";
+  onSuccess?: () => void;
 }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
@@ -42,6 +48,7 @@ export function DonationInquiryForm({
       setMessage(payload.message);
       form.reset();
       trackEvent(analyticsEvents.donationCtaClicked, { category, method });
+      onSuccess?.();
     } catch {
       setStatus("error");
       setMessage("The network dropped the request. Check your connection and try again.");
@@ -52,13 +59,14 @@ export function DonationInquiryForm({
   const busy = status === "loading" || status === "success";
 
   return (
-    <div className="border border-line bg-surface p-6 sm:p-8">
-      <h2 className="font-display text-3xl">Tell us you are giving</h2>
-      <p className="mt-3 text-sm text-muted">
-        This is not a card checkout. Use it to confirm a transfer, ask a question, or leave a
-        note with your gift. Do not send funds until official payment details are published.
-      </p>
-      <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
+    <div id={id} className="give-form scroll-mt-28">
+      {variant === "landing" ? (
+        <p className="section-kicker text-primary give-form__kicker">
+          <b>02</b>
+          Tell us you are giving
+        </p>
+      ) : null}
+      <form className="give-form__body" onSubmit={onSubmit} noValidate>
         <input
           type="text"
           name="website"
@@ -67,23 +75,36 @@ export function DonationInquiryForm({
           autoComplete="off"
           aria-hidden="true"
         />
-        <Field label="Your name" name="name" required disabled={busy} />
-        <Field label="Email" name="email" type="email" required disabled={busy} />
-        <Field label="Amount (optional)" name="amount" placeholder="KES" disabled={busy} />
+        <div className="give-form__grid give-form__grid--duo">
+          <Field label="Your name" name="name" required disabled={busy} autoComplete="name" />
+          <Field label="Email" name="email" type="email" required disabled={busy} autoComplete="email" />
+        </div>
+        <Field
+          label="Amount (optional)"
+          name="amount"
+          placeholder="e.g. KES 2,000"
+          disabled={busy}
+          hint="Rough figure is fine — it helps the team follow up."
+        />
         <label className="form-field">
           <span className="form-field-label">Note</span>
-          <textarea name="message" maxLength={2000} disabled={busy} />
+          <textarea
+            name="message"
+            maxLength={2000}
+            disabled={busy}
+            placeholder="Which cause you chose, when you gave, or anything the team should know."
+          />
         </label>
         <div aria-live="polite">
           {status === "success" ? <p className="form-success">{message}</p> : null}
           {status === "error" ? <p className="form-failure">{message}</p> : null}
         </div>
-        <button className="btn btn-plum w-full" type="submit" disabled={busy}>
+        <button className="btn btn-plum give-form__submit w-full" type="submit" disabled={busy}>
           {status === "loading"
             ? "Sending…"
             : status === "success"
               ? "Note sent"
-              : "Send confirmation"}
+              : "Send confirmation note"}
         </button>
       </form>
     </div>
@@ -97,6 +118,8 @@ function Field({
   required,
   placeholder,
   disabled,
+  hint,
+  autoComplete,
 }: {
   label: string;
   name: string;
@@ -104,6 +127,8 @@ function Field({
   required?: boolean;
   placeholder?: string;
   disabled?: boolean;
+  hint?: string;
+  autoComplete?: string;
 }) {
   return (
     <label className="form-field">
@@ -114,7 +139,9 @@ function Field({
         required={required}
         placeholder={placeholder}
         disabled={disabled}
+        autoComplete={autoComplete}
       />
+      {hint ? <span className="give-form__hint">{hint}</span> : null}
     </label>
   );
 }

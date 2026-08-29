@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { fitLabels, getCloth, getGarment } from "@/lib/data/shop";
 import {
   BUNDLE_ADDED_EVENT,
@@ -25,7 +25,12 @@ function noticeCopy(detail: HoldNotice) {
 export function RequestTray() {
   const pathname = usePathname();
   const { items } = useAtelierBundle();
-  const [ready, setReady] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const onShopPage = pathname === "/shop";
   const [open, setOpen] = useState(false);
   const [notice, setNotice] = useState("");
   const [formInView, setFormInView] = useState(false);
@@ -40,10 +45,6 @@ export function RequestTray() {
     window.history.replaceState(null, "", "/shop#request");
     setOpen(false);
   }
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
 
   useEffect(() => {
     function onAdded(event: Event) {
@@ -66,20 +67,20 @@ export function RequestTray() {
   }, [flash, notice]);
 
   useEffect(() => {
+    if (!onShopPage) return;
     const form = document.getElementById("request");
-    if (!form) {
-      setFormInView(false);
-      return;
-    }
+    if (!form) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setFormInView(Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.28));
+        const ratio = entry?.intersectionRatio ?? 0;
+        const next = Boolean(entry?.isIntersecting && ratio >= 0.28);
+        setFormInView((current) => (current === next ? current : next));
       },
       { threshold: [0.2, 0.28, 0.5] },
     );
     observer.observe(form);
     return () => observer.disconnect();
-  }, [ready, items.length]);
+  }, [onShopPage]);
 
   useEffect(() => {
     if (!open) return;
@@ -98,15 +99,15 @@ export function RequestTray() {
   }, [open]);
 
   useEffect(() => {
-    const visible = ready && items.length > 0 && !formInView;
+    const visible = mounted && items.length > 0 && !(onShopPage && formInView);
     document.documentElement.classList.toggle("request-tray-open", visible);
     document.documentElement.classList.toggle("request-tray-expanded", visible && open);
     return () => {
       document.documentElement.classList.remove("request-tray-open", "request-tray-expanded");
     };
-  }, [ready, items.length, formInView, open]);
+  }, [mounted, items.length, onShopPage, formInView, open]);
 
-  if (!ready || items.length === 0 || formInView) return null;
+  if (!mounted || items.length === 0 || (onShopPage && formInView)) return null;
 
   const kinds = items.length;
   const pieceWord = kinds === 1 ? "piece" : "pieces";

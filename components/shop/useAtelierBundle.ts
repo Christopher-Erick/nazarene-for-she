@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import { garmentSlugs, type ClothId, type GarmentFit } from "@/lib/data/shop";
 
 export const BUNDLE_KEY = "nfs-atelier-bundle";
@@ -69,6 +69,7 @@ export function readBundle(): BundleItem[] {
 
 export function writeBundle(items: BundleItem[]) {
   window.localStorage.setItem(BUNDLE_KEY, JSON.stringify(items.slice(0, BUNDLE_LIMIT)));
+  invalidateBundleSnapshot();
   emit();
 }
 
@@ -115,22 +116,37 @@ export function bundleCount(items: BundleItem[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0);
 }
 
+const EMPTY_BUNDLE: BundleItem[] = [];
+let bundleSnapshotCache: { raw: string | null; items: BundleItem[] } | null = null;
+
+function invalidateBundleSnapshot() {
+  bundleSnapshotCache = null;
+}
+
+function getBundleSnapshot(): BundleItem[] {
+  if (typeof window === "undefined") return EMPTY_BUNDLE;
+  const raw = window.localStorage.getItem(BUNDLE_KEY);
+  if (bundleSnapshotCache?.raw === raw) return bundleSnapshotCache.items;
+  const items = parseBundle(raw);
+  bundleSnapshotCache = { raw, items };
+  return items;
+}
+
+function subscribeBundle(onStoreChange: () => void) {
+  window.addEventListener(BUNDLE_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(BUNDLE_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
 export function useAtelierBundle() {
-  const [items, setItems] = useState<BundleItem[]>([]);
+  const items = useSyncExternalStore(subscribeBundle, getBundleSnapshot, () => EMPTY_BUNDLE);
 
   const refresh = useCallback(() => {
-    setItems(readBundle());
+    emit();
   }, []);
-
-  useEffect(() => {
-    refresh();
-    window.addEventListener(BUNDLE_EVENT, refresh);
-    window.addEventListener("storage", refresh);
-    return () => {
-      window.removeEventListener(BUNDLE_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
-    };
-  }, [refresh]);
 
   return { items, refresh };
 }

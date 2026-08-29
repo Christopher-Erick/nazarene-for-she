@@ -71,56 +71,56 @@ export function SiteHeader() {
         data-scrolled={scrolled || open ? "true" : "false"}
         data-menu-open={open ? "true" : "false"}
       >
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-3 overflow-visible px-4 py-2 sm:px-8">
-        <Link href="/" className="brand-lockup min-w-0 flex-1 lg:flex-none" aria-label={`${site.name} home`}>
-          <BrandMark className="brand-mark" />
-          <span className="min-w-0 leading-none">
-            <span className="brand-name">
-              <span>Nazarene</span>
-              <span>for She</span>
-            </span>
-            <span className="brand-tagline mt-1 hidden text-[0.7rem] italic lg:block">
-              {site.shortTagline}
-            </span>
-          </span>
-        </Link>
-
-        <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
-          {primaryNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="nav-link"
-              aria-current={pathname === item.href ? "page" : undefined}
-            >
-              {item.short}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <ButtonLink href={supportCta.href} className="header-cta">
-            {supportCta.label}
-          </ButtonLink>
-          <div className="flex items-center gap-1">
-            <ThemeToggle />
-            <button
-              type="button"
-              className="menu-toggle"
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              onClick={() => setOpen((value) => !value)}
-            >
-              <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-              <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
-                <span className={cn("h-px w-full bg-current transition", open && "translate-y-[7px] rotate-45")} />
-                <span className={cn("h-px w-full bg-current transition", open && "opacity-0")} />
-                <span className={cn("h-px w-full bg-current transition", open && "-translate-y-[7px] -rotate-45")} />
+        <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-3 overflow-visible px-4 py-2 sm:px-8">
+          <Link href="/" className="brand-lockup min-w-0 flex-1 lg:flex-none" aria-label={`${site.name} home`}>
+            <BrandMark className="brand-mark" />
+            <span className="min-w-0 leading-none">
+              <span className="brand-name">
+                <span>Nazarene</span>
+                <span>for She</span>
               </span>
-            </button>
+              <span className="brand-tagline mt-1 hidden text-[0.7rem] italic lg:block">
+                {site.shortTagline}
+              </span>
+            </span>
+          </Link>
+
+          <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
+            {primaryNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="nav-link"
+                aria-current={pathname === item.href ? "page" : undefined}
+              >
+                {item.short}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <ButtonLink href={supportCta.href} className="header-cta">
+              {supportCta.label}
+            </ButtonLink>
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <button
+                type="button"
+                className="menu-toggle"
+                aria-expanded={open}
+                aria-controls="mobile-menu"
+                onClick={() => setOpen((value) => !value)}
+              >
+                <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+                <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
+                  <span className={cn("h-px w-full bg-current transition", open && "translate-y-[7px] rotate-45")} />
+                  <span className={cn("h-px w-full bg-current transition", open && "opacity-0")} />
+                  <span className={cn("h-px w-full bg-current transition", open && "-translate-y-[7px] -rotate-45")} />
+                </span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </header>
       <MobileMenu open={open} pathname={pathname} onClose={() => setOpen(false)} />
     </>

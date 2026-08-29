@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/experience/Reveal";
+import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 
 export function ClosingCta() {
@@ -14,7 +15,7 @@ export function ClosingCta() {
           </p>
           <p className="mx-auto mt-8 max-w-2xl theme-muted">{site.tenSecondStory}</p>
           <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink href="/donate">Support A Girl</ButtonLink>
+            <ButtonLink href={supportCta.href}>{supportCta.label}</ButtonLink>
             <ButtonLink href="/shop" variant="ghost">
               Wear her work
             </ButtonLink>

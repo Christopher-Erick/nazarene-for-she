@@ -11,8 +11,8 @@ export const metadata = pageMetadata({
 export default async function DonatePage({
   searchParams,
 }: {
-  searchParams: Promise<{ cause?: string }>;
+  searchParams: Promise<{ cause?: string; give?: string }>;
 }) {
-  const { cause } = await searchParams;
-  return <DonationExperience initialCause={cause} />;
+  const { cause, give } = await searchParams;
+  return <DonationExperience initialCause={cause} startWizard={give !== undefined} />;
 }

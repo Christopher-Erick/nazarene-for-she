@@ -9,6 +9,7 @@ import { getStory, stories } from "@/lib/data/stories";
 import { getProgram } from "@/lib/data/programs";
 import { analyticsEvents } from "@/lib/analytics";
 import { pageMetadata } from "@/lib/seo";
+import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
 
@@ -113,8 +114,8 @@ export default async function StoryPage({
           <ButtonLink href="/stories" variant="ghost">
             All stories
           </ButtonLink>
-          <ButtonLink href="/donate" variant="plum">
-            Support A Girl
+          <ButtonLink href={supportCta.href} variant="plum">
+            {supportCta.label}
           </ButtonLink>
           <ButtonLink href="/get-involved" variant="ghost">
             Get involved

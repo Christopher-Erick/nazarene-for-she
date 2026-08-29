@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ThreadMark } from "@/components/ui/ThreadMark";
+import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 
 export function CinematicHero() {
@@ -39,8 +40,8 @@ export function CinematicHero() {
 
         <div className="hero-actions hero-copy">
           <ButtonLink href="#reality">See Her Story</ButtonLink>
-          <ButtonLink href="/donate" variant="ivory">
-            Support A Girl
+          <ButtonLink href={supportCta.href} variant="ivory">
+            {supportCta.label}
           </ButtonLink>
         </div>
 
