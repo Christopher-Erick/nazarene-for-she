@@ -2,16 +2,17 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { libraryImages } from "@/lib/data/library-images";
 
 const heroSlides = [
   {
     id: "distribution-handoff",
-    src: "/images/library/pad-distribution1.jpg",
+    src: libraryImages.padDistribution1,
     alt: "Girls receiving sanitary pad distribution support from Nazarene for She in the community.",
   },
   {
     id: "distribution-group",
-    src: "/images/library/pad-distribution2.jpg",
+    src: libraryImages.padDistribution2,
     alt: "Pad distribution day — dignity kits and menstrual health support reaching girls in need.",
   },
 ] as const;
@@ -20,6 +21,7 @@ const SLIDE_MS = 7000;
 
 export function HeroPhotoSlideshow() {
   const [active, setActive] = useState(0);
+  const [secondaryReady, setSecondaryReady] = useState(false);
 
   useEffect(() => {
     if (heroSlides.length < 2) return;
@@ -29,12 +31,25 @@ export function HeroPhotoSlideshow() {
     return () => window.clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    const preloadSecond = () => setSecondaryReady(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(preloadSecond, { timeout: 2500 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = globalThis.setTimeout(preloadSecond, 1500);
+    return () => globalThis.clearTimeout(id);
+  }, []);
+
   return (
     <>
       <div className="hero-photo-wrap">
         <div className="hero-slideshow" aria-live="off">
           {heroSlides.map((slide, index) => {
             const isActive = index === active;
+            const shouldRender = index === 0 || secondaryReady || isActive;
+            if (!shouldRender) return null;
+
             return (
               <div
                 key={slide.src}
@@ -47,7 +62,8 @@ export function HeroPhotoSlideshow() {
                   alt={slide.alt}
                   fill
                   priority={index === 0}
-                  quality={92}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  quality={index === 0 ? 85 : 80}
                   sizes="100vw"
                   className="hero-slideshow__photo object-cover"
                 />

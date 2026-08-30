@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { CountUp } from "@/components/impact/CountUp";
 import { Reveal } from "@/components/experience/Reveal";
+import { libraryImages } from "@/lib/data/library-images";
 import { site } from "@/lib/data/site";
 
 export function RealitySection() {
   return (
     <section id="reality" className="theme-band">
-      <div className="mx-auto grid max-w-6xl gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:items-center lg:py-32">
+      <div className="mx-auto grid max-w-6xl gap-12 px-5 pt-24 pb-8 sm:px-8 lg:grid-cols-2 lg:items-center lg:pt-32 lg:pb-10">
         <Reveal>
           <p className="section-kicker text-accent">
             <b>01</b>
@@ -29,14 +30,15 @@ export function RealitySection() {
           <p className="mt-2 text-sm theme-muted">Verified organisational figure.</p>
         </Reveal>
       </div>
-      <div className="relative mx-auto max-w-6xl px-5 pb-24 sm:px-8">
-        <div className="photo-frame relative aspect-[16/8] overflow-hidden">
+      <div className="relative mx-auto max-w-6xl px-5 pb-10 sm:px-8 lg:pb-12">
+        <div className="photo-frame photo-frame--library relative aspect-[3/2] overflow-hidden">
           <Image
-            src="/images/atmosphere-classroom.webp"
-            alt="A sunlit Kenyan classroom with wooden desks, open notebooks and late-afternoon light."
+            src={libraryImages.schoolGoing}
+            alt="Girls supported by Nazarene for She gathered outside school with dignity kits — staying in education with confidence."
             fill
             sizes="(min-width: 1152px) 72rem, 100vw"
-            className="object-cover"
+            className="library-photo object-cover object-center"
+            quality={80}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { stories } from "@/lib/data/stories";
+import { libraryImages } from "@/lib/data/library-images";
 
 export type Program = {
   slug: string;
@@ -26,7 +27,7 @@ const programDefs: Program[] = [
       "Girls who understand their bodies can stay in class, ask for what they need, and make informed choices.",
     donationCategory: "Menstrual Health",
     cta: { label: "Help her stay in school", href: "/donate?cause=menstrual-health" },
-    visual: "/images/atmosphere-classroom.webp",
+    visual: libraryImages.menstrualHealth,
   },
   {
     slug: "dignity-kits",
@@ -40,7 +41,7 @@ const programDefs: Program[] = [
       "A kit is not a transaction. It is a practical way to remove a barrier between a girl and her education.",
     donationCategory: "Dignity Kits",
     cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
-    visual: "/images/atmosphere-dignity-kit.webp",
+    visual: libraryImages.dignityKit,
   },
   {
     slug: "mentorship",
@@ -54,7 +55,7 @@ const programDefs: Program[] = [
       "A girl with a mentor is less likely to face hard choices alone.",
     donationCategory: "Mentorship",
     cta: { label: "Walk beside her", href: "/get-involved#mentor" },
-    visual: "/images/atmosphere-community.webp",
+    visual: libraryImages.mentorship,
   },
   {
     slug: "discipleship",

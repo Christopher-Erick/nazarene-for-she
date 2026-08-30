@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { DignityObjects } from "@/components/storytelling/DignityObjects";
 import { Reveal } from "@/components/experience/Reveal";
+import { libraryImages } from "@/lib/data/library-images";
 
 export function DignityKitSection() {
   return (
@@ -23,13 +24,14 @@ export function DignityKitSection() {
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="photo-frame relative aspect-[4/3] overflow-hidden">
+          <div className="photo-frame photo-frame--library relative aspect-[3/2] overflow-hidden">
             <Image
-              src="/images/atmosphere-dignity-kit.webp"
+              src={libraryImages.dignityKit}
               alt="A carefully arranged dignity kit on linen: wrapped pads, soap, a notebook and folded cloth."
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover"
+              className="library-photo object-contain object-center"
+              quality={80}
             />
           </div>
           <DignityObjects />

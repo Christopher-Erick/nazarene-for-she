@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/experience/Reveal";
+import { libraryImages } from "@/lib/data/library-images";
 
 const responses = [
   {
@@ -8,28 +9,28 @@ const responses = [
     index: "01",
     title: "Menstrual health",
     body: "Knowledge about her body, her cycle, and her right to stay in school.",
-    image: "/images/atmosphere-classroom.webp",
+    image: libraryImages.menstrualHealth,
   },
   {
     href: "/programs/dignity-kits",
     index: "02",
     title: "Dignity kits",
     body: "Pads, underwear and hygiene — access without humiliation.",
-    image: "/images/atmosphere-dignity-kit.webp",
+    image: libraryImages.dignityKit,
   },
   {
     href: "/programs/mentorship",
     index: "03",
     title: "Mentorship",
     body: "Someone walking beside her as she makes hard, ordinary decisions.",
-    image: "/images/atmosphere-community.webp",
+    image: libraryImages.mentorship,
   },
   {
     href: "/programs/discipleship",
     index: "04",
     title: "Community",
     body: "A gathering that holds faith, friendship and practical care together.",
-    image: "/images/atmosphere-community.webp",
+    image: libraryImages.community,
   },
 ];
 
@@ -48,13 +49,14 @@ export function ResponseSection() {
           {responses.map((item, index) => (
             <Reveal key={item.title} delay={index * 0.06}>
               <Link href={item.href} className="group block">
-                <div className="photo-frame relative aspect-[16/10] overflow-hidden">
+                <div className="photo-frame photo-frame--library relative aspect-[3/2] overflow-hidden">
                   <Image
                     src={item.image}
                     alt=""
                     fill
                     sizes="(min-width: 640px) 45vw, 100vw"
-                    className="object-cover"
+                    className="library-photo object-cover object-center"
+                    quality={80}
                   />
                 </div>
                 <p className="eyebrow mt-5 text-accent">{item.index}</p>

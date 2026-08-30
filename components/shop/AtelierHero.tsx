@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { ThreadMark } from "@/components/ui/ThreadMark";
 import { shop } from "@/lib/data/shop";

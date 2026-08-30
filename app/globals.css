@@ -1719,6 +1719,18 @@ button.involve-feature {
   transition: transform 800ms ease;
 }
 
+.photo-frame--library {
+  background: color-mix(in srgb, var(--color-plum) 6%, var(--color-background));
+}
+
+.photo-frame--library:hover img {
+  transform: none;
+}
+
+.library-photo {
+  image-rendering: auto;
+}
+
 .photo-frame:hover img {
   transform: scale(1.045);
 }

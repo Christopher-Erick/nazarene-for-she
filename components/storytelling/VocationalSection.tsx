@@ -5,37 +5,38 @@ import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/experience/Reveal";
 import { cn } from "@/lib/cn";
+import { libraryImages } from "@/lib/data/library-images";
 
 const sequence = [
   {
     word: "Thread",
     line: "It begins as a line — a connection, a craft, a chance.",
-    image: "/images/atmosphere-atelier.webp",
-    alt: "Tailoring table with gold thread, scissors, measuring tape and folded purple fabric.",
+    image: libraryImages.threading,
+    alt: "Thread and tailoring — the start of a craft and a livelihood.",
   },
   {
     word: "Skill",
     line: "Hands learn the machine. Measurement becomes instinct.",
-    image: "/images/atmosphere-atelier.webp",
-    alt: "Tailoring table with gold thread, scissors, measuring tape and folded purple fabric.",
+    image: libraryImages.skill,
+    alt: "Hands learning tailoring and dressmaking skills at the workshop.",
   },
   {
     word: "Product",
     line: "Fabric becomes clothing she can name as her own work.",
-    image: "/images/atmosphere-fabric.webp",
-    alt: "Draped Kenyan wax-print fabric in purple, gold and ivory.",
+    image: libraryImages.product,
+    alt: "A garment she can name as her own work.",
   },
   {
     word: "Income",
     line: "A garment can become a living. A living can become a choice.",
-    image: "/images/atmosphere-fabric.webp",
-    alt: "Draped Kenyan wax-print fabric in purple, gold and ivory.",
+    image: libraryImages.income,
+    alt: "Income from work she can name as her own.",
   },
   {
     word: "Independence",
     line: "Not rescue. Capacity — a future she can shape.",
-    image: "/images/atmosphere-rooftops.webp",
-    alt: "Golden hour over Kenyan urban rooftops.",
+    image: libraryImages.independence,
+    alt: "A future she can shape — capacity, not rescue.",
   },
 ];
 
@@ -69,24 +70,19 @@ export function VocationalSection() {
         </Reveal>
 
         <div
-          className="relative mt-12 aspect-[16/8] overflow-hidden bg-plum"
+          className="relative mt-12 aspect-[3/2] overflow-hidden bg-plum"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {sequence.map((item, index) => (
-            <Image
-              key={item.word}
-              src={item.image}
-              alt={active === index ? item.alt : ""}
-              fill
-              sizes="(min-width: 1152px) 72rem, 100vw"
-              className={cn(
-                "object-cover transition-opacity duration-500",
-                active === index ? "opacity-100" : "opacity-0",
-              )}
-              aria-hidden={active !== index}
-            />
-          ))}
+          <Image
+            key={sequence[active].image}
+            src={sequence[active].image}
+            alt={sequence[active].alt}
+            fill
+            sizes="(min-width: 1152px) 72rem, 100vw"
+            className="library-photo object-cover object-center"
+            quality={80}
+          />
         </div>
         <div className="vocational-tabs mt-4" role="tablist" aria-label="Vocational path">
           {sequence.map((item, index) => (

@@ -1,19 +1,21 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/experience/Reveal";
+import { libraryImages } from "@/lib/data/library-images";
 
 export function FaithSection() {
   return (
     <section className="theme-band">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:py-32">
         <Reveal>
-          <div className="photo-frame relative aspect-[4/5] overflow-hidden sm:aspect-[4/3]">
+          <div className="photo-frame photo-frame--library relative aspect-[3/2] overflow-hidden">
             <Image
-              src="/images/atmosphere-community.webp"
-              alt="Lantern-lit community gathering space with chairs in a circle and a purple cloth on the table."
+              src={libraryImages.mentorship}
+              alt="Mentorship — someone walking beside her as she makes hard, ordinary decisions."
               fill
               sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover"
+              className="library-photo object-cover object-center"
+              quality={80}
             />
           </div>
         </Reveal>
