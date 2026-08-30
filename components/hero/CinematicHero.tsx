@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { HeroPhotoSlideshow } from "@/components/hero/HeroPhotoSlideshow";
 import { ThreadMark } from "@/components/ui/ThreadMark";
 import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
@@ -8,15 +8,7 @@ export function CinematicHero() {
   return (
     <section className="hero-stage bleed-hero">
       <div className="hero-photo-wrap">
-        <Image
-          src="/images/atmosphere-rooftops.webp"
-          alt="Golden hour over Kenyan urban rooftops — a landscape of homes, water tanks and evening light."
-          fill
-          loading="eager"
-          fetchPriority="high"
-          sizes="100vw"
-          className="hero-photo object-cover object-[center_32%]"
-        />
+        <HeroPhotoSlideshow />
       </div>
       <div className="hero-veil" />
       <div className="grain" />
