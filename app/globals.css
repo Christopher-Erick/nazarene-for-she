@@ -836,7 +836,7 @@ html[data-theme="dark"] .btn-ghost:hover {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.4s ease-in-out;
+  transition: opacity 2.2s ease-in-out;
 }
 
 .hero-slideshow__slide.is-active {
@@ -872,11 +872,12 @@ html[data-theme="dark"] .btn-ghost:hover {
 
 .hero-slideshow__dots {
   position: absolute;
-  z-index: 3;
+  z-index: 5;
   right: 1.25rem;
   bottom: 1.25rem;
   display: flex;
   gap: 0.45rem;
+  pointer-events: auto;
 }
 
 .hero-slideshow__dot {
@@ -906,6 +907,24 @@ html[data-theme="dark"] .btn-ghost:hover {
   .hero-slideshow__dots {
     right: 2rem;
     bottom: 1.75rem;
+  }
+}
+
+.hero-slideshow__slide[data-slide="distribution-handoff"] .hero-slideshow__photo {
+  object-position: 52% 46%;
+}
+
+.hero-slideshow__slide[data-slide="distribution-group"] .hero-slideshow__photo {
+  object-position: 50% 24%;
+}
+
+@media (min-width: 640px) {
+  .hero-slideshow__slide[data-slide="distribution-handoff"] .hero-slideshow__photo {
+    object-position: 78% 42%;
+  }
+
+  .hero-slideshow__slide[data-slide="distribution-group"] .hero-slideshow__photo {
+    object-position: 68% 32%;
   }
 }
 
@@ -960,6 +979,7 @@ html[data-theme="dark"] .btn-ghost:hover {
   position: absolute;
   inset: 0;
   z-index: 4;
+  pointer-events: none;
   background:
     linear-gradient(
       100deg,
@@ -1014,6 +1034,16 @@ html[data-theme="dark"] .btn-ghost:hover {
 
 .hero-actions .btn-ivory {
   box-shadow: 0 12px 28px rgba(12, 4, 14, 0.28);
+}
+
+@media (max-width: 639px) {
+  .hero-copy-panel {
+    padding-top: calc(var(--header-height) + 5.75rem);
+  }
+
+  .hero-copy-panel > .hero-actions {
+    margin-top: 3.5rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -3659,8 +3689,6 @@ html.request-tray-open .site-footer {
   .reveal,
   .kit-card,
   .btn,
-  .hero-slideshow__slide,
-  .hero-slideshow__photo,
   .hero-photo,
   .hero-line,
   .hero-headline,
@@ -3689,5 +3717,18 @@ html.request-tray-open .site-footer {
     transform: none !important;
     opacity: 1 !important;
     transition: none !important;
+  }
+
+  .hero-slideshow__photo {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .hero-slideshow__slide:not(.is-active) {
+    opacity: 0 !important;
+  }
+
+  .hero-slideshow__slide.is-active {
+    opacity: 1 !important;
   }
 }

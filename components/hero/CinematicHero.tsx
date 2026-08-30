@@ -7,10 +7,8 @@ import { site } from "@/lib/data/site";
 export function CinematicHero() {
   return (
     <section className="hero-stage bleed-hero">
-      <div className="hero-photo-wrap">
-        <HeroPhotoSlideshow />
-      </div>
-      <div className="hero-veil" />
+      <HeroPhotoSlideshow />
+      <div className="hero-veil" aria-hidden="true" />
       <div className="grain" />
 
       <div className="hero-copy-panel">
