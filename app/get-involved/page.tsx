@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { EventsTeaser } from "@/components/events/EventsTeaser";
 import { involvementPaths } from "@/lib/data/donation";
 import { pageMetadata } from "@/lib/seo";
 
@@ -45,6 +46,8 @@ export default function GetInvolvedPage() {
           </div>
         </div>
       </section>
+
+      <EventsTeaser />
 
       <section id="pray" className="bg-background">
         <div className="mx-auto max-w-3xl px-5 py-24 sm:px-8">

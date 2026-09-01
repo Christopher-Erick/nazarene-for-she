@@ -1,3 +1,4 @@
+import { events } from "@/lib/data/events";
 import { programs } from "@/lib/data/programs";
 import { garments } from "@/lib/data/shop";
 import { site } from "@/lib/data/site";
@@ -9,6 +10,7 @@ export default function sitemap() {
     "/about",
     "/programs",
     "/impact",
+    "/events",
     "/stories",
     "/get-involved",
     "/donate",
@@ -36,6 +38,10 @@ export default function sitemap() {
     })),
     ...stories.map((story) => ({
       url: `${site.url}/stories/${story.slug}`,
+      lastModified: now,
+    })),
+    ...events.map((event) => ({
+      url: `${site.url}/events/${event.slug}`,
       lastModified: now,
     })),
   ];

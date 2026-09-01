@@ -109,14 +109,6 @@ export const partnershipContent = {
   ],
 };
 
-export const events: Array<{
-  slug: string;
-  title: string;
-  date: string;
-  status: "placeholder";
-  summary: string;
-}> = [];
-
 export const partners: Array<{
   name: string;
   href?: string;

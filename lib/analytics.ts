@@ -8,6 +8,7 @@ export const analyticsEvents = {
   atelierRequested: "atelier_requested",
   programViewed: "program_viewed",
   storyViewed: "story_viewed",
+  eventViewed: "event_viewed",
 } as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[keyof typeof analyticsEvents];

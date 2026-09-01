@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { primaryNav, supportCta } from "@/lib/data/navigation";
+import { supportCta, type NavItem } from "@/lib/data/navigation";
 
 export function MobileMenu({
   open,
   pathname,
+  navItems,
   onClose,
 }: {
   open: boolean;
   pathname: string;
+  navItems: NavItem[];
   onClose: () => void;
 }) {
   return (
@@ -24,7 +26,7 @@ export function MobileMenu({
 
         <nav aria-label="Mobile">
           <ul className="mobile-menu-list">
-            {primaryNav.map((item) => (
+            {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

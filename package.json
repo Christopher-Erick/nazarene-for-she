@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test lib/security.test.ts lib/validation/contact.test.ts lib/validation/shop.test.ts lib/cache/single-flight.test.ts lib/theme.test.ts",
+    "test": "node --experimental-strip-types --test lib/security.test.ts lib/validation/contact.test.ts lib/validation/shop.test.ts lib/cache/single-flight.test.ts lib/theme.test.ts lib/events/dates.test.ts",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
