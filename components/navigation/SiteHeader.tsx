@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { cn } from "@/lib/cn";
-import { primaryNav, supportCta } from "@/lib/data/navigation";
+import { supportCta, type NavItem } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 import { DEFAULT_THEME, readTheme, type Theme } from "@/lib/theme";
 
@@ -26,7 +26,7 @@ function isBandHero(pathname: string) {
   return pathname === "/donate" || pathname === "/get-involved";
 }
 
-export function SiteHeader() {
+export function SiteHeader({ navItems }: { navItems: NavItem[] }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -87,7 +87,7 @@ export function SiteHeader() {
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
-            {primaryNav.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -123,7 +123,7 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
-      <MobileMenu open={open} pathname={pathname} onClose={() => setOpen(false)} />
+      <MobileMenu open={open} pathname={pathname} navItems={navItems} onClose={() => setOpen(false)} />
     </>
   );
 }
