@@ -539,21 +539,9 @@ html[data-theme="dark"] .theme-toggle {
 
 .nav-link {
   position: relative;
-  flex-shrink: 0;
-  white-space: nowrap;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 550;
   letter-spacing: 0.04em;
-}
-
-@media (min-width: 1280px) {
-  .nav-link {
-    font-size: 0.82rem;
-  }
-}
-
-.primary-nav {
-  overflow: visible;
 }
 
 .nav-link::after {

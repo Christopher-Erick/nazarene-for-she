@@ -6,7 +6,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { HashScroll } from "@/components/ui/HashScroll";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { SkipLink } from "@/components/ui/SkipLink";
-import { headerNav, primaryNav } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 import "./globals.css";
 
@@ -96,7 +95,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd />
         <SkipLink />
         <HashScroll />
-        <SiteHeader headerItems={[...headerNav]} menuItems={[...primaryNav]} />
+        <SiteHeader />
         <main id="main" className="flex-1 pt-[var(--header-height)]">
           {children}
         </main>

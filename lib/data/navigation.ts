@@ -3,24 +3,13 @@ export const primaryNav = [
   { href: "/about", label: "Why We Exist", short: "Our Story" },
   { href: "/programs", label: "How We Empower", short: "Our Work" },
   { href: "/shop", label: "The Atelier", short: "Atelier" },
-  { href: "/events", label: "Events", short: "Events" },
   { href: "/impact", label: "Impact", short: "Impact" },
-  { href: "/stories", label: "Stories", short: "Stories" },
-  { href: "/get-involved", label: "Get Involved", short: "Involve" },
-] as const;
-
-/** Compact set for the desktop header so Events always fits beside the logo and CTA. */
-export const headerNav = [
-  { href: "/about", label: "Why We Exist", short: "Our Story" },
-  { href: "/programs", label: "How We Empower", short: "Our Work" },
   { href: "/events", label: "Events", short: "Events" },
-  { href: "/impact", label: "Impact", short: "Impact" },
   { href: "/stories", label: "Stories", short: "Stories" },
-  { href: "/get-involved", label: "Get Involved", short: "Involve" },
+  { href: "/get-involved", label: "Get Involved", short: "Get Involved" },
 ] as const;
 
 export type NavItem = (typeof primaryNav)[number];
-export type HeaderNavItem = (typeof headerNav)[number];
 
 export const supportCta = {
   href: "/donate?give",
