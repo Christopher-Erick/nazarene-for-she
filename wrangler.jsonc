@@ -13,19 +13,5 @@
       "binding": "WORKER_SELF_REFERENCE",
       "service": "nazarene-for-she"
     }
-  ],
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "nazarene-for-she",
-      "database_id": "00000000-0000-0000-0000-000000000001",
-      "migrations_dir": "migrations"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "MEDIA",
-      "bucket_name": "nazarene-for-she-media"
-    }
   ]
 }
