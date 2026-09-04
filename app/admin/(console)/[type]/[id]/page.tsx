@@ -18,5 +18,5 @@ export default function ContentEditorPage() {
   if (type === "programs") return <ProgramEditor id={id} />;
   if (type === "pages") return <SitePageEditor id={id} />;
 
-  return <p className="admin-flash">That part of the site is not edited here.</p>;
+  return <p className="admin-flash admin-flash--error">That part of the site is not edited here.</p>;
 }

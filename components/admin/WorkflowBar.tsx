@@ -27,13 +27,19 @@ export function WorkflowBar({
 
   return (
     <div className="admin-workflow">
+      <p className="admin-workflow__label">Status</p>
       <p>
         <strong>{statusLabel(status)}</strong>
         <span className="text-muted"> — {statusHint(status)}</span>
       </p>
       <div className="admin-workflow-actions">
-        {steps.map((step) => (
-          <button key={step.to} className="btn btn-ghost" type="button" onClick={() => move(step.to).catch(() => undefined)}>
+        {steps.map((step, index) => (
+          <button
+            key={step.to}
+            className={`btn ${step.to === "archived" ? "admin-danger" : index === 0 ? "btn-plum" : "btn-ghost"}`}
+            type="button"
+            onClick={() => move(step.to).catch(() => undefined)}
+          >
             {step.label}
           </button>
         ))}

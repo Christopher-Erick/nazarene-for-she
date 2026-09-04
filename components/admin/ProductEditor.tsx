@@ -82,14 +82,14 @@ export function ProductEditor({ id }: { id: string }) {
     }
   }
 
-  if (error && !item) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this piece…</p>;
+  if (error && !item) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this piece…</p>;
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/shop">Back to the shop</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/shop">
+        ← Back to the shop
+      </Link>
       <AdminHeader
         kicker="Shop piece"
         title={item.name}
@@ -100,12 +100,12 @@ export function ProductEditor({ id }: { id: string }) {
           changes what visitors see immediately after you save a published piece.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <p className="admin-note mt-4">
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <p className="admin-note">
         {item.sku} · {formatKes(item.priceKes)} · {item.stock} on the rack
       </p>
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           Piece name
           <input name="name" defaultValue={item.name} required />

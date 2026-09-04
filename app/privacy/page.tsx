@@ -31,7 +31,7 @@ export default async function PrivacyPage() {
         <div className="prose-nfs mx-auto max-w-3xl px-5 pb-24 sm:px-8">
           <h2 className="font-display text-3xl">What we ask for</h2>
           <p>
-            Contact, donation-inquiry and atelier request forms may collect your name, email,
+            Contact, donation-inquiry and shop checkout forms may collect your name, email,
             optional phone number, organisation, garment preferences, and a message. We use that
             information to respond to your inquiry.
           </p>

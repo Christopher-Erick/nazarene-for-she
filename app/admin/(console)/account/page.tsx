@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 
 export default function AccountPage() {
   const [name, setName] = useState("");
@@ -64,12 +65,13 @@ export default function AccountPage() {
   }
 
   return (
-    <div>
-      <h1 className="font-display text-4xl">My account</h1>
-      <p className="mt-2 text-muted">{role}</p>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <form className="admin-form mt-8" onSubmit={save}>
+    <div className="admin-stack">
+      <AdminHeader kicker="You" title="My account">
+        <p>{role || "Your sign-in details and data requests."}</p>
+      </AdminHeader>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <form className="admin-form" onSubmit={save}>
         <label>
           Name
           <input value={name} onChange={(event) => setName(event.target.value)} />
@@ -83,7 +85,7 @@ export default function AccountPage() {
             onChange={(event) => setEmail(event.target.value)}
           />
         </label>
-        <p className="text-sm text-muted">
+        <p className="admin-help">
           Saving a new email replaces the old one. Sign in with the new address after that. Enter your
           current password to confirm an email change.
         </p>
@@ -99,16 +101,23 @@ export default function AccountPage() {
           Save
         </button>
       </form>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <button className="btn btn-ghost" type="button" onClick={download}>
-          Download my data
-        </button>
-        <button className="btn btn-ghost" type="button" onClick={() => request("export")}>
-          Request export
-        </button>
-        <button className="btn btn-ghost" type="button" onClick={() => request("deletion")}>
-          Request account deletion
-        </button>
+      <div className="admin-panel">
+        <h2 className="font-display">Your data</h2>
+        <p>
+          Download a copy, ask for an export to be recorded, or request that this account be
+          deleted. Deletion is reviewed by Super Admin.
+        </p>
+        <div className="admin-piece-actions">
+          <button className="btn btn-ghost" type="button" onClick={download}>
+            Download my data
+          </button>
+          <button className="btn btn-ghost" type="button" onClick={() => request("export")}>
+            Request export
+          </button>
+          <button className="btn admin-danger" type="button" onClick={() => request("deletion")}>
+            Request account deletion
+          </button>
+        </div>
       </div>
     </div>
   );

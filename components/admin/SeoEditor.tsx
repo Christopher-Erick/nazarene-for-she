@@ -38,23 +38,25 @@ export function SeoEditor() {
   }
 
   return (
-    <form className="admin-form" onSubmit={save}>
+    <div className="admin-stack">
       <AdminHeader kicker="Search" title="SEO defaults">
         <p>Used when a page does not set its own title or description for search engines.</p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <label>
-        Default title
-        <input value={title} onChange={(event) => setTitle(event.target.value)} />
-      </label>
-      <label>
-        Default description
-        <textarea rows={4} value={description} onChange={(event) => setDescription(event.target.value)} />
-      </label>
-      <button className="btn btn-plum" type="submit">
-        Save search defaults
-      </button>
-    </form>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <form className="admin-form" onSubmit={save}>
+        <label>
+          Default title
+          <input value={title} onChange={(event) => setTitle(event.target.value)} />
+        </label>
+        <label>
+          Default description
+          <textarea rows={4} value={description} onChange={(event) => setDescription(event.target.value)} />
+        </label>
+        <button className="btn btn-plum" type="submit">
+          Save search defaults
+        </button>
+      </form>
+    </div>
   );
 }

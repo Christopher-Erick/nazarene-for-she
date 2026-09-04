@@ -60,16 +60,17 @@ export function OrganizationEditor() {
   }
 
   return (
-    <form onSubmit={save}>
+    <form className="admin-stack" onSubmit={save}>
       <AdminHeader kicker="The organisation" title="Organization" previewHref="/about">
         <p>
           These sections appear on Why We Exist. Do not invent unconfirmed facts. Mission and vision
           follow the January 2021 constitution unless the organisation has formally restated them.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <div className="admin-form mt-8">
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-form">
+        <h2 className="admin-form-title font-display">How to reach the workshop</h2>
         <label>
           Public phone
           <input
@@ -79,7 +80,7 @@ export function OrganizationEditor() {
             onChange={(event) => setValues((current) => ({ ...current, phone: event.target.value }))}
           />
         </label>
-        <p className="text-sm text-muted">
+        <p className="admin-help">
           Shown on the contact page. Leave blank to keep using the site environment number.
         </p>
         <label>
@@ -95,10 +96,13 @@ export function OrganizationEditor() {
             }
           />
         </label>
-        <p className="text-sm text-muted">
+        <p className="admin-help">
           Digits with country code. Used for Order via WhatsApp when WHATSAPP_NUMBER is not set in
           the environment. Leave blank to hide that checkout action.
         </p>
+      </div>
+      <div className="admin-form">
+        <h2 className="admin-form-title font-display">Why We Exist</h2>
         {COPY_FIELDS.map((field) => (
           <label key={field.key}>
             {field.label}

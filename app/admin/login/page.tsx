@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { adminFetch, ensureCsrf } from "@/components/admin/adminFetch";
+import { BrandMark } from "@/components/ui/BrandMark";
 
 export default function AdminLoginPage() {
   const [error, setError] = useState("");
@@ -29,24 +30,31 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-5">
-      <p className="eyebrow text-accent">Nazarene for She</p>
-      <h1 className="mt-2 font-display text-4xl">Sign in</h1>
-      <p className="mt-3 text-muted">This area is for authorised organisational users only.</p>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      <form className="admin-form mt-8" onSubmit={onSubmit}>
-        <label>
-          Email
-          <input name="email" type="email" autoComplete="username" required />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" autoComplete="current-password" required />
-        </label>
-        <button className="btn btn-plum" type="submit" disabled={pending}>
-          {pending ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
+    <main className="admin-login">
+      <div className="admin-login-card">
+        <header className="admin-login-head">
+          <BrandMark className="admin-brand__mark text-primary" />
+          <div>
+            <p className="eyebrow text-accent">Nazarene for She</p>
+            <h1 className="font-display">Sign in</h1>
+          </div>
+        </header>
+        <p className="admin-login-lede">This desk is for authorised organisational users only.</p>
+        {error ? <p className="admin-flash admin-flash--error mt-4">{error}</p> : null}
+        <form className="admin-form mt-7" onSubmit={onSubmit}>
+          <label>
+            Email
+            <input name="email" type="email" autoComplete="username" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autoComplete="current-password" required />
+          </label>
+          <button className="btn btn-plum" type="submit" disabled={pending}>
+            {pending ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

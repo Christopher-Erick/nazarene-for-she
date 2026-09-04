@@ -39,24 +39,25 @@ export function StoryEditor({ id }: { id: string }) {
     });
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this story…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this story…</p>;
   const payload = item.payload ?? {};
   const related = Array.isArray(payload.relatedProgramSlugs)
     ? payload.relatedProgramSlugs.filter((value): value is string => typeof value === "string")
     : [];
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/stories">Back to stories</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/stories">
+        ← Back to stories
+      </Link>
       <AdminHeader kicker="Story" title={item.title} previewHref={`/stories/${item.slug}`}>
         <p>Do not publish a real name or portrait without explicit consent.</p>
       </AdminHeader>
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <WorkflowBar type="stories" id={item.id} status={item.status} onChanged={refresh} />
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-editor">
+        <WorkflowBar type="stories" id={item.id} status={item.status} onChanged={refresh} />
+        <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           How she is named
           <input name="firstName" defaultValue={String(payload.firstName || item.title)} required />
@@ -120,6 +121,7 @@ export function StoryEditor({ id }: { id: string }) {
           {busy ? "Saving…" : "Save story"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

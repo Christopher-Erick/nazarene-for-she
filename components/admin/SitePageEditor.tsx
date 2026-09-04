@@ -58,26 +58,27 @@ export function SitePageEditor({ id }: { id: string }) {
     });
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this page…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this page…</p>;
   const slug = item.slug;
   const kicker = String(item.payload.kicker || meta?.kicker || "");
   const pathways = involvePathsFrom(item.payload.pathways);
   const partnership = pagePayload("partnership", item.payload);
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/pages">Back to site pages</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/pages">
+        ← Back to site pages
+      </Link>
       <AdminHeader
         kicker={meta?.label ?? "Site page"}
         title={item.title}
         previewHref={publicPathFor("pages", slug)}
       />
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <WorkflowBar type="pages" id={item.id} status={item.status} onChanged={refresh} />
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-editor">
+        <WorkflowBar type="pages" id={item.id} status={item.status} onChanged={refresh} />
+        <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           Small heading
           <input name="kicker" defaultValue={kicker} />
@@ -174,6 +175,7 @@ export function SitePageEditor({ id }: { id: string }) {
           {busy ? "Saving…" : "Save page"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

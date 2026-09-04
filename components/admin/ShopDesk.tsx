@@ -122,69 +122,99 @@ export function ShopDesk() {
   }
 
   return (
-    <div>
+    <div className="admin-stack">
       <AdminHeader kicker="The workshop" title="Shop" previewHref="/shop">
         <p>
           Categories are what visitors filter by — Dresses, Skirts, Totes, and any you add later.
           Pieces live inside those categories, each with a price, stock, and an automatic SKU.
         </p>
       </AdminHeader>
-      {error || categories.error ? <p className="admin-flash mt-4">{error || categories.error}</p> : null}
+      {error || categories.error ? (
+        <p className="admin-flash admin-flash--error">{error || categories.error}</p>
+      ) : null}
       {message || categories.message ? (
-        <p className="admin-flash mt-4">{message || categories.message}</p>
+        <p className="admin-flash admin-flash--ok">{message || categories.message}</p>
       ) : null}
 
-      <div className="admin-piece-grid mt-8">
-        <button type="button" className="admin-piece admin-piece-link" onClick={() => setTab("orders")}>
-          <p className="eyebrow text-accent">Orders</p>
-          <p className="font-display text-4xl">{openCount}</p>
-          <p className="mt-2 text-sm text-muted">Need attention</p>
+      <div className="admin-metrics">
+        <button
+          type="button"
+          className={`admin-metric${tab === "orders" ? " is-active" : ""}`}
+          onClick={() => setTab("orders")}
+        >
+          <span className="admin-metric__label">Orders</span>
+          <strong className="admin-metric__value">{openCount}</strong>
+          <span className="admin-metric__hint">Need attention</span>
         </button>
-        <button type="button" className="admin-piece admin-piece-link" onClick={() => setTab("pieces")}>
-          <p className="eyebrow text-accent">Pieces</p>
-          <p className="font-display text-4xl">{products.length}</p>
-          <p className="mt-2 text-sm text-muted">On the rack</p>
+        <button
+          type="button"
+          className={`admin-metric${tab === "pieces" ? " is-active" : ""}`}
+          onClick={() => setTab("pieces")}
+        >
+          <span className="admin-metric__label">Pieces</span>
+          <strong className="admin-metric__value">{products.length}</strong>
+          <span className="admin-metric__hint">On the rack</span>
         </button>
-        <button type="button" className="admin-piece admin-piece-link" onClick={() => setTab("stock")}>
-          <p className="eyebrow text-accent">Low stock</p>
-          <p className="font-display text-4xl">{lowStock.length}</p>
-          <p className="mt-2 text-sm text-muted">Three or fewer left</p>
+        <button
+          type="button"
+          className={`admin-metric${tab === "stock" ? " is-active" : ""}`}
+          onClick={() => setTab("stock")}
+        >
+          <span className="admin-metric__label">Low stock</span>
+          <strong className="admin-metric__value">{lowStock.length}</strong>
+          <span className="admin-metric__hint">Three or fewer left</span>
         </button>
-        <button type="button" className="admin-piece admin-piece-link" onClick={() => setTab("categories")}>
-          <p className="eyebrow text-accent">Categories</p>
-          <p className="font-display text-4xl">{categories.items.length}</p>
-          <p className="mt-2 text-sm text-muted">Visitor filters</p>
+        <button
+          type="button"
+          className={`admin-metric${tab === "categories" ? " is-active" : ""}`}
+          onClick={() => setTab("categories")}
+        >
+          <span className="admin-metric__label">Categories</span>
+          <strong className="admin-metric__value">{categories.items.length}</strong>
+          <span className="admin-metric__hint">Visitor filters</span>
         </button>
       </div>
 
-      <div className="admin-workflow-actions mt-8">
-        {(["orders", "pieces", "stock", "categories"] as DeskTab[]).map((id) => (
-          <button
-            key={id}
-            type="button"
-            className={`btn ${tab === id ? "btn-plum" : "btn-ghost"}`}
-            onClick={() => setTab(id)}
-          >
-            {id === "orders"
+      <div className="admin-controls">
+        <div>
+          <h2 className="font-display">
+            {tab === "orders"
               ? "Orders"
-              : id === "pieces"
+              : tab === "pieces"
                 ? "Pieces"
-                : id === "stock"
+                : tab === "stock"
                   ? "Inventory"
                   : "Categories"}
+          </h2>
+          <p>
+            {tab === "orders"
+              ? "Open checkouts first. Fulfilled and cancelled stay on the list."
+              : tab === "pieces"
+                ? "Grouped by category, as visitors see them on the rack."
+                : tab === "stock"
+                  ? "The number here is what visitors see as in stock or sold out."
+                  : "These names appear as filters on /shop."}
+          </p>
+        </div>
+        {tab === "pieces" ? (
+          <button className="btn btn-plum" type="button" onClick={() => setAdding((value) => !value)}>
+            {adding ? "Cancel" : "Add a piece"}
           </button>
-        ))}
+        ) : null}
+        {tab === "categories" ? (
+          <button className="btn btn-plum" type="button" onClick={() => setAddingCategory((value) => !value)}>
+            {addingCategory ? "Cancel" : "Add a category"}
+          </button>
+        ) : null}
       </div>
 
       {tab === "orders" ? <OrderList orders={orders} /> : null}
 
       {tab === "pieces" ? (
-        <section className="mt-8">
-          <button className="btn btn-plum" type="button" onClick={() => setAdding((value) => !value)}>
-            {adding ? "Cancel" : "Add a piece"}
-          </button>
+        <div className="admin-stack">
           {adding ? (
-            <form className="admin-form admin-form-wide mt-6" onSubmit={addPiece}>
+            <form className="admin-form admin-form-wide" onSubmit={addPiece}>
+              <h2 className="admin-form-title font-display admin-span-2">New piece</h2>
               <label>
                 Category
                 <select name="categoryId" required defaultValue="">
@@ -228,71 +258,59 @@ export function ShopDesk() {
           ) : null}
 
           {grouped.map(({ category, pieces }) => (
-            <div key={category.id} className="mt-10">
-              <div className="admin-piece-top">
-                <h2 className="font-display text-2xl">{category.title}</h2>
+            <section key={category.id} className="admin-group">
+              <div className="admin-section-head">
+                <h2 className="font-display">{category.title}</h2>
                 <Link className="btn btn-ghost" href={`/admin/shop/category/${category.id}`}>
                   Edit category
                 </Link>
               </div>
-              <div className="admin-piece-grid mt-4">
+              <div className="admin-piece-grid">
                 {pieces.length ? (
                   pieces.map((item) => <ProductCard key={item.id} item={item} />)
                 ) : (
-                  <p className="text-muted">No pieces in this category yet.</p>
+                  <p className="admin-empty">No pieces in this category yet.</p>
                 )}
               </div>
-            </div>
+            </section>
           ))}
-        </section>
+        </div>
       ) : null}
 
       {tab === "stock" ? (
-        <section className="mt-8">
-          <p className="admin-note">
-            Changing the number here is what visitors see as in stock or sold out. Cancelling an
-            order puts the pieces back.
-          </p>
-          <div className="admin-piece-grid mt-6">
-            {orderedProducts.map((item) => {
-              const tone = stockTone(item.stock);
-              return (
-                <article key={item.id} className="admin-piece">
-                  <p className="eyebrow text-accent">{item.categoryName}</p>
-                  <h3 className="font-display text-2xl">{item.name}</h3>
-                  <p className="mt-1 text-sm text-muted">{item.sku}</p>
-                  <p className={`mt-3 text-sm is-${tone}`}>{stockLabel(item.stock)}</p>
-                  <label className="mt-3">
-                    On the rack
-                    <input
-                      type="number"
-                      min={0}
-                      defaultValue={item.stock}
-                      key={`${item.id}-${item.stock}`}
-                      onBlur={(event) => {
-                        const next = Number(event.target.value);
-                        if (Number.isFinite(next) && next !== item.stock) setStock(item.id, next);
-                      }}
-                    />
-                  </label>
-                </article>
-              );
-            })}
-          </div>
-        </section>
+        <div className="admin-piece-grid">
+          {orderedProducts.map((item) => {
+            const tone = stockTone(item.stock);
+            return (
+              <article key={item.id} className="admin-piece">
+                <p className="eyebrow text-accent">{item.categoryName}</p>
+                <h3 className="font-display">{item.name}</h3>
+                <p className="mt-1 text-sm text-muted">{item.sku}</p>
+                <p className={`mt-3 text-sm is-${tone}`}>{stockLabel(item.stock)}</p>
+                <label className="mt-3">
+                  On the rack
+                  <input
+                    type="number"
+                    min={0}
+                    defaultValue={item.stock}
+                    key={`${item.id}-${item.stock}`}
+                    onBlur={(event) => {
+                      const next = Number(event.target.value);
+                      if (Number.isFinite(next) && next !== item.stock) setStock(item.id, next);
+                    }}
+                  />
+                </label>
+              </article>
+            );
+          })}
+        </div>
       ) : null}
 
       {tab === "categories" ? (
-        <section className="mt-8">
-          <p className="admin-note">
-            These names appear as filters on /shop. Add a new one when the workshop starts a new
-            kind of piece — not a poetic rack.
-          </p>
-          <button className="btn btn-plum mt-6" type="button" onClick={() => setAddingCategory((value) => !value)}>
-            {addingCategory ? "Cancel" : "Add a category"}
-          </button>
+        <div className="admin-stack">
           {addingCategory ? (
-            <form className="admin-form admin-form-wide mt-6" onSubmit={addCategory}>
+            <form className="admin-form admin-form-wide" onSubmit={addCategory}>
+              <h2 className="admin-form-title font-display admin-span-2">New category</h2>
               <label>
                 Category name
                 <input name="title" required placeholder="Aprons" />
@@ -329,7 +347,7 @@ export function ShopDesk() {
               </button>
             </form>
           ) : null}
-          <div className="admin-piece-grid mt-6">
+          <div className="admin-piece-grid">
             {orderedCategories.map((item) => (
               <CategoryCard
                 key={item.id}
@@ -340,7 +358,7 @@ export function ShopDesk() {
               />
             ))}
           </div>
-        </section>
+        </div>
       ) : null}
     </div>
   );
@@ -362,7 +380,7 @@ function ProductCard({ item }: { item: ShopProduct }) {
       </p>
       <p className={`mt-1 text-sm is-${tone}`}>{item.categoryName}</p>
       <div className="admin-piece-actions">
-        <Link className="btn btn-ghost" href={`/admin/shop/piece/${item.id}`}>
+        <Link className="btn btn-plum" href={`/admin/shop/piece/${item.id}`}>
           Edit this piece
         </Link>
         {item.status === "published" ? (
@@ -398,13 +416,13 @@ function CategoryCard({
       </p>
       <WorkflowBar type="atelier" id={item.id} status={item.status} onChanged={onChanged} />
       <div className="admin-piece-actions">
-        <Link className="btn btn-ghost" href={`/admin/shop/category/${item.id}`}>
+        <Link className="btn btn-plum" href={`/admin/shop/category/${item.id}`}>
           Edit category
         </Link>
         <Link className="btn btn-ghost" href={`/shop/${item.slug}`} target="_blank" rel="noreferrer">
           Preview
         </Link>
-        <button className="btn btn-ghost" type="button" onClick={onRemove}>
+        <button className="btn admin-danger" type="button" onClick={onRemove}>
           Remove
         </button>
       </div>
@@ -414,7 +432,7 @@ function CategoryCard({
 
 function OrderList({ orders }: { orders: ShopOrder[] }) {
   if (!orders.length) {
-    return <p className="mt-8 text-muted">No orders yet. They appear here when a visitor checks out.</p>;
+    return <p className="admin-empty">No orders yet. They appear here when a visitor checks out.</p>;
   }
   const groups: OrderStatus[] = [
     "awaiting_payment",
@@ -426,18 +444,20 @@ function OrderList({ orders }: { orders: ShopOrder[] }) {
     "cancelled",
   ];
   return (
-    <div className="mt-8 space-y-8">
+    <div className="admin-stack">
       {groups.map((status) => {
         const rows = orders.filter((item) => item.status === status);
         if (!rows.length) return null;
         return (
-          <section key={status}>
-            <h2 className="font-display text-2xl">{ORDER_STATUS_LABELS[status]}</h2>
-            <div className="admin-piece-grid mt-4">
+          <section key={status} className="admin-group">
+            <div className="admin-section-head">
+              <h2 className="font-display">{ORDER_STATUS_LABELS[status]}</h2>
+            </div>
+            <div className="admin-piece-grid">
               {rows.map((order) => (
                 <Link key={order.id} href={`/admin/shop/order/${order.id}`} className="admin-piece admin-piece-link">
                   <p className="eyebrow text-accent">{order.reference}</p>
-                  <h3 className="font-display text-2xl">{order.customerName}</h3>
+                  <h3 className="font-display">{order.customerName}</h3>
                   <p className="mt-2 text-sm text-muted">
                     {formatKes(order.subtotalKes)} · {order.items.length}{" "}
                     {order.items.length === 1 ? "line" : "lines"} · {ORDER_CHANNEL_LABELS[order.channel]}

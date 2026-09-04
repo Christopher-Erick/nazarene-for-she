@@ -34,8 +34,8 @@ export function ShopRecordGate({ id }: { id: string }) {
     };
   }, [id]);
 
-  if (kind === "loading") return <p>Loading this shop record…</p>;
+  if (kind === "loading") return <p className="admin-loading">Loading this shop record…</p>;
   if (kind === "product") return <ProductEditor id={id} />;
   if (kind === "category") return <CategoryEditor id={id} />;
-  return <p className="admin-flash">That piece or category is not on the shop.</p>;
+  return <p className="admin-flash admin-flash--error">That piece or category is not on the shop.</p>;
 }

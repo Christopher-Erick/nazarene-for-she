@@ -19,15 +19,15 @@ export function SitePageBoard() {
   const { items, error, refresh } = useAdminList("pages");
 
   return (
-    <div>
+    <div className="admin-stack">
       <AdminHeader kicker="The public site" title="Site pages">
         <p>
           These four pages exist on the website. You can change the words visitors read. You cannot
           add extra pages here — Home, Programs, Shop, and the rest already have their own places.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      <div className="admin-piece-grid mt-8">
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      <div className="admin-piece-grid">
         {SITE_PAGES.map((meta) => {
           const item = items.find((row) => row.slug === meta.slug);
           return (
@@ -41,7 +41,7 @@ export function SitePageBoard() {
               {item ? <WorkflowBar type="pages" id={item.id} status={item.status} onChanged={refresh} /> : null}
               <div className="admin-piece-actions">
                 {item ? (
-                  <Link className="btn btn-ghost" href={`/admin/pages/${item.id}`}>
+                  <Link className="btn btn-plum" href={`/admin/pages/${item.id}`}>
                     Edit this page
                   </Link>
                 ) : null}

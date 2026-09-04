@@ -32,24 +32,25 @@ export function CategoryEditor({ id }: { id: string }) {
     });
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this category…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this category…</p>;
   const payload = item.payload ?? {};
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/shop">Back to the shop</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/shop">
+        ← Back to the shop
+      </Link>
       <AdminHeader kicker="Shop category" title={item.title} previewHref={`/shop/${item.slug}`}>
         <p>
           This is a filter on the public rack — Dresses, Skirts, Totes, and so on. Pieces you add
           later live inside this category.
         </p>
       </AdminHeader>
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <WorkflowBar type="atelier" id={item.id} status={item.status} onChanged={refresh} />
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-editor">
+        <WorkflowBar type="atelier" id={item.id} status={item.status} onChanged={refresh} />
+        <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           Category name
           <input name="title" defaultValue={item.title} required />
@@ -119,6 +120,7 @@ export function CategoryEditor({ id }: { id: string }) {
           {busy ? "Saving…" : "Save category"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

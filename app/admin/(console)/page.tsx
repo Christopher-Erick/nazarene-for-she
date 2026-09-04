@@ -54,35 +54,37 @@ export default function AdminDashboardPage() {
       .catch((err: Error) => setError(err.message));
   }, []);
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!data) return <p>Loading today…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!data) return <p className="admin-loading">Loading today…</p>;
 
   return (
-    <div>
+    <div className="admin-stack">
       <AdminHeader kicker="Today" title={`Hello, ${data.user.name.split(" ")[0] || data.user.name}`}>
         <p>
           You are signed in as {data.user.role}. Counts only include what you are allowed to see.
           Drafts stay off the public website until they are published.
         </p>
       </AdminHeader>
-      <div className="admin-piece-grid mt-8">
+      <div className="admin-metrics admin-metrics--fill">
         {CARDS.filter((card) => data.counts[card.key] != null).map((card) => (
-          <Link key={card.key} href={card.href} className="admin-piece admin-piece-link">
-            <p className="eyebrow text-accent">{card.label}</p>
-            <p className="font-display text-4xl">{data.counts[card.key]}</p>
-            <p className="mt-2 text-sm text-muted">
+          <Link key={card.key} href={card.href} className="admin-metric">
+            <span className="admin-metric__label">{card.label}</span>
+            <strong className="admin-metric__value">{data.counts[card.key]}</strong>
+            <span className="admin-metric__hint">
               {card.hint}
               {data.counts[`${card.key}Drafts`]
                 ? ` · ${data.counts[`${card.key}Drafts`]} waiting to go live`
                 : ""}
-            </p>
+            </span>
           </Link>
         ))}
       </div>
       {data.activity.length ? (
-        <section className="mt-10">
-          <h2 className="font-display text-2xl">Recent activity</h2>
-          <ul className="admin-activity mt-4">
+        <section className="admin-group">
+          <div className="admin-section-head">
+            <h2 className="font-display">Recent activity</h2>
+          </div>
+          <ul className="admin-activity">
             {data.activity.map((row) => (
               <li key={row.id}>
                 <strong>{ACTION_LABELS[row.action] ?? row.action.replaceAll("_", " ").toLowerCase()}</strong>

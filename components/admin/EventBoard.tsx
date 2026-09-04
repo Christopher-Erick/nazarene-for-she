@@ -48,9 +48,11 @@ export function EventBoard() {
 
   function Group({ title, rows }: { title: string; rows: typeof mapped }) {
     return (
-      <section className="mt-10">
-        <h2 className="font-display text-2xl">{title}</h2>
-        <div className="admin-piece-grid mt-4">
+      <section className="admin-group">
+        <div className="admin-section-head">
+          <h2 className="font-display">{title}</h2>
+        </div>
+        <div className="admin-piece-grid">
           {rows.length ? (
             rows.map(({ item, type, startsAt }) => (
               <article key={item.id} className="admin-piece">
@@ -65,17 +67,17 @@ export function EventBoard() {
                 <p className="mt-1 text-sm text-muted">{String(item.payload.location || "Congo, Kawangware")}</p>
                 <WorkflowBar type="events" id={item.id} status={item.status} onChanged={refresh} />
                 <div className="admin-piece-actions">
-                  <Link className="btn btn-ghost" href={adminEditPath("events", item.id)}>
+                  <Link className="btn btn-plum" href={adminEditPath("events", item.id)}>
                     Edit this event
                   </Link>
-                  <button className="btn btn-ghost" type="button" onClick={() => remove(item.id, item.title)}>
+                  <button className="btn admin-danger" type="button" onClick={() => remove(item.id, item.title)}>
                     Remove
                   </button>
                 </div>
               </article>
             ))
           ) : (
-            <p className="text-muted">None yet.</p>
+            <p className="admin-empty">None yet.</p>
           )}
         </div>
       </section>
@@ -83,17 +85,23 @@ export function EventBoard() {
   }
 
   return (
-    <div>
-      <AdminHeader kicker="In the community" title="Events" previewHref="/events">
+    <div className="admin-stack">
+      <AdminHeader
+        kicker="In the community"
+        title="Events"
+        previewHref="/events"
+        actions={
+          <button className="btn btn-plum" type="button" onClick={() => setOpen((value) => !value)}>
+            {open ? "Cancel" : "Add an event"}
+          </button>
+        }
+      >
         <p>Dates are shown in Nairobi time, as they are on the public calendar.</p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <button className="btn btn-plum mt-6" type="button" onClick={() => setOpen((value) => !value)}>
-        {open ? "Cancel" : "Add an event"}
-      </button>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
       {open ? (
-        <form className="admin-form admin-form-wide mt-6" onSubmit={add}>
+        <form className="admin-form admin-form-wide" onSubmit={add}>
           <label>
             Event name
             <input name="title" required />

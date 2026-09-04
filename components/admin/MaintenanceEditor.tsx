@@ -50,53 +50,56 @@ export function MaintenanceEditor() {
     }
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!state) return <p>Loading maintenance…</p>;
-
   return (
-    <form className="admin-form" onSubmit={save}>
+    <div className="admin-stack">
       <AdminHeader kicker="Super Admin" title="Maintenance">
         <p>
           When this is on, visitors see a short message instead of the public site. People with Admin
           access can still sign in.
         </p>
       </AdminHeader>
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <label className="admin-check">
-        <input name="enabled" type="checkbox" defaultChecked={state.enabled} />
-        Show the maintenance page to visitors
-      </label>
-      <label>
-        Status
-        <select name="status" defaultValue={state.status}>
-          <option value="scheduled">Scheduled</option>
-          <option value="active">Active now</option>
-          <option value="completed">Completed</option>
-        </select>
-      </label>
-      <label>
-        Heading visitors see
-        <input name="title" defaultValue={state.title} />
-      </label>
-      <label>
-        Message
-        <textarea name="message" rows={4} defaultValue={state.message} />
-      </label>
-      <label>
-        Expected return (Nairobi, optional)
-        <input
-          name="estimatedReturnAt"
-          type="datetime-local"
-          defaultValue={state.estimatedReturnAt ? datetimeLocalFromIso(new Date(state.estimatedReturnAt).toISOString()) : ""}
-        />
-      </label>
-      <label>
-        Contact line
-        <input name="contact" defaultValue={state.contact} />
-      </label>
-      <button className="btn btn-plum" type="submit">
-        Save maintenance
-      </button>
-    </form>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      {!state && !error ? <p className="admin-loading">Loading maintenance…</p> : null}
+      {state ? (
+        <form className="admin-form" onSubmit={save}>
+          <label className="admin-check">
+            <input name="enabled" type="checkbox" defaultChecked={state.enabled} />
+            Show the maintenance page to visitors
+          </label>
+          <label>
+            Status
+            <select name="status" defaultValue={state.status}>
+              <option value="scheduled">Scheduled</option>
+              <option value="active">Active now</option>
+              <option value="completed">Completed</option>
+            </select>
+          </label>
+          <label>
+            Heading visitors see
+            <input name="title" defaultValue={state.title} />
+          </label>
+          <label>
+            Message
+            <textarea name="message" rows={4} defaultValue={state.message} />
+          </label>
+          <label>
+            Expected return (Nairobi, optional)
+            <input
+              name="estimatedReturnAt"
+              type="datetime-local"
+              defaultValue={state.estimatedReturnAt ? datetimeLocalFromIso(new Date(state.estimatedReturnAt).toISOString()) : ""}
+            />
+          </label>
+          <label>
+            Contact line
+            <input name="contact" defaultValue={state.contact} />
+          </label>
+          <button className="btn btn-plum" type="submit">
+            Save maintenance
+          </button>
+        </form>
+      ) : null}
+    </div>
   );
 }

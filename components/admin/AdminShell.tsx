@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
+import { BrandMark } from "@/components/ui/BrandMark";
 
 export function AdminShell({
   userName,
@@ -25,19 +26,41 @@ export function AdminShell({
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   async function logout() {
     await adminFetch("/api/v1/admin/session", { method: "DELETE" });
     window.location.href = "/admin/login";
   }
 
+  const current =
+    nav
+      .filter((item) => isCurrent(item.href))
+      .sort((a, b) => b.href.length - a.href.length)[0] ?? null;
+
   return (
     <div className={`admin-shell${open ? " is-open" : ""}`}>
+      {open ? (
+        <button type="button" className="admin-backdrop" aria-label="Close menu" onClick={() => setOpen(false)} />
+      ) : null}
       <aside className="admin-side">
-        <div className="admin-brand">
-          Nazarene for She
-          <span>Administration</span>
-        </div>
-        <nav className="admin-nav" aria-label="Admin">
+        <Link className="admin-brand" href="/admin" onClick={() => setOpen(false)}>
+          <BrandMark className="admin-brand__mark" />
+          <span>
+            <strong>Nazarene for She</strong>
+            <span>Administration</span>
+          </span>
+        </Link>
+        <nav id="admin-nav" className="admin-nav" aria-label="Admin">
           {groups.map((group) => (
             <div key={group} className="admin-nav-group">
               <p className="admin-nav-heading">{group}</p>
@@ -56,20 +79,38 @@ export function AdminShell({
             </div>
           ))}
         </nav>
-        <button type="button" className="btn btn-ghost" onClick={logout}>
-          Sign out
-        </button>
+        <div className="admin-side-foot">
+          <Link className="admin-user" href="/admin/account" onClick={() => setOpen(false)}>
+            <strong>{userName}</strong>
+            <span>{roleName}</span>
+          </Link>
+          <button type="button" className="btn btn-ghost" onClick={logout}>
+            Sign out
+          </button>
+        </div>
       </aside>
       <div className="admin-main">
         <div className="admin-top">
-          <button type="button" className="btn btn-ghost admin-menu-btn" onClick={() => setOpen((value) => !value)}>
-            Menu
+          <button
+            type="button"
+            className="btn btn-ghost admin-menu-btn"
+            aria-expanded={open}
+            aria-controls="admin-nav"
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? "Close" : "Menu"}
           </button>
-          <p className="text-sm text-muted">
-            {userName} · {roleName}
-          </p>
+          <p className="admin-top__place">{current?.label ?? "Desk"}</p>
+          <div className="admin-top__links">
+            <Link className="btn btn-ghost" href="/" target="_blank" rel="noreferrer">
+              View website
+            </Link>
+            <Link className="btn btn-ghost" href="/admin/account">
+              My account
+            </Link>
+          </div>
         </div>
-        {children}
+        <div className="admin-content">{children}</div>
       </div>
     </div>
   );

@@ -37,20 +37,26 @@ export function StoryBoard() {
   }
 
   return (
-    <div>
-      <AdminHeader kicker="Her voice" title="Stories" previewHref="/stories">
+    <div className="admin-stack">
+      <AdminHeader
+        kicker="Her voice"
+        title="Stories"
+        previewHref="/stories"
+        actions={
+          <button className="btn btn-plum" type="button" onClick={() => setOpen((value) => !value)}>
+            {open ? "Cancel" : "Add a story"}
+          </button>
+        }
+      >
         <p>
           Real stories go live only with consent. Keep a piece marked as a placeholder until she has
           agreed — visitors will see that clearly.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <button className="btn btn-plum mt-6" type="button" onClick={() => setOpen((value) => !value)}>
-        {open ? "Cancel" : "Add a story"}
-      </button>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
       {open ? (
-        <form className="admin-form mt-6" onSubmit={add}>
+        <form className="admin-form" onSubmit={add}>
           <label>
             How she is named
             <input name="firstName" required placeholder="Her story — forthcoming" />
@@ -72,8 +78,9 @@ export function StoryBoard() {
           </button>
         </form>
       ) : null}
-      <div className="admin-piece-grid mt-8">
-        {items.map((item) => {
+      <div className="admin-piece-grid">
+        {items.length ? (
+          items.map((item) => {
           const pending = item.payload.storyStatus === "placeholder";
           return (
             <article key={item.id} className="admin-piece">
@@ -85,16 +92,19 @@ export function StoryBoard() {
               <p className="mt-2 text-sm text-muted">{String(item.payload.community || "")}</p>
               <WorkflowBar type="stories" id={item.id} status={item.status} onChanged={refresh} />
               <div className="admin-piece-actions">
-                <Link className="btn btn-ghost" href={adminEditPath("stories", item.id)}>
+                <Link className="btn btn-plum" href={adminEditPath("stories", item.id)}>
                   Edit this story
                 </Link>
-                <button className="btn btn-ghost" type="button" onClick={() => remove(item.id, item.title)}>
+                <button className="btn admin-danger" type="button" onClick={() => remove(item.id, item.title)}>
                   Remove
                 </button>
               </div>
             </article>
           );
-        })}
+          })
+        ) : (
+          <p className="admin-empty">No stories yet. Add a placeholder until consent is given.</p>
+        )}
       </div>
     </div>
   );

@@ -60,16 +60,16 @@ export function OrderDetail({ id }: { id: string }) {
     }
   }
 
-  if (error && !order) return <p className="admin-flash">{error}</p>;
-  if (!order) return <p>Loading this order…</p>;
+  if (error && !order) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!order) return <p className="admin-loading">Loading this order…</p>;
 
   const actions = NEXT_ACTIONS[order.status] ?? [];
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/shop">Back to the shop</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/shop">
+        ← Back to the shop
+      </Link>
       <AdminHeader kicker="Shop order" title={order.reference}>
         <p>
           {ORDER_STATUS_LABELS[order.status]} · {ORDER_CHANNEL_LABELS[order.channel]}. Ask the
@@ -82,28 +82,30 @@ export function OrderDetail({ id }: { id: string }) {
           </p>
         ) : null}
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
 
-      <div className="admin-piece-grid mt-8">
-        <article className="admin-piece">
-          <p className="eyebrow text-accent">Customer</p>
-          <h3 className="font-display text-2xl">{order.customerName}</h3>
-          <p className="mt-2 text-sm">{order.customerEmail}</p>
-          {order.customerPhone ? <p className="text-sm">{order.customerPhone}</p> : null}
-          {order.gift ? <p className="mt-2 text-sm">This is a gift.</p> : null}
+      <div className="admin-metrics admin-metrics--two">
+        <article className="admin-metric is-static">
+          <span className="admin-metric__label">Customer</span>
+          <strong className="admin-metric__value">{order.customerName}</strong>
+          <span className="admin-metric__hint">
+            {order.customerEmail}
+            {order.customerPhone ? ` · ${order.customerPhone}` : ""}
+            {order.gift ? " · Gift" : ""}
+          </span>
         </article>
-        <article className="admin-piece">
-          <p className="eyebrow text-accent">Total</p>
-          <p className="font-display text-4xl">{formatKes(order.subtotalKes)}</p>
-          <p className="mt-2 text-sm text-muted">
-            {new Date(order.createdAt).toLocaleString("en-KE")}
-          </p>
+        <article className="admin-metric is-static">
+          <span className="admin-metric__label">Total</span>
+          <strong className="admin-metric__value">{formatKes(order.subtotalKes)}</strong>
+          <span className="admin-metric__hint">{new Date(order.createdAt).toLocaleString("en-KE")}</span>
         </article>
       </div>
 
-      <section className="mt-8">
-        <h2 className="font-display text-2xl">Pieces</h2>
-        <ul className="mt-4 space-y-3">
+      <section className="admin-group">
+        <div className="admin-section-head">
+          <h2 className="font-display">Pieces</h2>
+        </div>
+        <ul className="admin-group">
           {order.items.map((item) => (
             <li key={item.id} className="admin-piece">
               <div className="admin-piece-top">
@@ -120,31 +122,34 @@ export function OrderDetail({ id }: { id: string }) {
       </section>
 
       {order.deliveryNotes ? (
-        <section className="mt-8">
-          <h2 className="font-display text-2xl">Where it should go</h2>
-          <p className="mt-3 whitespace-pre-wrap">{order.deliveryNotes}</p>
+        <section className="admin-panel">
+          <h2 className="font-display">Where it should go</h2>
+          <p className="whitespace-pre-wrap">{order.deliveryNotes}</p>
         </section>
       ) : null}
       {order.notes ? (
-        <section className="mt-8">
-          <h2 className="font-display text-2xl">Notes</h2>
-          <p className="mt-3 whitespace-pre-wrap">{order.notes}</p>
+        <section className="admin-panel">
+          <h2 className="font-display">Notes</h2>
+          <p className="whitespace-pre-wrap">{order.notes}</p>
         </section>
       ) : null}
 
       {actions.length ? (
-        <div className="admin-workflow-actions mt-8">
-          {actions.map((status) => (
-            <button
-              key={status}
-              type="button"
-              className={`btn ${status === "cancelled" ? "btn-ghost" : "btn-plum"}`}
-              disabled={busy}
-              onClick={() => setStatus(status)}
-            >
-              {ACTION_LABELS[status] ?? ORDER_STATUS_LABELS[status]}
-            </button>
-          ))}
+        <div className="admin-workflow">
+          <p className="admin-workflow__label">Next step</p>
+          <div className="admin-workflow-actions">
+            {actions.map((status) => (
+              <button
+                key={status}
+                type="button"
+                className={`btn ${status === "cancelled" ? "admin-danger" : "btn-plum"}`}
+                disabled={busy}
+                onClick={() => setStatus(status)}
+              >
+                {ACTION_LABELS[status] ?? ORDER_STATUS_LABELS[status]}
+              </button>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>

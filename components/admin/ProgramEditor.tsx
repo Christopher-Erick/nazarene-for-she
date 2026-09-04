@@ -38,22 +38,23 @@ export function ProgramEditor({ id }: { id: string }) {
     });
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this programme…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this programme…</p>;
   const payload = item.payload ?? {};
   const related = Array.isArray(payload.relatedStorySlugs)
     ? payload.relatedStorySlugs.filter((value): value is string => typeof value === "string")
     : [];
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/programs">Back to programmes</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/programs">
+        ← Back to programmes
+      </Link>
       <AdminHeader kicker="Programme" title={item.title} previewHref={`/programs/${item.slug}`} />
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <WorkflowBar type="programs" id={item.id} status={item.status} onChanged={refresh} />
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-editor">
+        <WorkflowBar type="programs" id={item.id} status={item.status} onChanged={refresh} />
+        <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           Programme name
           <input name="name" defaultValue={item.title} required />
@@ -120,6 +121,7 @@ export function ProgramEditor({ id }: { id: string }) {
           {busy ? "Saving…" : "Save programme"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

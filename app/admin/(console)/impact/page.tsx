@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 
 type Stat = {
   id: string;
@@ -38,15 +39,16 @@ export default function ImpactAdminPage() {
   }
 
   return (
-    <form onSubmit={save}>
-      <h1 className="font-display text-4xl">Impact</h1>
-      <p className="mt-2 text-muted">
-        These figures appear on Impact. Keep a number off the public page until it is verified — we do
-        not invent impact.
-      </p>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <div className="mt-6 space-y-4">
+    <form className="admin-stack" onSubmit={save}>
+      <AdminHeader kicker="The public site" title="Impact" previewHref="/impact">
+        <p>
+          These figures appear on Impact. Keep a number off the public page until it is verified — we do
+          not invent impact.
+        </p>
+      </AdminHeader>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-stack">
         {items.map((item, index) => (
           <article key={item.id} className="admin-card grid gap-3 md:grid-cols-2">
             <label>
@@ -85,8 +87,7 @@ export default function ImpactAdminPage() {
                 <option value="awaiting-verification">Awaiting verification</option>
               </select>
             </label>
-            <label>
-              Show on the Impact page
+            <label className="admin-check">
               <input
                 type="checkbox"
                 checked={Boolean(item.published)}
@@ -96,11 +97,12 @@ export default function ImpactAdminPage() {
                   setItems(next);
                 }}
               />
+              Show on the Impact page
             </label>
           </article>
         ))}
       </div>
-      <button className="btn btn-plum mt-6" type="submit">
+      <button className="btn btn-plum" type="submit">
         Save statistics
       </button>
     </form>

@@ -42,19 +42,20 @@ export function EventEditor({ id }: { id: string }) {
     });
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-  if (!item) return <p>Loading this event…</p>;
+  if (error) return <p className="admin-flash admin-flash--error">{error}</p>;
+  if (!item) return <p className="admin-loading">Loading this event…</p>;
   const payload = item.payload ?? {};
 
   return (
-    <div>
-      <p>
-        <Link href="/admin/events">Back to events</Link>
-      </p>
+    <div className="admin-stack">
+      <Link className="admin-back" href="/admin/events">
+        ← Back to events
+      </Link>
       <AdminHeader kicker="Event" title={item.title} previewHref={`/events/${item.slug}`} />
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <WorkflowBar type="events" id={item.id} status={item.status} onChanged={refresh} />
-      <form className="admin-form admin-form-wide mt-6" onSubmit={onSubmit}>
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-editor">
+        <WorkflowBar type="events" id={item.id} status={item.status} onChanged={refresh} />
+        <form className="admin-form admin-form-wide" onSubmit={onSubmit}>
         <label>
           Event name
           <input name="title" defaultValue={item.title} required />
@@ -128,6 +129,7 @@ export function EventEditor({ id }: { id: string }) {
           {busy ? "Saving…" : "Save event"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

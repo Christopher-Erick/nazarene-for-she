@@ -38,23 +38,25 @@ export function PrivacyEditor() {
   }
 
   return (
-    <form className="admin-form" onSubmit={save}>
+    <div className="admin-stack">
       <AdminHeader kicker="Public website" title="Privacy" previewHref="/privacy">
         <p>If the body is empty, visitors still see the careful default policy already on the site.</p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <label>
-        Title
-        <input value={title} onChange={(event) => setTitle(event.target.value)} />
-      </label>
-      <label>
-        Policy body
-        <textarea rows={16} value={body} onChange={(event) => setBody(event.target.value)} />
-      </label>
-      <button className="btn btn-plum" type="submit">
-        Save privacy policy
-      </button>
-    </form>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <form className="admin-form" onSubmit={save}>
+        <label>
+          Title
+          <input value={title} onChange={(event) => setTitle(event.target.value)} />
+        </label>
+        <label>
+          Policy body
+          <textarea rows={16} value={body} onChange={(event) => setBody(event.target.value)} />
+        </label>
+        <button className="btn btn-plum" type="submit">
+          Save privacy policy
+        </button>
+      </form>
+    </div>
   );
 }

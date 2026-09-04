@@ -36,17 +36,17 @@ const LINKS = [
 
 export default function SettingsPage() {
   return (
-    <div>
+    <div className="admin-stack">
       <AdminHeader kicker="Housekeeping" title="Settings">
         <p>Choose the part of the public site you want to look after. Nothing here is a database table.</p>
       </AdminHeader>
-      <div className="admin-piece-grid mt-8">
+      <div className="admin-piece-grid">
         {LINKS.map((link) => (
           <article key={link.href} className="admin-piece">
             <h2 className="font-display text-2xl">{link.title}</h2>
             <p className="mt-2 text-sm text-muted">{link.body}</p>
             <div className="admin-piece-actions">
-              <Link className="btn btn-ghost" href={link.href}>
+              <Link className="btn btn-plum" href={link.href}>
                 Open
               </Link>
             </div>

@@ -60,15 +60,19 @@ export default function UsersPage() {
   }
 
   return (
-    <div>
+    <div className="admin-stack">
       <AdminHeader kicker="Access" title="People">
         <p>
           These are the people who can sign in to Admin. Roles control what they may change. Only a
           Super Admin can open Roles & access.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      <form className="admin-form mt-8" onSubmit={create}>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      <section className="admin-group">
+        <div className="admin-section-head">
+          <h2 className="font-display">Invite</h2>
+        </div>
+        <form className="admin-form" onSubmit={create}>
         <label>
           Name
           <input name="name" required />
@@ -95,8 +99,14 @@ export default function UsersPage() {
           Invite to Admin
         </button>
       </form>
-      <div className="admin-piece-grid mt-10">
-        {items.map((user) => (
+      </section>
+      <section className="admin-group">
+        <div className="admin-section-head">
+          <h2 className="font-display">On this desk</h2>
+        </div>
+      <div className="admin-piece-grid">
+        {items.length ? (
+          items.map((user) => (
           <article key={user.id} className="admin-piece">
             <div className="admin-piece-top">
               <p className="eyebrow text-accent">{user.roleName}</p>
@@ -108,7 +118,7 @@ export default function UsersPage() {
             <p className="mt-1 text-sm text-muted">{user.email}</p>
             <div className="admin-piece-actions">
               <button
-                className="btn btn-ghost"
+                className={`btn ${user.status === "active" ? "admin-danger" : "btn-plum"}`}
                 type="button"
                 onClick={() =>
                   update(user, { status: user.status === "active" ? "disabled" : "active" })
@@ -118,8 +128,12 @@ export default function UsersPage() {
               </button>
             </div>
           </article>
-        ))}
+          ))
+        ) : (
+          <p className="admin-empty">No people on this desk yet. Invite someone above.</p>
+        )}
       </div>
+      </section>
     </div>
   );
 }

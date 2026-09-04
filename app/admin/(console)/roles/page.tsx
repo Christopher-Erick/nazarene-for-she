@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { CMS_ACTIONS, CMS_MODULES, ROLE_LABELS, ROLE_SLUGS, type RoleSlug } from "@/lib/cms/permissions";
 
 export default function RolesPage() {
@@ -45,26 +46,31 @@ export default function RolesPage() {
     }
   }
 
-  if (error) return <p className="admin-flash">{error}</p>;
-
   return (
-    <div>
-      <h1 className="font-display text-4xl">Roles & Permissions</h1>
-      <p className="mt-2 text-muted">
-        Only Super Admin can open this page. Other roles receive 403 if they request it directly.
-      </p>
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <label className="admin-field mt-6 max-w-xs">
-        Role
-        <select value={role} onChange={(event) => setRole(event.target.value as RoleSlug)}>
-          {ROLE_SLUGS.map((slug) => (
-            <option key={slug} value={slug}>
-              {ROLE_LABELS[slug]}
-            </option>
-          ))}
-        </select>
-      </label>
-      <div className="mt-6 overflow-x-auto">
+    <div className="admin-stack">
+      <AdminHeader kicker="Access" title="Roles & permissions">
+        <p>Only Super Admin can open this page. Other roles receive 403 if they request it directly.</p>
+      </AdminHeader>
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-form">
+        <label>
+          Role
+          <select value={role} onChange={(event) => setRole(event.target.value as RoleSlug)}>
+            {ROLE_SLUGS.map((slug) => (
+              <option key={slug} value={slug}>
+                {ROLE_LABELS[slug]}
+              </option>
+            ))}
+          </select>
+        </label>
+        {role === "super_admin" ? (
+          <p className="admin-note">Super Admin always has every permission. Those boxes cannot be turned off.</p>
+        ) : (
+          <p className="text-sm text-muted">Tick what this role may do, then save.</p>
+        )}
+      </div>
+      <div className="admin-table-wrap">
         <table className="admin-matrix">
           <thead>
             <tr>
@@ -94,9 +100,11 @@ export default function RolesPage() {
           </tbody>
         </table>
       </div>
-      <button className="btn btn-plum mt-6" type="button" onClick={save} disabled={role === "super_admin"}>
-        Save {ROLE_LABELS[role]}
-      </button>
+      <div className="admin-toolbar">
+        <button className="btn btn-plum" type="button" onClick={save} disabled={role === "super_admin"}>
+          Save {ROLE_LABELS[role]}
+        </button>
+      </div>
     </div>
   );
 }

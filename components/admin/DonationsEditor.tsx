@@ -73,7 +73,7 @@ export function DonationsEditor() {
   }
 
   return (
-    <form onSubmit={save}>
+    <form className="admin-stack" onSubmit={save}>
       <AdminHeader kicker="Support A Girl" title="Donations" previewHref="/donate">
         <p>
           M-Pesa, bank and M-Changa are the ways visitors can give. Leave a field marked as a
@@ -81,9 +81,10 @@ export function DonationsEditor() {
           account details.
         </p>
       </AdminHeader>
-      {error ? <p className="admin-flash mt-4">{error}</p> : null}
-      {message ? <p className="admin-flash mt-4">{message}</p> : null}
-      <div className="admin-form mt-8">
+      {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <div className="admin-form">
+        <h2 className="admin-form-title font-display">Opening copy</h2>
         <label>
           Opening on Support A Girl
           <textarea rows={4} value={intro} onChange={(event) => setIntro(event.target.value)} />
@@ -94,7 +95,7 @@ export function DonationsEditor() {
         </label>
       </div>
       {methods.map((method, methodIndex) => (
-        <article key={method.id} className="admin-piece mt-6">
+        <article key={method.id} className="admin-piece">
           <h2 className="font-display text-2xl">{method.name}</h2>
           <label className="admin-field mt-3">
             How this way of giving is described
@@ -135,7 +136,7 @@ export function DonationsEditor() {
           ))}
         </article>
       ))}
-      <button className="btn btn-plum mt-6" type="submit">
+      <button className="btn btn-plum" type="submit">
         Save donation details
       </button>
     </form>

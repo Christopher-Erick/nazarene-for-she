@@ -1,5 +1,5 @@
 export const shop = {
-  name: "The Atelier",
+  name: "Shop",
   path: "/shop",
   kicker: "The Kawangware workshop",
   tagline: "Wear what she made.",
@@ -99,7 +99,7 @@ export const garments: Garment[] = [
     summary: "A dress cut and sewn in the workshop — work she can name as her own.",
     lure: "When she finishes a dress, it is not charity leaving the table. It is a girl paid.",
     explanation:
-      "Dresses are made to order from the Kawangware atelier. A picture of the finished piece, and a fair price, come when the workshop confirms your request.",
+      "Dresses are made to order from the Kawangware workshop. A picture of the finished piece, and a fair price, come when the workshop confirms your request.",
     sizing: "body",
   },
   {
@@ -231,7 +231,7 @@ export const garments: Garment[] = [
     summary: "A tote bag she carried through every step — cut, stitch, finish.",
     lure: "Carry her work on your shoulder. That weight is a girl's income.",
     explanation:
-      "Tote bags are sewn in the Kawangware atelier as part of vocational training. They are made to order. A fair price comes when the workshop confirms your request.",
+      "Tote bags are sewn in the Kawangware workshop as part of vocational training. They are made to order. A fair price comes when the workshop confirms your request.",
     sizing: "one",
   },
   {
