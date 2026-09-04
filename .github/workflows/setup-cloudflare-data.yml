@@ -1,0 +1,50 @@
+name: Setup Cloudflare D1 and R2
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-data-setup
+  cancel-in-progress: false
+
+jobs:
+  setup:
+    name: Create D1, R2, and apply migrations
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create D1 and R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/provision-cloudflare.mjs
+
+      - name: Apply D1 migrations
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run db:migrate
+
+      - name: Commit wrangler bindings if they changed
+        run: |
+          git add wrangler.jsonc
+          if git diff --staged --quiet; then
+            echo "wrangler.jsonc is already up to date."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Bind production D1 and R2 in wrangler."
+          git push
