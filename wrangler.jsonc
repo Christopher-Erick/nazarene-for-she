@@ -21,5 +21,11 @@
       "database_id": "63e259fd-8c15-4be5-95be-8c23013ff831",
       "migrations_dir": "migrations"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "nazarene-for-she-media"
+    }
   ]
 }
