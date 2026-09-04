@@ -23,7 +23,9 @@ export default function MediaPage() {
   }
 
   useEffect(() => {
-    load().catch((err: Error) => setError(err.message));
+    adminFetch("/api/v1/admin/media")
+      .then((data) => setItems((data.items as MediaItem[]) ?? []))
+      .catch((err: Error) => setError(err.message));
   }, []);
 
   async function upload(event: FormEvent<HTMLFormElement>) {

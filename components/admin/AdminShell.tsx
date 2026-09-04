@@ -18,7 +18,9 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openedFor, setOpenedFor] = useState(pathname);
+  const open = menuOpen && openedFor === pathname;
   const groups = [...new Set(nav.map((item) => item.group))];
 
   function isCurrent(href: string) {
@@ -26,9 +28,18 @@ export function AdminShell({
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
+  function toggleMenu() {
+    if (open) {
+      setMenuOpen(false);
+      return;
+    }
+    setOpenedFor(pathname);
+    setMenuOpen(true);
+  }
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -50,10 +61,10 @@ export function AdminShell({
   return (
     <div className={`admin-shell${open ? " is-open" : ""}`}>
       {open ? (
-        <button type="button" className="admin-backdrop" aria-label="Close menu" onClick={() => setOpen(false)} />
+        <button type="button" className="admin-backdrop" aria-label="Close menu" onClick={closeMenu} />
       ) : null}
       <aside className="admin-side">
-        <Link className="admin-brand" href="/admin" onClick={() => setOpen(false)}>
+        <Link className="admin-brand" href="/admin" onClick={closeMenu}>
           <BrandMark className="admin-brand__mark" />
           <span>
             <strong>Nazarene for She</strong>
@@ -71,7 +82,7 @@ export function AdminShell({
                     key={item.href}
                     href={item.href}
                     aria-current={isCurrent(item.href) ? "page" : undefined}
-                    onClick={() => setOpen(false)}
+                    onClick={closeMenu}
                   >
                     {item.label}
                   </Link>
@@ -80,7 +91,7 @@ export function AdminShell({
           ))}
         </nav>
         <div className="admin-side-foot">
-          <Link className="admin-user" href="/admin/account" onClick={() => setOpen(false)}>
+          <Link className="admin-user" href="/admin/account" onClick={closeMenu}>
             <strong>{userName}</strong>
             <span>{roleName}</span>
           </Link>
@@ -96,7 +107,7 @@ export function AdminShell({
             className="btn btn-ghost admin-menu-btn"
             aria-expanded={open}
             aria-controls="admin-nav"
-            onClick={() => setOpen((value) => !value)}
+            onClick={toggleMenu}
           >
             {open ? "Close" : "Menu"}
           </button>

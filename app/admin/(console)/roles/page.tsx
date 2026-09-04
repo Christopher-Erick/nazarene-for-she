@@ -17,7 +17,9 @@ export default function RolesPage() {
   }
 
   useEffect(() => {
-    load().catch((err: Error) => setError(err.message));
+    adminFetch("/api/v1/admin/roles")
+      .then((data) => setMatrix((data.matrix as Record<string, string[]>) ?? {}))
+      .catch((err: Error) => setError(err.message));
   }, []);
 
   function checked(module: string, action: string) {

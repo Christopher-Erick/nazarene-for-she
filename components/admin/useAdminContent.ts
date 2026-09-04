@@ -28,8 +28,18 @@ export function useAdminItem(type: string, id: string) {
   }, [type, id]);
 
   useEffect(() => {
-    refresh().catch((err: Error) => setError(err.message));
-  }, [refresh]);
+    let cancelled = false;
+    adminFetch(`/api/v1/admin/content/${type}/${id}`)
+      .then((data) => {
+        if (!cancelled) setItem(data.item as AdminItem);
+      })
+      .catch((err: Error) => {
+        if (!cancelled) setError(err.message);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [type, id]);
 
   async function save(body: Record<string, unknown>) {
     setBusy(true);
@@ -66,10 +76,27 @@ export function useAdminList(type: string) {
   }, [type]);
 
   useEffect(() => {
-    refresh()
-      .catch((err: Error) => setError(err.message))
-      .finally(() => setLoaded(true));
-  }, [refresh]);
+    let cancelled = false;
+    adminFetch(`/api/v1/admin/content/${type}`)
+      .then((data) => {
+        if (cancelled) return;
+        setItems(
+          ((data.items as AdminItem[]) ?? []).map((item) => ({
+            ...item,
+            payload: item.payload ?? {},
+          })),
+        );
+        setLoaded(true);
+      })
+      .catch((err: Error) => {
+        if (cancelled) return;
+        setError(err.message);
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [type]);
 
   async function create(body: Record<string, unknown>) {
     setError("");

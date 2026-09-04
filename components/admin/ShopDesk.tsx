@@ -35,7 +35,23 @@ export function ShopDesk() {
   }
 
   useEffect(() => {
-    refreshShop().catch((err: Error) => setError(err.message));
+    let cancelled = false;
+    Promise.all([
+      adminFetch("/api/v1/admin/shop/products?status=all"),
+      adminFetch("/api/v1/admin/shop/orders"),
+    ])
+      .then(([productData, orderData]) => {
+        if (cancelled) return;
+        setProducts((productData.items as ShopProduct[]) ?? []);
+        setOrders((orderData.items as ShopOrder[]) ?? []);
+        setOpenCount(Number(orderData.open ?? 0));
+      })
+      .catch((err: Error) => {
+        if (!cancelled) setError(err.message);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const orderedCategories = useMemo(

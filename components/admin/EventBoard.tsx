@@ -5,11 +5,65 @@ import Link from "next/link";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { WorkflowBar } from "@/components/admin/WorkflowBar";
-import { useAdminList } from "@/components/admin/useAdminContent";
+import { useAdminList, type AdminItem } from "@/components/admin/useAdminContent";
 import { adminEditPath } from "@/lib/cms/admin-paths";
 import { datetimeLocalFromIso, isoFromDatetimeLocal } from "@/lib/cms/shapes";
 import { eventTypeLabels, type EventType } from "@/lib/data/events";
 import { formatEventSchedule, isUpcomingEvent } from "@/lib/events/dates";
+
+type EventBoardRow = {
+  item: AdminItem;
+  startsAt: string;
+  type: EventType;
+};
+
+function EventBoardGroup({
+  title,
+  rows,
+  onChanged,
+  onRemove,
+}: {
+  title: string;
+  rows: EventBoardRow[];
+  onChanged: () => void;
+  onRemove: (id: string, title: string) => void;
+}) {
+  return (
+    <section className="admin-group">
+      <div className="admin-section-head">
+        <h2 className="font-display">{title}</h2>
+      </div>
+      <div className="admin-piece-grid">
+        {rows.length ? (
+          rows.map(({ item, type, startsAt }) => (
+            <article key={item.id} className="admin-piece">
+              <div className="admin-piece-top">
+                <p className="eyebrow text-accent">{eventTypeLabels[type] ?? type}</p>
+                <StatusBadge status={item.status} />
+              </div>
+              <h3 className="font-display text-2xl">{item.title}</h3>
+              <p className="mt-2 text-sm text-muted">
+                {startsAt ? formatEventSchedule({ startsAt, endsAt: String(item.payload.endsAt || "") || undefined }) : "Date not set"}
+              </p>
+              <p className="mt-1 text-sm text-muted">{String(item.payload.location || "Congo, Kawangware")}</p>
+              <WorkflowBar type="events" id={item.id} status={item.status} onChanged={onChanged} />
+              <div className="admin-piece-actions">
+                <Link className="btn btn-plum" href={adminEditPath("events", item.id)}>
+                  Edit this event
+                </Link>
+                <button className="btn admin-danger" type="button" onClick={() => onRemove(item.id, item.title)}>
+                  Remove
+                </button>
+              </div>
+            </article>
+          ))
+        ) : (
+          <p className="admin-empty">None yet.</p>
+        )}
+      </div>
+    </section>
+  );
+}
 
 export function EventBoard() {
   const { items, error, message, create, remove, refresh, setError } = useAdminList("events");
@@ -44,44 +98,6 @@ export function EventBoard() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not add that event.");
     }
-  }
-
-  function Group({ title, rows }: { title: string; rows: typeof mapped }) {
-    return (
-      <section className="admin-group">
-        <div className="admin-section-head">
-          <h2 className="font-display">{title}</h2>
-        </div>
-        <div className="admin-piece-grid">
-          {rows.length ? (
-            rows.map(({ item, type, startsAt }) => (
-              <article key={item.id} className="admin-piece">
-                <div className="admin-piece-top">
-                  <p className="eyebrow text-accent">{eventTypeLabels[type] ?? type}</p>
-                  <StatusBadge status={item.status} />
-                </div>
-                <h3 className="font-display text-2xl">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted">
-                  {startsAt ? formatEventSchedule({ startsAt, endsAt: String(item.payload.endsAt || "") || undefined }) : "Date not set"}
-                </p>
-                <p className="mt-1 text-sm text-muted">{String(item.payload.location || "Congo, Kawangware")}</p>
-                <WorkflowBar type="events" id={item.id} status={item.status} onChanged={refresh} />
-                <div className="admin-piece-actions">
-                  <Link className="btn btn-plum" href={adminEditPath("events", item.id)}>
-                    Edit this event
-                  </Link>
-                  <button className="btn admin-danger" type="button" onClick={() => remove(item.id, item.title)}>
-                    Remove
-                  </button>
-                </div>
-              </article>
-            ))
-          ) : (
-            <p className="admin-empty">None yet.</p>
-          )}
-        </div>
-      </section>
-    );
   }
 
   return (
@@ -141,8 +157,8 @@ export function EventBoard() {
           </button>
         </form>
       ) : null}
-      <Group title="Coming up" rows={upcoming} />
-      <Group title="Past days" rows={past} />
+      <EventBoardGroup title="Coming up" rows={upcoming} onChanged={refresh} onRemove={remove} />
+      <EventBoardGroup title="Past days" rows={past} onChanged={refresh} onRemove={remove} />
     </div>
   );
 }

@@ -47,10 +47,6 @@ export function CategoryPreviewCard({
   const count = products.filter((item) => item.categorySlug === category.slug).length;
 
   useEffect(() => {
-    setActive(0);
-  }, [category.id]);
-
-  useEffect(() => {
     if (stills.length < 2) return;
     const timer = window.setInterval(() => {
       setActive((current) => (current + 1) % stills.length);
@@ -58,7 +54,7 @@ export function CategoryPreviewCard({
     return () => window.clearInterval(timer);
   }, [stills.length]);
 
-  const still = stills[active] ?? stillForGarment(category);
+  const still = stills[stills.length ? active % stills.length : 0] ?? stillForGarment(category);
 
   return (
     <article className="shop-card" id={`piece-${category.slug}`}>

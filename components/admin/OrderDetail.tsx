@@ -32,13 +32,18 @@ export function OrderDetail({ id }: { id: string }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  async function refresh() {
-    const data = await adminFetch(`/api/v1/admin/shop/orders/${id}`);
-    setOrder(data.item as ShopOrder);
-  }
-
   useEffect(() => {
-    refresh().catch((err: Error) => setError(err.message));
+    let cancelled = false;
+    adminFetch(`/api/v1/admin/shop/orders/${id}`)
+      .then((data) => {
+        if (!cancelled) setOrder(data.item as ShopOrder);
+      })
+      .catch((err: Error) => {
+        if (!cancelled) setError(err.message);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   async function setStatus(status: OrderStatus) {

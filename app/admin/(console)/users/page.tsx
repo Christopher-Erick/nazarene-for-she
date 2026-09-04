@@ -24,7 +24,9 @@ export default function UsersPage() {
   }
 
   useEffect(() => {
-    load().catch((err: Error) => setError(err.message));
+    adminFetch("/api/v1/admin/users")
+      .then((data) => setItems((data.items as User[]) ?? []))
+      .catch((err: Error) => setError(err.message));
   }, []);
 
   async function create(event: FormEvent<HTMLFormElement>) {

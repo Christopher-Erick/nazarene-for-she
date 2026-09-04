@@ -47,7 +47,7 @@ export function CheckoutForm({
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [payMethod, setPayMethod] = useState<DonationMethod["id"]>(methods[0]?.id ?? "mpesa");
-  const channelRef = useRef<OrderChannel>("web");
+  const [channel, setChannel] = useState<OrderChannel>("web");
   const locked = useRef(false);
   const count = cartCount(items);
   const subtotal = cartSubtotal(items);
@@ -60,7 +60,10 @@ export function CheckoutForm({
       setMessage("Add at least one piece before checking out.");
       return;
     }
-    const channel = channelRef.current;
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    const channel: OrderChannel =
+      submitter instanceof HTMLButtonElement && submitter.value === "whatsapp" ? "whatsapp" : "web";
+    setChannel(channel);
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
     if (channel === "whatsapp" && !String(data.phone ?? "").trim()) {
@@ -302,12 +305,11 @@ export function CheckoutForm({
                   <button
                     className="btn btn-plum"
                     type="submit"
+                    name="channel"
+                    value="whatsapp"
                     disabled={busy}
-                    onClick={() => {
-                      channelRef.current = "whatsapp";
-                    }}
                   >
-                    {status === "loading" && channelRef.current === "whatsapp"
+                    {status === "loading" && channel === "whatsapp"
                       ? "Opening WhatsApp…"
                       : "Order via WhatsApp"}
                   </button>
@@ -315,12 +317,11 @@ export function CheckoutForm({
                 <button
                   className={whatsappEnabled ? "btn btn-ghost" : "btn btn-plum"}
                   type="submit"
+                  name="channel"
+                  value="web"
                   disabled={busy}
-                  onClick={() => {
-                    channelRef.current = "web";
-                  }}
                 >
-                  {status === "loading" && channelRef.current === "web"
+                  {status === "loading" && channel === "web"
                     ? "Placing order…"
                     : status === "success"
                       ? "Order placed"

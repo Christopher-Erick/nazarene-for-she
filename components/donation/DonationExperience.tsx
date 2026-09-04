@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DonationInquiryForm } from "@/components/donation/DonationInquiryForm";
 import { DonationPaymentPanel } from "@/components/donation/DonationPaymentPanel";
 import { DonationWizard } from "@/components/donation/DonationWizard";
@@ -35,14 +35,6 @@ export function DonationExperience({
   const [method, setMethod] = useState<(typeof donationMethods)[number]["id"]>("mchanga");
   const [showGiveForm, setShowGiveForm] = useState(false);
   const [noteSubmitted, setNoteSubmitted] = useState(false);
-
-  useEffect(() => {
-    if (hasValidCause) {
-      setWizardOpen(true);
-      setStep(1);
-      setCategory(initialCause!);
-    }
-  }, [initialCause, hasValidCause]);
 
   function startGiveWizard() {
     setWizardOpen(true);

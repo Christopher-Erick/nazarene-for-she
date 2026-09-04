@@ -18,7 +18,7 @@ const MODULES = [
   "privacy",
 ];
 const ACTIONS = ["view", "create", "edit", "delete", "approve", "publish"];
-const ALL = MODULES.flatMap((module) => ACTIONS.map((action) => `${module}.${action}`));
+const ALL = MODULES.flatMap((cmsModule) => ACTIONS.map((action) => `${cmsModule}.${action}`));
 
 const ROLES = [
   ["super_admin", "Super Admin", "Controls the authorization system and the full CMS."],
@@ -168,9 +168,9 @@ lines.push(
 );
 
 const permRows = [];
-for (const module of MODULES) {
+for (const cmsModule of MODULES) {
   for (const action of ACTIONS) {
-    permRows.push(`  ('${module}.${action}', '${module}', '${action}', '${action} ${module}')`);
+    permRows.push(`  ('${cmsModule}.${action}', '${cmsModule}', '${action}', '${action} ${cmsModule}')`);
   }
 }
 lines.push("", "INSERT OR IGNORE INTO permissions (id, module, action, description) VALUES");

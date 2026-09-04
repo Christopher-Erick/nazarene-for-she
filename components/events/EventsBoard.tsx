@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { EventCard } from "@/components/events/EventCard";
 import {
   EventsCalendar,
@@ -51,7 +51,7 @@ export function EventsBoard({
   initialMonth: number;
   initialSelectedKey: string;
 }) {
-  const [visibleMonth, setVisibleMonth] = useState(
+  const [userMonth, setUserMonth] = useState(
     `${initialYear}-${pad2(initialMonth)}`,
   );
   const [query, setQuery] = useState("");
@@ -80,24 +80,15 @@ export function EventsBoard({
   const focusParts = focusDateKey ? parseDateKey(focusDateKey) : null;
 
   const listedUpcoming = filteredUpcoming.filter((event) => {
-    const hideMonth = focusDateKey ? focusDateKey.slice(0, 7) : visibleMonth;
+    const hideMonth = focusDateKey ? focusDateKey.slice(0, 7) : userMonth;
     return eventMonthKey(event) !== hideMonth;
   });
 
   const matchCount = filteredUpcoming.length + filteredPast.length;
 
   const handleVisibleMonth = useCallback((year: number, month: number) => {
-    setVisibleMonth(`${year}-${pad2(month)}`);
+    setUserMonth(`${year}-${pad2(month)}`);
   }, []);
-
-  useEffect(() => {
-    if (focusDateKey) {
-      const { year, month } = parseDateKey(focusDateKey);
-      setVisibleMonth(`${year}-${pad2(month)}`);
-      return;
-    }
-    setVisibleMonth(`${initialYear}-${pad2(initialMonth)}`);
-  }, [focusDateKey, initialYear, initialMonth]);
 
   return (
     <div className="event-shell">

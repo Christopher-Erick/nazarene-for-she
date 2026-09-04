@@ -18,6 +18,7 @@ export default async function DonatePage({
   const donations = await publishedDonations();
   return (
     <DonationExperience
+      key={`${cause ?? ""}:${give ?? ""}`}
       initialCause={cause}
       startWizard={give !== undefined}
       methods={donations.methods}
