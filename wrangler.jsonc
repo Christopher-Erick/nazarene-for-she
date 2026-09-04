@@ -13,5 +13,13 @@
       "binding": "WORKER_SELF_REFERENCE",
       "service": "nazarene-for-she"
     }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nazarene-for-she",
+      "database_id": "63e259fd-8c15-4be5-95be-8c23013ff831",
+      "migrations_dir": "migrations"
+    }
   ]
 }

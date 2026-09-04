@@ -88,7 +88,7 @@ function createBucket() {
   }
 }
 
-function writeWranglerConfig(databaseId) {
+function writeWranglerConfig(databaseId, includeR2) {
   const config = {
     $schema: "node_modules/wrangler/config-schema.json",
     name: "nazarene-for-she",
@@ -113,13 +113,15 @@ function writeWranglerConfig(databaseId) {
         migrations_dir: "migrations",
       },
     ],
-    r2_buckets: [
+  };
+  if (includeR2) {
+    config.r2_buckets = [
       {
         binding: "MEDIA",
         bucket_name: BUCKET_NAME,
       },
-    ],
-  };
+    ];
+  }
   writeFileSync(wranglerPath, `${JSON.stringify(config, null, 2)}\n`);
 }
 
@@ -130,6 +132,14 @@ if (!databaseId) {
   throw new Error("D1 database exists, but Wrangler did not return an id.");
 }
 process.stdout.write(`D1 ${DB_NAME} id: ${databaseId}\n`);
-createBucket();
-writeWranglerConfig(databaseId);
+let r2Ready = false;
+try {
+  createBucket();
+  r2Ready = true;
+} catch (error) {
+  process.stderr.write(`${error instanceof Error ? error.message : error}\n`);
+  process.stderr.write("Continuing with D1 only. Enable R2, then run this script again.\n");
+}
+writeWranglerConfig(databaseId, r2Ready);
 process.stdout.write(`Updated ${path.relative(root, wranglerPath)}\n`);
+if (!r2Ready) process.exitCode = 2;
