@@ -1,0 +1,85 @@
+/* Header cart stays a 44px tool at every width. Donate is a heart under 1024px. */
+
+.site-header a.header-cart {
+  display: inline-flex !important;
+  box-sizing: border-box;
+  position: relative;
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  margin: 0;
+  padding: 0 !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: visible;
+  color: inherit;
+  text-decoration: none;
+  background: color-mix(in srgb, currentColor 8%, #fffdf9);
+  border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+
+html[data-theme="light"] .site-header a.header-cart {
+  color: var(--nfs-primary);
+  background: color-mix(in srgb, var(--nfs-primary) 8%, #fffdf9);
+  border-color: color-mix(in srgb, var(--nfs-primary) 42%, transparent);
+}
+
+html[data-theme="dark"] .site-header a.header-cart,
+.site-header[data-on-dark="true"] a.header-cart {
+  color: var(--color-ivory);
+  background: color-mix(in srgb, var(--color-plum) 55%, transparent);
+  border-color: color-mix(in srgb, var(--color-ivory) 40%, transparent);
+}
+
+.site-header a.header-cart:hover,
+.site-header a.header-cart:focus-visible {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.site-header .header-cart__label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.site-header .header-cart__count {
+  position: absolute;
+  top: -0.12rem;
+  right: -0.12rem;
+  z-index: 1;
+}
+
+@media (max-width: 1023px) {
+  .site-header .header-cta.btn {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+  }
+
+  .site-header .header-cta__icon {
+    display: block !important;
+  }
+
+  .site-header .header-cta__label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}

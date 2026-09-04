@@ -8,9 +8,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import {
   eventTypeLabels,
   events,
-  getEvent,
 } from "@/lib/data/events";
-import { getProgram } from "@/lib/data/programs";
+import { publishedEvent, publishedProgram } from "@/lib/cms/public-content";
 import { site } from "@/lib/data/site";
 import {
   formatEventSchedule,
@@ -31,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const event = getEvent(slug);
+  const event = await publishedEvent(slug);
   if (!event) return {};
   return pageMetadata({
     title: event.title,
@@ -46,12 +45,12 @@ export default async function EventPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = getEvent(slug);
+  const event = await publishedEvent(slug);
   if (!event) notFound();
 
   const upcoming = isUpcomingEvent(event);
   const relatedProgram = event.relatedProgramSlug
-    ? getProgram(event.relatedProgramSlug)
+    ? await publishedProgram(event.relatedProgramSlug)
     : undefined;
 
   const jsonLd = {

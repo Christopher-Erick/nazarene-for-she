@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { programs } from "@/lib/data/programs";
+import { publishedPrograms } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -11,7 +11,8 @@ export const metadata = pageMetadata({
   path: "/programs",
 });
 
-export default function ProgramsPage() {
+export default async function ProgramsPage() {
+  const programs = await publishedPrograms();
   return (
     <>
       <PageIntro kicker="How we empower" title="A kit for today. A skill for tomorrow. A community for both.">

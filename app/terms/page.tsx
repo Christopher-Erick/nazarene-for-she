@@ -1,4 +1,6 @@
 import { PageIntro } from "@/components/ui/PageIntro";
+import { publishedSitePage } from "@/lib/cms/public-content";
+import { sanitizeHtml } from "@/lib/cms/sanitize";
 import { site } from "@/lib/data/site";
 import { pageMetadata } from "@/lib/seo";
 
@@ -8,38 +10,18 @@ export const metadata = pageMetadata({
   path: "/terms",
 });
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const page = await publishedSitePage("terms");
+
   return (
     <>
-      <PageIntro kicker="Terms" title="Use this site to understand the work — and to walk with it honestly.">
-        <p>These terms cover the public website and its forms.</p>
+      <PageIntro kicker={page.kicker} title={page.title}>
+        <p>{page.excerpt}</p>
       </PageIntro>
-      <div className="prose-nfs mx-auto max-w-3xl px-5 pb-24 sm:px-8">
-        <h2 className="font-display text-3xl">Content</h2>
-        <p>
-          Unpublished payment details and placeholder stories are marked as such. Do not
-          treat placeholders as official organisational commitments. Mission and vision on
-          this site follow the January 2021 constitution.
-        </p>
-        <h2 className="mt-10 font-display text-3xl">Giving</h2>
-        <p>
-          Donations should be made only through official details published by the
-          organisation. If a field still reads as a placeholder, wait for confirmation before
-          sending funds.
-        </p>
-        <h2 className="mt-10 font-display text-3xl">The Atelier</h2>
-        <p>
-          Requests for garments are inquiries, not completed sales. A price, making time and
-          official payment details will be confirmed in a reply before you should send money.
-          Atmosphere photographs show the workshop, not a specific finished piece already for
-          sale.
-        </p>
-        <h2 className="mt-10 font-display text-3xl">Stories</h2>
-        <p>
-          Photographs used as atmosphere are not portraits of named beneficiaries. Published
-          personal stories will appear only with consent.
-        </p>
-      </div>
+      <div
+        className="prose-nfs mx-auto max-w-3xl px-5 pb-24 sm:px-8"
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
+      />
     </>
   );
 }

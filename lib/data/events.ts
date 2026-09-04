@@ -72,6 +72,21 @@ const eventDefs: NfsEvent[] = [
     featured: true,
   },
   {
+    slug: "skills-workshop-december-2026",
+    title: "Skills workshop — sewing basics",
+    summary:
+      "A practical afternoon introducing sewing skills for girls in the vocational pathway.",
+    description:
+      "Hands-on sewing practice for girls beginning their vocational journey. The session covers basic stitching, machine safety and the first steps toward making simple garments — skill offered as dignity, not display.",
+    type: "workshop",
+    startsAt: "2026-12-06T10:00:00+03:00",
+    endsAt: "2026-12-06T13:00:00+03:00",
+    location: "Congo, Kawangware",
+    visual: libraryImages.skill,
+    relatedProgramSlug: "vocational-training",
+    cta: { label: "Support vocational training", href: "/donate?cause=vocational" },
+  },
+  {
     slug: "discipleship-gathering-july-2026",
     title: "Community discipleship gathering",
     summary:
@@ -85,6 +100,36 @@ const eventDefs: NfsEvent[] = [
     visual: libraryImages.community,
     relatedProgramSlug: "discipleship",
     cta: { label: "Pray with us", href: "/get-involved#pray" },
+  },
+  {
+    slug: "pad-distribution-may-2026",
+    title: "Pad distribution day — May",
+    summary:
+      "Dignity kits and menstrual health education shared with girls and caregivers.",
+    description:
+      "An earlier distribution day in the year — pads, underwear and hygiene items alongside short teaching on menstrual health, so girls can stay in school with less fear and less shame.",
+    type: "distribution",
+    startsAt: "2026-05-17T10:00:00+03:00",
+    endsAt: "2026-05-17T13:30:00+03:00",
+    location: "Congo, Kawangware",
+    visual: libraryImages.padDistribution2,
+    relatedProgramSlug: "dignity-kits",
+    cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
+  },
+  {
+    slug: "menstrual-health-workshop-march-2026",
+    title: "Menstrual health workshop",
+    summary:
+      "A focused session on body literacy, hygiene and confidence for adolescent girls.",
+    description:
+      "Girls and a few caregivers gathered for clear teaching on menstrual health — what changes, what to expect, and how to care for themselves with the kits they receive. Knowledge shared without shame.",
+    type: "workshop",
+    startsAt: "2026-03-22T11:00:00+03:00",
+    endsAt: "2026-03-22T13:30:00+03:00",
+    location: "Congo, Kawangware",
+    visual: libraryImages.menstrualHealth,
+    relatedProgramSlug: "menstrual-health",
+    cta: { label: "Support this work", href: "/donate" },
   },
 ];
 

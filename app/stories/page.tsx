@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { stories } from "@/lib/data/stories";
+import { publishedStories } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -11,7 +11,8 @@ export const metadata = pageMetadata({
   path: "/stories",
 });
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  const stories = await publishedStories();
   return (
     <>
       <PageIntro kicker="Stories" title="Her story, in her time, with her permission.">

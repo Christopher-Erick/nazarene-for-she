@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test lib/security.test.ts lib/validation/contact.test.ts lib/validation/shop.test.ts lib/cache/single-flight.test.ts lib/theme.test.ts lib/events/dates.test.ts",
+    "test": "node --experimental-strip-types --test lib/security.test.ts lib/validation/contact.test.ts lib/validation/checkout.test.ts lib/cache/single-flight.test.ts lib/theme.test.ts lib/events/dates.test.ts lib/events/calendar.test.ts lib/cms/password.test.ts lib/cms/sanitize.test.ts lib/cms/rbac.test.ts lib/cms/workflow.test.ts lib/cms/shapes.test.ts lib/shop/sku.test.ts lib/shop/catalog.test.ts lib/shop/whatsapp.test.ts",
+    "db:migrate:local": "wrangler d1 migrations apply nazarene-for-she --local",
+    "db:migrate": "wrangler d1 migrations apply nazarene-for-she --remote",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"

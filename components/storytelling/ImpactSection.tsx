@@ -1,9 +1,14 @@
 import Link from "next/link";
-import { impactMetrics } from "@/lib/data/impact";
+import { publishedImpact } from "@/lib/cms/public-content";
 import { CountUp } from "@/components/impact/CountUp";
 import { Reveal } from "@/components/experience/Reveal";
 
-export function ImpactSection() {
+function metricNumber(value: string) {
+  return Number(String(value).replace(/[^\d]/g, "")) || 0;
+}
+
+export async function ImpactSection() {
+  const impactMetrics = await publishedImpact();
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
@@ -23,8 +28,11 @@ export function ImpactSection() {
           {impactMetrics.map((metric) => (
             <article key={metric.id} className="impact-card">
               <p className="impact-card-value">
-                {metric.status === "verified" ? (
-                  <CountUp value={600} suffix="+" />
+                {metric.status === "verified" && metricNumber(metric.value) ? (
+                  <CountUp
+                    value={metricNumber(metric.value)}
+                    suffix={String(metric.value).includes("+") ? "+" : ""}
+                  />
                 ) : (
                   metric.value
                 )}

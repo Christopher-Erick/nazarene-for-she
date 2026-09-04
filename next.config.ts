@@ -37,34 +37,74 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31536000,
-    qualities: [75, 80, 85],
+    qualities: [75, 80, 85, 90],
   },
   async headers() {
+    const isDev = process.env.NODE_ENV !== "production";
     return [
       {
         source: "/(.*)",
-        headers: securityHeaders,
+        headers: isDev
+          ? [
+              ...securityHeaders,
+              { key: "Cache-Control", value: "no-store, must-revalidate" },
+            ]
+          : securityHeaders,
       },
       {
         source: "/images/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: isDev
+              ? "no-store, must-revalidate"
+              : "public, max-age=31536000, immutable",
           },
         ],
       },
+      ...(!isDev
+        ? [
+            {
+              source: "/_next/static/:path*",
+              headers: [
+                {
+                  key: "Cache-Control",
+                  value: "public, max-age=31536000, immutable",
+                },
+              ],
+            },
+          ]
+        : []),
       {
-        source: "/_next/static/:path*",
+        source: "/api/v1/admin/:path*",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
+          { key: "Cache-Control", value: "no-store, max-age=0" },
+          { key: "Pragma", value: "no-cache" },
         ],
       },
       {
-        source: "/api/:path*",
+        source: "/api/shop",
+        headers: [
+          { key: "Cache-Control", value: "no-store, max-age=0" },
+          { key: "Pragma", value: "no-cache" },
+        ],
+      },
+      {
+        source: "/api/shop/:path*",
+        headers: [
+          { key: "Cache-Control", value: "no-store, max-age=0" },
+          { key: "Pragma", value: "no-cache" },
+        ],
+      },
+      {
+        source: "/api/contact",
+        headers: [
+          { key: "Cache-Control", value: "no-store, max-age=0" },
+          { key: "Pragma", value: "no-cache" },
+        ],
+      },
+      {
+        source: "/api/donation",
         headers: [
           { key: "Cache-Control", value: "no-store, max-age=0" },
           { key: "Pragma", value: "no-cache" },

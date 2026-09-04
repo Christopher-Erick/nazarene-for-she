@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { stories } from "@/lib/data/stories";
+import { publishedStories } from "@/lib/cms/public-content";
 import { Reveal } from "@/components/experience/Reveal";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
-export function StoriesTeaser() {
+export async function StoriesTeaser() {
+  const stories = await publishedStories();
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">

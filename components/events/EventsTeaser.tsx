@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { featuredUpcomingEvents } from "@/lib/data/events";
-import { formatEventSchedule } from "@/lib/events/dates";
+import { publishedEvents } from "@/lib/cms/public-content";
+import { isUpcomingEvent, formatEventSchedule } from "@/lib/events/dates";
+import { sortByStartAsc } from "@/lib/data/events";
 
-export function EventsTeaser() {
-  const featured = featuredUpcomingEvents(2);
+export async function EventsTeaser() {
+  const featured = (await publishedEvents())
+    .filter((event) => event.featured && isUpcomingEvent(event))
+    .sort(sortByStartAsc)
+    .slice(0, 2);
 
   return (
     <section className="bg-surface">

@@ -1,6 +1,7 @@
-import { AtelierHero } from "@/components/shop/AtelierHero";
-import { AtelierLookbook } from "@/components/shop/AtelierLookbook";
-import { garments, shop } from "@/lib/data/shop";
+import { ShopFloor } from "@/components/shop/ShopFloor";
+import { publishedProducts } from "@/lib/cms/public-content";
+import { shop } from "@/lib/data/shop";
+import { productHref } from "@/lib/shop/catalog";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
 import { pageMetadata } from "@/lib/seo";
@@ -8,26 +9,31 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: shop.name,
   description:
-    "Buy dresses, skirts, blouses, palazzos, kimonos, uniforms, totes, kitenges and more made in the Nazarene for She workshop in Kawangware. Pieces are made to order. Price is confirmed before you pay.",
+    "Buy dresses, skirts, blouses, palazzos, kimonos, uniforms, totes, kitenges and more made in the Nazarene for She workshop in Kawangware.",
   path: shop.path,
 });
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const products = await publishedProducts();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "OfferCatalog",
     name: `${site.name} ${shop.name}`,
     description: shop.intro,
     url: `${site.url}${shop.path}`,
-    itemListElement: garments.map((garment, index) => ({
+    itemListElement: products.map((product, index) => ({
       "@type": "Offer",
       position: index + 1,
-      availability: "https://schema.org/PreOrder",
-      url: `${site.url}${shop.path}/${garment.slug}`,
+      priceCurrency: "KES",
+      price: product.priceKes,
+      availability:
+        product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      url: `${site.url}${productHref(product)}`,
       itemOffered: {
         "@type": "Product",
-        name: garment.name,
-        description: garment.summary,
+        name: product.name,
+        sku: product.sku,
+        description: product.summary,
       },
     })),
   };
@@ -38,8 +44,7 @@ export default function ShopPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}
       />
-      <AtelierHero />
-      <AtelierLookbook />
+      <ShopFloor showExchange />
     </>
   );
 }

@@ -3,20 +3,25 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import "@/components/navigation/header-chrome.css";
+import { HeaderNav } from "@/components/navigation/HeaderNav";
 import { MobileMenu } from "@/components/navigation/MobileMenu";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { HeaderCartLink } from "@/components/shop/CartTray";
 import { cn } from "@/lib/cn";
-import { supportCta, type NavItem } from "@/lib/data/navigation";
+import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 import { DEFAULT_THEME, readTheme, type Theme } from "@/lib/theme";
 
 function isPhotoHero(pathname: string) {
   if (pathname === "/") return true;
-  if (pathname === "/shop") return true;
+  if (pathname.startsWith("/shop/checkout") || pathname.startsWith("/shop/order")) {
+    return false;
+  }
+  if (pathname === "/shop" || /^\/shop\/[^/]+(\/[^/]+)?$/.test(pathname)) return true;
   if (/^\/programs\/[^/]+$/.test(pathname)) return true;
-  if (/^\/shop\/[^/]+$/.test(pathname)) return true;
   if (/^\/stories\/[^/]+$/.test(pathname)) return true;
   if (/^\/events\/[^/]+$/.test(pathname)) return true;
   return false;
@@ -26,7 +31,7 @@ function isBandHero(pathname: string) {
   return pathname === "/donate" || pathname === "/get-involved";
 }
 
-export function SiteHeader({ navItems }: { navItems: NavItem[] }) {
+export function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -86,22 +91,18 @@ export function SiteHeader({ navItems }: { navItems: NavItem[] }) {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="nav-link"
-                aria-current={pathname === item.href ? "page" : undefined}
-              >
-                {item.short}
-              </Link>
-            ))}
-          </nav>
+          <HeaderNav />
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <ButtonLink href={supportCta.href} className="header-cta">
-              {supportCta.label}
+            <HeaderCartLink />
+            <ButtonLink href={supportCta.href} className="header-cta size-11 shrink-0 p-0 lg:h-12 lg:w-auto lg:min-h-12 lg:px-[1.15rem]" aria-label={supportCta.label}>
+              <svg className="header-cta__icon lg:hidden" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12.1 21.35 10.6 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"
+                />
+              </svg>
+              <span className="header-cta__label sr-only lg:not-sr-only">{supportCta.label}</span>
             </ButtonLink>
             <div className="flex items-center gap-1">
               <ThemeToggle />
@@ -123,7 +124,7 @@ export function SiteHeader({ navItems }: { navItems: NavItem[] }) {
           </div>
         </div>
       </header>
-      <MobileMenu open={open} pathname={pathname} navItems={navItems} onClose={() => setOpen(false)} />
+      <MobileMenu open={open} pathname={pathname} onClose={() => setOpen(false)} />
     </>
   );
 }

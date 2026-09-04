@@ -1,4 +1,5 @@
 import { DonationExperience } from "@/components/donation/DonationExperience";
+import { publishedDonations } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -14,5 +15,13 @@ export default async function DonatePage({
   searchParams: Promise<{ cause?: string; give?: string }>;
 }) {
   const { cause, give } = await searchParams;
-  return <DonationExperience initialCause={cause} startWizard={give !== undefined} />;
+  const donations = await publishedDonations();
+  return (
+    <DonationExperience
+      initialCause={cause}
+      startWizard={give !== undefined}
+      methods={donations.methods}
+      intro={donations.intro}
+    />
+  );
 }

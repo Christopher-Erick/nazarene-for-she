@@ -2,6 +2,10 @@ import dynamic from "next/dynamic";
 import { CinematicHero } from "@/components/hero/CinematicHero";
 import { RealitySection } from "@/components/storytelling/RealitySection";
 import { ScrollRibbon } from "@/components/experience/ScrollRibbon";
+import { ImpactSection } from "@/components/storytelling/ImpactSection";
+import { StoriesTeaser } from "@/components/storytelling/StoriesTeaser";
+import { InvolveSection } from "@/components/storytelling/InvolveSection";
+import { girlsSupportedFromImpact, publishedImpact } from "@/lib/cms/public-content";
 
 const ChoiceSection = dynamic(() =>
   import("@/components/storytelling/ChoiceSection").then((m) => m.ChoiceSection),
@@ -34,15 +38,6 @@ const TransformationSection = dynamic(() =>
     (m) => m.TransformationSection,
   ),
 );
-const ImpactSection = dynamic(() =>
-  import("@/components/storytelling/ImpactSection").then((m) => m.ImpactSection),
-);
-const StoriesTeaser = dynamic(() =>
-  import("@/components/storytelling/StoriesTeaser").then((m) => m.StoriesTeaser),
-);
-const InvolveSection = dynamic(() =>
-  import("@/components/storytelling/InvolveSection").then((m) => m.InvolveSection),
-);
 const SustainabilitySection = dynamic(() =>
   import("@/components/storytelling/SustainabilitySection").then(
     (m) => m.SustainabilitySection,
@@ -55,12 +50,13 @@ const ClosingCta = dynamic(() =>
   import("@/components/storytelling/ClosingCta").then((m) => m.ClosingCta),
 );
 
-export default function HomePage() {
+export default async function HomePage() {
+  const girls = girlsSupportedFromImpact(await publishedImpact());
   return (
     <div className="relative">
       <ScrollRibbon />
-      <CinematicHero />
-      <RealitySection />
+      <CinematicHero girlsDisplay={girls.display} girlsLabel={girls.label} />
+      <RealitySection girlsValue={girls.value} girlsLabel={girls.label} verified={girls.verified} />
       <ChoiceSection />
       <BeliefSection />
       <ResponseSection />

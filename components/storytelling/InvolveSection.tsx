@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { involvementPaths } from "@/lib/data/donation";
+import { publishedSitePage } from "@/lib/cms/public-content";
+import { involvePathsFrom } from "@/lib/cms/shapes";
 import { Reveal } from "@/components/experience/Reveal";
 
-export function InvolveSection() {
-  const [primary, ...rest] = involvementPaths;
+export async function InvolveSection() {
+  const page = await publishedSitePage("get-involved");
+  const pathways = involvePathsFrom(page.payload.pathways);
+  const [primary, ...rest] = pathways;
 
   return (
     <section className="theme-band">
@@ -16,11 +19,11 @@ export function InvolveSection() {
           <h2 className="display-lg mt-5 max-w-[16ch]">Help remove a barrier between her and her future.</h2>
         </Reveal>
         <div className="involve-board mt-12">
-          <Link href={primary.href} className="involve-feature">
+          <Link href={primary?.href ?? "/donate"} className="involve-feature">
             <span className="eyebrow text-accent-soft">Start here</span>
-            <h3>{primary.title}</h3>
-            <p>{primary.body}</p>
-            <span className="involve-feature-cta">{primary.cta} →</span>
+            <h3>{primary?.title}</h3>
+            <p>{primary?.body}</p>
+            <span className="involve-feature-cta">{primary?.cta ?? "Walk with her"} →</span>
           </Link>
           <div className="involve-side-list">
             {rest.map((path) => (

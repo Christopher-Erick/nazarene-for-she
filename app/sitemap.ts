@@ -1,10 +1,7 @@
-import { events } from "@/lib/data/events";
-import { programs } from "@/lib/data/programs";
-import { garments } from "@/lib/data/shop";
+import { publishedEvents, publishedGarments, publishedPrograms, publishedStories } from "@/lib/cms/public-content";
 import { site } from "@/lib/data/site";
-import { stories } from "@/lib/data/stories";
 
-export default function sitemap() {
+export default async function sitemap() {
   const staticRoutes = [
     "",
     "/about",
@@ -22,6 +19,12 @@ export default function sitemap() {
   ];
 
   const now = new Date();
+  const [programs, stories, events, garments] = await Promise.all([
+    publishedPrograms(),
+    publishedStories(),
+    publishedEvents(),
+    publishedGarments(),
+  ]);
 
   return [
     ...staticRoutes.map((path) => ({
@@ -46,3 +49,4 @@ export default function sitemap() {
     })),
   ];
 }
+

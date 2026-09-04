@@ -1,6 +1,7 @@
 import { ContactForm } from "@/components/forms/ContactForm";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
+import { publishedOrganization } from "@/lib/cms/public-content";
 import { site } from "@/lib/data/site";
 import { pageMetadata } from "@/lib/seo";
 
@@ -18,6 +19,9 @@ export default async function ContactPage({
   searchParams: Promise<{ intent?: string }>;
 }) {
   const { intent } = await searchParams;
+  const organization = await publishedOrganization();
+  const phone = organization.phone || site.contact.phone;
+  const phoneHref = phone.replace(/\D/g, "").length >= 9 ? `tel:${phone.replace(/\s+/g, "")}` : "";
   return (
     <>
       <PageIntro kicker="Start a conversation" title="Write to us. We will answer through official channels.">
@@ -52,10 +56,20 @@ export default async function ContactPage({
               <div>
                 <dt className="eyebrow text-primary">Phone</dt>
                 <dd className="mt-2 text-lg">
-                  {site.contact.phone || (
+                  {phone ? (
+                    phoneHref ? (
+                      <a href={phoneHref} className="text-primary underline-offset-4 hover:underline">
+                        {phone}
+                      </a>
+                    ) : (
+                      phone
+                    )
+                  ) : (
                     <>
                       Awaiting official number
-                      <PlaceholderNote>Set NEXT_PUBLIC_CONTACT_PHONE when ready.</PlaceholderNote>
+                      <PlaceholderNote>
+                        Set a public phone in Organization, or NEXT_PUBLIC_CONTACT_PHONE when ready.
+                      </PlaceholderNote>
                     </>
                   )}
                 </dd>

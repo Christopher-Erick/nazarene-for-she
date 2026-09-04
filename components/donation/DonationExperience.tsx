@@ -16,9 +16,13 @@ type WizardStep = 1 | 2 | 3;
 export function DonationExperience({
   initialCause,
   startWizard = false,
+  methods = donationMethods,
+  intro,
 }: {
   initialCause?: string;
   startWizard?: boolean;
+  methods?: typeof donationMethods;
+  intro?: string;
 }) {
   const hasValidCause = Boolean(
     initialCause && donationCategories.some((item) => item.id === initialCause),
@@ -84,7 +88,7 @@ export function DonationExperience({
           <h1 className="donate-landing-hero__title mt-5 max-w-3xl">
             Help remove a barrier between her and her future.
           </h1>
-          <p className="donate-landing-hero__lead mt-5 max-w-xl theme-muted">{donationWizardGiveCta}</p>
+          <p className="donate-landing-hero__lead mt-5 max-w-xl theme-muted">{intro || donationWizardGiveCta}</p>
 
           <div className="mt-12 max-w-4xl">
             <p className="eyebrow text-accent">Three ways to walk with her</p>
@@ -120,7 +124,7 @@ export function DonationExperience({
           <DonationInquiryForm id="give-form" category={category} method={method} />
         </div>
         <div className="lg:col-span-7">
-          <DonationPaymentPanel method={method} onMethodChange={setMethod} id="official-payment" />
+          <DonationPaymentPanel method={method} onMethodChange={setMethod} id="official-payment" methods={methods} />
         </div>
       </div>
     </>

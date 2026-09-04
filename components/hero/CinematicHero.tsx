@@ -4,7 +4,13 @@ import { ThreadMark } from "@/components/ui/ThreadMark";
 import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 
-export function CinematicHero() {
+export function CinematicHero({
+  girlsDisplay = site.girlsSupported.display,
+  girlsLabel = site.girlsSupported.label,
+}: {
+  girlsDisplay?: string;
+  girlsLabel?: string;
+}) {
   return (
     <section className="hero-stage bleed-hero">
       <HeroPhotoSlideshow />
@@ -36,8 +42,8 @@ export function CinematicHero() {
         </div>
 
         <p className="hero-stat hero-copy text-sm text-ivory/70">
-          <span className="font-display text-2xl text-accent-soft">{site.girlsSupported.display}</span>
-          <span className="ml-3 tracking-wide">{site.girlsSupported.label}</span>
+          <span className="font-display text-2xl text-accent-soft">{girlsDisplay}</span>
+          <span className="ml-3 tracking-wide">{girlsLabel}</span>
         </p>
       </div>
     </section>

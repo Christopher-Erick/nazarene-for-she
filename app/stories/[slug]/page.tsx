@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { TrackView } from "@/components/analytics/TrackView";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { getStory, stories } from "@/lib/data/stories";
-import { getProgram } from "@/lib/data/programs";
+import { stories } from "@/lib/data/stories";
+import { publishedStory, publishedProgram } from "@/lib/cms/public-content";
 import { analyticsEvents } from "@/lib/analytics";
 import { pageMetadata } from "@/lib/seo";
 import { supportCta } from "@/lib/data/navigation";
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const story = getStory(slug);
+  const story = await publishedStory(slug);
   if (!story) return {};
   return pageMetadata({
     title: story.firstName,
@@ -38,12 +38,12 @@ export default async function StoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const story = getStory(slug);
+  const story = await publishedStory(slug);
   if (!story) notFound();
 
-  const relatedPrograms = story.relatedProgramSlugs
-    .map((programSlug) => getProgram(programSlug))
-    .filter((program): program is NonNullable<typeof program> => Boolean(program));
+  const relatedPrograms = (
+    await Promise.all(story.relatedProgramSlugs.map((programSlug) => publishedProgram(programSlug)))
+  ).filter((program): program is NonNullable<typeof program> => Boolean(program));
 
   const jsonLd =
     story.status === "published"

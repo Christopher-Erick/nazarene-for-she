@@ -8,20 +8,20 @@ const hits = new Map<string, { count: number; reset: number }>();
  * isolates — use Cloudflare Rate Limiting / WAF for durable protection.
  * This still reduces burst abuse within a single isolate.
  */
-export function rateLimit(key: string) {
+export function rateLimit(key: string, max = MAX, windowMs = WINDOW_MS) {
   pruneExpired();
   const now = Date.now();
   const current = hits.get(key);
   if (!current || current.reset < now) {
     if (hits.size >= MAX_KEYS) pruneOldest();
-    hits.set(key, { count: 1, reset: now + WINDOW_MS });
-    return { ok: true as const, remaining: MAX - 1, retryAt: now + WINDOW_MS };
+    hits.set(key, { count: 1, reset: now + windowMs });
+    return { ok: true as const, remaining: max - 1, retryAt: now + windowMs };
   }
-  if (current.count >= MAX) {
+  if (current.count >= max) {
     return { ok: false as const, remaining: 0, retryAt: current.reset };
   }
   current.count += 1;
-  return { ok: true as const, remaining: MAX - current.count, retryAt: current.reset };
+  return { ok: true as const, remaining: max - current.count, retryAt: current.reset };
 }
 
 function pruneExpired() {

@@ -11,17 +11,17 @@ export const shop = {
     {
       step: "01",
       title: "Choose her work",
-      body: "Choose from dresses, skirts, uniforms, kitenges, totes and more. Nothing is charged on this site.",
+      body: "Browse dresses, skirts, uniforms, kitenges, totes and more. Each piece on the rack has a price and what is left in the workshop.",
     },
     {
       step: "02",
-      title: "We confirm",
-      body: "The workshop replies with a fair price, a making time, and official payment details.",
+      title: "Place the order",
+      body: "Add pieces to your cart and check out. You will receive an order reference to use when you pay.",
     },
     {
       step: "03",
       title: "She is paid",
-      body: "You pay through those official channels. The piece leaves the table as her work, sold.",
+      body: "Pay through the official M-Pesa, bank or M-Changa details shown after checkout. The piece leaves the table as her work, sold.",
     },
   ],
 } as const;
@@ -85,6 +85,8 @@ export type Garment = {
   lure: string;
   explanation: string;
   sizing: "body" | "one";
+  still?: "fabric" | "atelier" | "thread";
+  visual?: string;
 };
 
 export const garments: Garment[] = [
@@ -324,8 +326,19 @@ const stillBySlug: Record<string, StillId> = {
   cap: "thread",
 };
 
-export function stillFor(slug: string) {
+export function stillFor(slug: string, still?: StillId) {
+  if (still && still in workshopStills) return workshopStills[still];
   return workshopStills[stillBySlug[slug] ?? "atelier"];
+}
+
+export function stillForGarment(garment: Pick<Garment, "slug" | "still" | "visual" | "name">) {
+  if (garment.visual) {
+    return {
+      src: garment.visual,
+      alt: `Workshop photograph for ${garment.name}.`,
+    };
+  }
+  return stillFor(garment.slug, garment.still);
 }
 
 export function garmentsIn(collectionId: CollectionId) {
@@ -333,7 +346,11 @@ export function garmentsIn(collectionId: CollectionId) {
 }
 
 export function fitsFor(garment: Garment): GarmentFit[] {
-  return garment.sizing === "one" ? ["os", "custom"] : ["s", "m", "l", "custom"];
+  return fitsForSizing(garment.sizing);
+}
+
+export function fitsForSizing(sizing: "body" | "one"): GarmentFit[] {
+  return sizing === "one" ? ["os", "custom"] : ["s", "m", "l", "custom"];
 }
 
 export function defaultFit(garment: Garment): GarmentFit {

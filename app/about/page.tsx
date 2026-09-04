@@ -1,6 +1,6 @@
 import { PageIntro } from "@/components/ui/PageIntro";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { aboutContent } from "@/lib/data/about";
+import { publishedOrganization, publishedSitePage } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -10,7 +10,8 @@ export const metadata = pageMetadata({
   path: "/about",
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [aboutContent, page] = await Promise.all([publishedOrganization(), publishedSitePage("about")]);
   const sections = [
     aboutContent.whoWeAre,
     aboutContent.ourStory,
@@ -23,12 +24,8 @@ export default function AboutPage() {
 
   return (
     <>
-      <PageIntro kicker="Why we exist" title="She is not a problem to be solved.">
-        <p>
-          She is a person with potential who deserves opportunity. This page is for visitors
-          who want the deeper organisational picture. The story itself lives on the journey
-          through our work.
-        </p>
+      <PageIntro kicker={page.kicker} title={page.title}>
+        <p>{page.excerpt}</p>
       </PageIntro>
 
       <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">

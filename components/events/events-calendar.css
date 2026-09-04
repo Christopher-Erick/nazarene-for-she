@@ -1,0 +1,671 @@
+.event-shell {
+  display: grid;
+  gap: 2rem;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+@media (min-width: 1100px) {
+  .event-shell {
+    grid-template-columns: 16.5rem 72rem;
+    column-gap: 1.75rem;
+    align-items: start;
+  }
+}
+
+.event-side {
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+}
+
+.event-side .event-find__sort {
+  width: 100%;
+}
+
+.event-main {
+  min-width: 0;
+  width: min(100%, 72rem);
+}
+
+.event-intro {
+  display: grid;
+  gap: 1.15rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-intro__lead {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.event-intro__title {
+  margin: 0;
+  max-width: 12ch;
+  line-height: 1.02;
+}
+
+.event-intro__blurb {
+  margin: 0;
+  max-width: 26rem;
+  color: var(--color-muted);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 720px) {
+  .event-intro {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+    align-items: end;
+    column-gap: 2rem;
+  }
+}
+
+.event-past {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.event-past__head h2 {
+  margin: 0;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.event-past__head p {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+.event-past__list {
+  display: grid;
+  gap: 0;
+}
+
+.event-past__list > article {
+  border-top: 1px solid var(--color-line);
+  padding-top: 0.95rem;
+  margin-top: 0.95rem;
+}
+
+.event-past__list > article:first-child {
+  border-top: 0;
+  padding-top: 0.1rem;
+  margin-top: 0;
+}
+
+.event-past__list article > a {
+  gap: 0.75rem;
+}
+
+.event-past__list .font-display.text-3xl {
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.event-past__list .h-24 {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+@media (min-width: 640px) {
+  .event-past__list .sm\:h-\[6\.5rem\],
+  .event-past__list .sm\:w-\[6\.5rem\] {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+.event-past__empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.event-also {
+  margin-top: 2.75rem;
+}
+
+.event-find {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.event-find__search,
+.event-find__sort {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.event-find__search > label,
+.event-find__sort > label {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.event-find__field {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.8rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+
+.event-find__field:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.event-find__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--color-primary);
+}
+
+.event-find__icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.event-find__field input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.event-find__field input::placeholder {
+  color: var(--color-muted);
+}
+
+.event-find__field input:focus-visible {
+  outline: none;
+}
+
+.event-find__field input[type="search"]::-webkit-search-decoration,
+.event-find__field input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.event-find__clear {
+  flex: none;
+  min-height: 2rem;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.event-find__clear:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-ivory);
+}
+
+.event-find__sort select {
+  display: block;
+  width: 100%;
+  min-height: 2.55rem;
+  padding: 0.35rem 2rem 0.35rem 0.75rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%235e2063' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 0.7rem center;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.event-find__sort select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.event-find__status {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+#nfs-event-calendar.event-cal {
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+#nfs-event-calendar .event-cal__month {
+  padding: 0.85rem 0.85rem 0.75rem;
+  background: var(--color-surface);
+}
+
+@media (min-width: 768px) {
+  #nfs-event-calendar .event-cal__month {
+    padding: 1rem 1.1rem 0.85rem;
+  }
+}
+
+#nfs-event-calendar .event-cal__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+#nfs-event-calendar .event-cal__title {
+  margin: 0;
+  flex: 1;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+
+#nfs-event-calendar .event-cal__nav {
+  display: inline-flex;
+  width: 1.85rem;
+  height: 1.85rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#nfs-event-calendar .event-cal__nav:hover {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-lavender) 70%, transparent);
+}
+
+#nfs-event-calendar .event-cal__weekdays {
+  margin-bottom: 0.2rem;
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+#nfs-event-calendar .event-cal__grid {
+  gap: 0;
+}
+
+#nfs-event-calendar .event-cal__day {
+  position: relative;
+  display: flex;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0.28rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+#nfs-event-calendar .event-cal__num {
+  display: flex;
+  width: 1.65rem;
+  height: 1.65rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+#nfs-event-calendar .event-cal__mark {
+  position: absolute;
+  bottom: 0.08rem;
+  left: 50%;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: transparent;
+  transform: translateX(-50%);
+}
+
+#nfs-event-calendar .event-cal__day:hover .event-cal__num {
+  background: color-mix(in srgb, var(--color-lavender) 80%, transparent);
+}
+
+#nfs-event-calendar .event-cal__day[data-outside="true"] .event-cal__num {
+  color: color-mix(in srgb, var(--color-muted) 48%, transparent);
+}
+
+#nfs-event-calendar .event-cal__day[data-today="true"] .event-cal__num {
+  box-shadow: inset 0 0 0 1.5px var(--color-primary);
+}
+
+#nfs-event-calendar .event-cal__day[data-has-event="true"][data-upcoming="true"] .event-cal__mark {
+  background: var(--color-accent);
+}
+
+#nfs-event-calendar .event-cal__day[data-has-event="true"][data-upcoming="false"] .event-cal__mark {
+  background: color-mix(in srgb, var(--color-muted) 55%, transparent);
+}
+
+#nfs-event-calendar .event-cal__day[data-selected="true"] .event-cal__num {
+  background: var(--color-primary);
+  color: var(--color-ivory);
+  box-shadow: none;
+  font-weight: 650;
+}
+
+#nfs-event-calendar .event-cal__legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.85rem;
+  margin: 0.55rem 0.05rem 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--color-line);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+#nfs-event-calendar .event-cal__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+#nfs-event-calendar .event-cal__legend-swatch {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+}
+
+#nfs-event-calendar .event-cal__legend-swatch[data-kind="upcoming"] {
+  background: var(--color-accent);
+}
+
+#nfs-event-calendar .event-cal__legend-swatch[data-kind="selected"] {
+  background: var(--color-primary);
+}
+
+#nfs-event-calendar .event-cal__panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0.85rem 0.95rem;
+  background: color-mix(in srgb, var(--color-lavender) 72%, #fff);
+  border-top: 1px solid var(--color-line);
+}
+
+@media (min-width: 768px) {
+  #nfs-event-calendar .event-cal__panel {
+    padding: 0.9rem 1.1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  #nfs-event-calendar.event-cal {
+    grid-template-columns: minmax(17.5rem, 21.5rem) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  #nfs-event-calendar .event-cal__panel {
+    border-top: 0;
+    border-left: 1px solid var(--color-line);
+  }
+
+  #nfs-event-calendar .event-cal__list,
+  #nfs-event-calendar .event-cal__ticket {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 100%;
+  }
+}
+
+#nfs-event-calendar .event-cal__list {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#nfs-event-calendar .event-cal__ticket {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem 1.1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 720px) {
+  #nfs-event-calendar .event-cal__ticket {
+    gap: 0.75rem 1.25rem;
+  }
+}
+
+#nfs-event-calendar .event-cal__photo {
+  position: relative;
+  height: 100%;
+  width: auto;
+  min-height: 10rem;
+  aspect-ratio: 1;
+  align-self: stretch;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      120% 90% at 10% 0%,
+      color-mix(in srgb, var(--color-accent) 58%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      110% 80% at 90% 100%,
+      color-mix(in srgb, var(--color-accent-soft) 42%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-primary) 0%,
+      var(--color-primary-dark) 38%,
+      var(--color-primary) 72%,
+      color-mix(in srgb, var(--color-primary) 68%, var(--color-accent)) 100%
+    );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 42%, transparent);
+}
+
+#nfs-event-calendar .event-cal__photo img {
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (min-width: 1024px) {
+  #nfs-event-calendar .event-cal__ticket {
+    gap: 0.75rem 1.35rem;
+    align-items: stretch;
+  }
+
+  #nfs-event-calendar .event-cal__photo {
+    height: 100%;
+    min-height: 0;
+    max-width: 28rem;
+    aspect-ratio: 1;
+  }
+}
+
+#nfs-event-calendar .event-cal__copy {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#nfs-event-calendar .event-cal__stamp {
+  display: grid;
+  min-width: 3.15rem;
+  padding: 0.45rem 0.55rem 0.5rem;
+  background: var(--color-plum);
+  color: var(--color-ivory);
+  text-align: center;
+  line-height: 1;
+}
+
+#nfs-event-calendar .event-cal__stamp--on-photo {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  z-index: 1;
+  min-width: 2.4rem;
+  padding: 0.28rem 0.35rem 0.32rem;
+  background: var(--color-plum);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+#nfs-event-calendar .event-cal__stamp-day {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+#nfs-event-calendar .event-cal__stamp-month {
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+#nfs-event-calendar .event-cal__ticket-type {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+#nfs-event-calendar .event-cal__ticket-title {
+  margin: 0.3rem 0 0;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: var(--color-text);
+}
+
+#nfs-event-calendar .event-cal__ticket-summary {
+  margin: 0.4rem 0 0;
+  max-width: 36rem;
+  color: var(--color-muted);
+}
+
+#nfs-event-calendar .event-cal__ticket-meta {
+  margin: 0.2rem 0 0;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+}
+
+#nfs-event-calendar .event-cal__ticket-summary + .event-cal__ticket-meta {
+  margin-top: 0.75rem;
+}
+
+#nfs-event-calendar .event-cal__ticket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+  margin-top: auto;
+  padding-top: 0.7rem;
+}
+
+#nfs-event-calendar .event-cal__ticket-cta {
+  display: inline-flex;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+#nfs-event-calendar .event-cal__ticket-cta:hover {
+  color: var(--color-primary-dark);
+}
+
+#nfs-event-calendar .event-cal__ticket-support {
+  min-height: 2.35rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+#nfs-event-calendar .event-cal__empty {
+  display: grid;
+  flex: 1;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem 0.9rem;
+  align-items: center;
+  min-height: 100%;
+}
+
+#nfs-event-calendar .event-cal__empty .event-cal__stamp-day {
+  font-size: 1.35rem;
+}
+
+#nfs-event-calendar .event-cal__empty-kicker {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+#nfs-event-calendar .event-cal__empty-title {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+}
+
+#nfs-event-calendar .event-cal__empty-copy {
+  margin: 0.2rem 0 0;
+  max-width: 22rem;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}

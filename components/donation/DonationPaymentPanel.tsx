@@ -9,15 +9,17 @@ export function DonationPaymentPanel({
   onMethodChange,
   heading = "Official payment details",
   id,
+  methods = donationMethods,
 }: {
   method: (typeof donationMethods)[number]["id"];
   onMethodChange?: (method: (typeof donationMethods)[number]["id"]) => void;
   heading?: string;
   id?: string;
+  methods?: typeof donationMethods;
 }) {
   const selectedMethod = useMemo(
-    () => donationMethods.find((item) => item.id === method) ?? donationMethods[0],
-    [method],
+    () => methods.find((item) => item.id === method) ?? methods[0] ?? donationMethods[0],
+    [method, methods],
   );
   const paymentReady = selectedMethod.fields.some((field) => field.value && !field.placeholder);
   const interactive = Boolean(onMethodChange);
@@ -33,7 +35,7 @@ export function DonationPaymentPanel({
           : "Payment numbers are not published yet. Transfer only when official M-Pesa, bank or M-Changa details appear here."}
       </p>
       <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Donation methods">
-        {donationMethods.map((item) => (
+        {methods.map((item) => (
           <button
             key={item.id}
             type="button"

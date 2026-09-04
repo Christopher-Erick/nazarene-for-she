@@ -1,7 +1,11 @@
-import { EventCard } from "@/components/events/EventCard";
-import { PageIntro } from "@/components/ui/PageIntro";
-import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { pastEvents, upcomingEvents } from "@/lib/data/events";
+import { EventsBoard } from "@/components/events/EventsBoard";
+import {
+  sortByStartAsc,
+  sortByStartDesc,
+} from "@/lib/data/events";
+import { publishedEvents } from "@/lib/cms/public-content";
+import { isUpcomingEvent } from "@/lib/events/dates";
+import { parseDateKey, toNairobiDateKey } from "@/lib/events/calendar";
 import { pageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -13,62 +17,27 @@ export const metadata = pageMetadata({
   path: "/events",
 });
 
-export default function EventsPage() {
-  const upcoming = upcomingEvents();
-  const past = pastEvents();
+export default async function EventsPage() {
+  const all = await publishedEvents();
+  const now = new Date();
+  const upcoming = all.filter((event) => isUpcomingEvent(event, now)).sort(sortByStartAsc);
+  const past = all.filter((event) => !isUpcomingEvent(event, now)).sort(sortByStartDesc);
+  const todayKey = toNairobiDateKey(new Date());
+  const initialSelectedKey = upcoming[0]
+    ? toNairobiDateKey(upcoming[0].startsAt)
+    : todayKey;
+  const { year: initialYear, month: initialMonth } = parseDateKey(initialSelectedKey);
 
   return (
-    <>
-      <PageIntro
-        kicker="Events"
-        title="Show up where the work is happening."
-      >
-        <p>
-          Distributions, mentorship, discipleship and workshops — dates and places to walk
-          beside girls and young women in Kawangware. Past events stay here as a record of
-          what we have done together.
-        </p>
-      </PageIntro>
-
-      <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
-        <section aria-labelledby="upcoming-events-heading">
-          <h2 id="upcoming-events-heading" className="font-display text-3xl">
-            Upcoming
-          </h2>
-          {upcoming.length === 0 ? (
-            <PlaceholderNote>
-              No upcoming events right now. Check back soon or{" "}
-              <a href="/contact" className="text-primary underline-offset-4 hover:underline">
-                start a conversation
-              </a>{" "}
-              if you would like to visit.
-            </PlaceholderNote>
-          ) : (
-            <div className="mt-8 grid gap-10 lg:grid-cols-2">
-              {upcoming.map((event) => (
-                <EventCard key={event.slug} event={event} />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {past.length > 0 ? (
-          <section className="mt-20 border-t border-line pt-16" aria-labelledby="past-events-heading">
-            <h2 id="past-events-heading" className="font-display text-3xl">
-              Past events
-            </h2>
-            <p className="mt-3 max-w-2xl text-muted">
-              Archived automatically after each event ends. Pages stay available as a record
-              of the community&apos;s work.
-            </p>
-            <div className="mt-8 grid gap-8">
-              {past.map((event) => (
-                <EventCard key={event.slug} event={event} compact />
-              ))}
-            </div>
-          </section>
-        ) : null}
-      </div>
-    </>
+    <div className="mx-auto max-w-[90rem] px-5 pt-10 pb-24 sm:px-8 lg:pt-12">
+      <EventsBoard
+        upcoming={upcoming}
+        past={past}
+        todayKey={todayKey}
+        initialYear={initialYear}
+        initialMonth={initialMonth}
+        initialSelectedKey={initialSelectedKey}
+      />
+    </div>
   );
 }

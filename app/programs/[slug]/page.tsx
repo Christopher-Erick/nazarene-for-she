@@ -6,8 +6,8 @@ import { TrackView } from "@/components/analytics/TrackView";
 import { analyticsEvents } from "@/lib/analytics";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { getProgram, programs } from "@/lib/data/programs";
-import { stories } from "@/lib/data/stories";
+import { programs } from "@/lib/data/programs";
+import { publishedProgram, publishedStories } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const program = getProgram(slug);
+  const program = await publishedProgram(slug);
   if (!program) return {};
   return pageMetadata({
     title: program.name,
@@ -37,9 +37,9 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = getProgram(slug);
+  const program = await publishedProgram(slug);
   if (!program) notFound();
-
+  const stories = await publishedStories();
   const related = stories.filter((story) => program.relatedStorySlugs.includes(story.slug));
 
   const jsonLd = {

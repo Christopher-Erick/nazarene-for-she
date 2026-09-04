@@ -1,6 +1,6 @@
 import { CountUp } from "@/components/impact/CountUp";
 import { PageIntro } from "@/components/ui/PageIntro";
-import { impactMetrics } from "@/lib/data/impact";
+import { publishedImpact } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -10,7 +10,8 @@ export const metadata = pageMetadata({
   path: "/impact",
 });
 
-export default function ImpactPage() {
+export default async function ImpactPage() {
+  const impactMetrics = await publishedImpact();
   return (
     <>
       <PageIntro kicker="Impact" title="We would rather show a blank than invent a number.">
@@ -24,7 +25,11 @@ export default function ImpactPage() {
           {impactMetrics.map((metric) => (
             <article key={metric.id} className="impact-card">
               <p className="impact-card-value">
-                {metric.id === "girls-supported" ? <CountUp value={600} suffix="+" /> : metric.value}
+                {metric.status === "verified" && Number(String(metric.value).replace(/[^\d]/g, "")) ? (
+                  <CountUp value={Number(String(metric.value).replace(/[^\d]/g, ""))} suffix={String(metric.value).includes("+") ? "+" : ""} />
+                ) : (
+                  metric.value
+                )}
               </p>
               <h2>{metric.label}</h2>
               {metric.status === "awaiting-verification" ? (

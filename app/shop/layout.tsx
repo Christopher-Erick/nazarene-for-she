@@ -1,10 +1,21 @@
-import { RequestTray } from "@/components/shop/RequestTray";
+import { CartTray } from "@/components/shop/CartTray";
+import { ShopCatalogProvider } from "@/components/shop/ShopCatalog";
+import { publishedCategories, publishedOrganization, publishedProducts } from "@/lib/cms/public-content";
+import { isWhatsAppOrderingEnabled } from "@/lib/shop/whatsapp";
+import "./shop.css";
 
-export default function ShopLayout({ children }: LayoutProps<"/shop">) {
+export const revalidate = 60;
+
+export default async function ShopLayout({ children }: LayoutProps<"/shop">) {
+  const [categories, products, organization] = await Promise.all([
+    publishedCategories(),
+    publishedProducts(),
+    publishedOrganization(),
+  ]);
   return (
-    <>
+    <ShopCatalogProvider categories={categories} products={products}>
       {children}
-      <RequestTray />
-    </>
+      <CartTray whatsappEnabled={isWhatsAppOrderingEnabled(organization.whatsapp)} />
+    </ShopCatalogProvider>
   );
 }
