@@ -20,7 +20,7 @@ export async function GET(_request: Request, context: RouteContext<"/api/v1/publ
   return new Response(object.body, {
     headers: {
       "Content-Type": row.mime_type,
-      "Cache-Control": "public, max-age=86400",
+      "Cache-Control": "public, max-age=31536000, stale-while-revalidate=86400, immutable",
       "X-Content-Type-Options": "nosniff",
     },
   });

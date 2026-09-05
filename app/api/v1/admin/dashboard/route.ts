@@ -1,5 +1,5 @@
 import { requireAuth } from "@/lib/cms/guard";
-import { hasPermission as can } from "@/lib/cms/auth";
+import { hasPermission as can, isSuperAdmin } from "@/lib/cms/auth";
 import { queryFirst } from "@/lib/cms/db";
 import { jsonNoStore } from "@/lib/security";
 import { CONTENT_TYPES } from "@/lib/cms/content";
@@ -53,7 +53,15 @@ export async function GET(request: Request) {
     counts.media = media?.n ?? 0;
   }
   if (can(auth, "users.view")) {
-    const users = await queryFirst<{ n: number }>(db, "SELECT COUNT(*) AS n FROM users WHERE status = 'active'");
+    const users = await queryFirst<{ n: number }>(
+      db,
+      isSuperAdmin(auth)
+        ? "SELECT COUNT(*) AS n FROM users WHERE status = 'active'"
+        : `SELECT COUNT(*) AS n FROM users u
+           JOIN user_roles ur ON ur.user_id = u.id
+           JOIN roles r ON r.id = ur.role_id
+           WHERE u.status = 'active' AND r.slug != 'super_admin'`,
+    );
     counts.users = users?.n ?? 0;
   }
 

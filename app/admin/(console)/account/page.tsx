@@ -105,7 +105,7 @@ export default function AccountPage() {
         <h2 className="font-display">Your data</h2>
         <p>
           Download a copy, ask for an export to be recorded, or request that this account be
-          deleted. Deletion is reviewed by Super Admin.
+          deleted. Deletion is reviewed before it is carried out.
         </p>
         <div className="admin-piece-actions">
           <button className="btn btn-ghost" type="button" onClick={download}>

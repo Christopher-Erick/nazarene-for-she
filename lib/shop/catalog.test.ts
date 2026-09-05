@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { describe, it } from "node:test";
 import { categoryOrder } from "../data/shop.ts";
 
@@ -14,5 +15,13 @@ describe("shop category order", () => {
     assert.ok(categoryRank("skirt") < categoryRank("dress"));
     assert.ok(categoryRank("dress") < categoryRank("blouse"));
     assert.ok(categoryRank("unknown") > categoryRank("cap"));
+  });
+});
+
+describe("catalog stills", () => {
+  it("keeps smaller workshop photographs for the rack", () => {
+    assert.equal(existsSync("public/images/shop/fabric-card.webp"), true);
+    assert.equal(existsSync("public/images/shop/atelier-chip.webp"), true);
+    assert.equal(existsSync("public/images/shop/thread-card.webp"), true);
   });
 });

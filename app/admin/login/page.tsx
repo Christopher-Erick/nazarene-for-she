@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { adminFetch, ensureCsrf } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export default function AdminLoginPage() {
   const [error, setError] = useState("");
@@ -34,10 +35,11 @@ export default function AdminLoginPage() {
       <div className="admin-login-card">
         <header className="admin-login-head">
           <BrandMark className="admin-brand__mark text-primary" />
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="eyebrow text-accent">Nazarene for She</p>
             <h1 className="font-display">Sign in</h1>
           </div>
+          <ThemeToggle />
         </header>
         <p className="admin-login-lede">This desk is for authorised organisational users only.</p>
         {error ? <p className="admin-flash admin-flash--error mt-4">{error}</p> : null}

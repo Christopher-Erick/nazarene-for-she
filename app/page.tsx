@@ -1,62 +1,48 @@
-import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { CinematicHero } from "@/components/hero/CinematicHero";
 import { RealitySection } from "@/components/storytelling/RealitySection";
 import { ScrollRibbon } from "@/components/experience/ScrollRibbon";
+import { ChoiceSection } from "@/components/storytelling/ChoiceSection";
+import { BeliefSection } from "@/components/storytelling/BeliefSection";
+import { ResponseSection } from "@/components/storytelling/ResponseSection";
+import { DignityKitSection } from "@/components/storytelling/DignityKitSection";
+import { FaithSection } from "@/components/storytelling/FaithSection";
+import { BeyondPadSection } from "@/components/storytelling/BeyondPadSection";
+import { VocationalSection } from "@/components/storytelling/VocationalSection";
+import { EntrepreneurshipSection } from "@/components/storytelling/EntrepreneurshipSection";
+import { TransformationSection } from "@/components/storytelling/TransformationSection";
 import { ImpactSection } from "@/components/storytelling/ImpactSection";
 import { StoriesTeaser } from "@/components/storytelling/StoriesTeaser";
 import { InvolveSection } from "@/components/storytelling/InvolveSection";
+import { SustainabilitySection } from "@/components/storytelling/SustainabilitySection";
+import { WordRiver } from "@/components/storytelling/WordRiver";
+import { ClosingCta } from "@/components/storytelling/ClosingCta";
 import { girlsSupportedFromImpact, publishedImpact } from "@/lib/cms/public-content";
 
-const ChoiceSection = dynamic(() =>
-  import("@/components/storytelling/ChoiceSection").then((m) => m.ChoiceSection),
-);
-const BeliefSection = dynamic(() =>
-  import("@/components/storytelling/BeliefSection").then((m) => m.BeliefSection),
-);
-const ResponseSection = dynamic(() =>
-  import("@/components/storytelling/ResponseSection").then((m) => m.ResponseSection),
-);
-const DignityKitSection = dynamic(() =>
-  import("@/components/storytelling/DignityKitSection").then((m) => m.DignityKitSection),
-);
-const FaithSection = dynamic(() =>
-  import("@/components/storytelling/FaithSection").then((m) => m.FaithSection),
-);
-const BeyondPadSection = dynamic(() =>
-  import("@/components/storytelling/BeyondPadSection").then((m) => m.BeyondPadSection),
-);
-const VocationalSection = dynamic(() =>
-  import("@/components/storytelling/VocationalSection").then((m) => m.VocationalSection),
-);
-const EntrepreneurshipSection = dynamic(() =>
-  import("@/components/storytelling/EntrepreneurshipSection").then(
-    (m) => m.EntrepreneurshipSection,
-  ),
-);
-const TransformationSection = dynamic(() =>
-  import("@/components/storytelling/TransformationSection").then(
-    (m) => m.TransformationSection,
-  ),
-);
-const SustainabilitySection = dynamic(() =>
-  import("@/components/storytelling/SustainabilitySection").then(
-    (m) => m.SustainabilitySection,
-  ),
-);
-const WordRiver = dynamic(() =>
-  import("@/components/storytelling/WordRiver").then((m) => m.WordRiver),
-);
-const ClosingCta = dynamic(() =>
-  import("@/components/storytelling/ClosingCta").then((m) => m.ClosingCta),
-);
-
-export default async function HomePage() {
+async function HomeHero() {
   const girls = girlsSupportedFromImpact(await publishedImpact());
+  return (
+    <>
+      <CinematicHero girlsDisplay={girls.display} girlsLabel={girls.label} />
+      <RealitySection girlsValue={girls.value} girlsLabel={girls.label} verified={girls.verified} />
+    </>
+  );
+}
+
+export default function HomePage() {
   return (
     <div className="relative">
       <ScrollRibbon />
-      <CinematicHero girlsDisplay={girls.display} girlsLabel={girls.label} />
-      <RealitySection girlsValue={girls.value} girlsLabel={girls.label} verified={girls.verified} />
+      <Suspense
+        fallback={
+          <>
+            <CinematicHero />
+            <RealitySection />
+          </>
+        }
+      >
+        <HomeHero />
+      </Suspense>
       <ChoiceSection />
       <BeliefSection />
       <ResponseSection />
@@ -66,9 +52,15 @@ export default async function HomePage() {
       <VocationalSection />
       <EntrepreneurshipSection />
       <TransformationSection />
-      <ImpactSection />
-      <StoriesTeaser />
-      <InvolveSection />
+      <Suspense fallback={<section className="bg-background min-h-[20rem]" aria-hidden="true" />}>
+        <ImpactSection />
+      </Suspense>
+      <Suspense fallback={<section className="bg-background min-h-[16rem]" aria-hidden="true" />}>
+        <StoriesTeaser />
+      </Suspense>
+      <Suspense fallback={<section className="theme-band min-h-[20rem]" aria-hidden="true" />}>
+        <InvolveSection />
+      </Suspense>
       <SustainabilitySection />
       <WordRiver tone="dark" />
       <ClosingCta />

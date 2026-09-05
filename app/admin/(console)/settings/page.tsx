@@ -30,7 +30,7 @@ const LINKS = [
   {
     href: "/admin/maintenance",
     title: "Maintenance",
-    body: "Take the public site offline. Super Admin only.",
+    body: "Take the public site offline.",
   },
 ];
 

@@ -24,7 +24,7 @@ export default async function ConsoleLayout({ children }: { children: React.Reac
         children
       ) : (
         <p className="admin-flash admin-flash--error">
-          This page is not on your desk. Super Admin grants each role only the pages they should see.
+          This page is not on your desk.
         </p>
       )}
     </AdminShell>

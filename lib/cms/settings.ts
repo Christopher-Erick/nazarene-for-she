@@ -1,4 +1,5 @@
 import { getDb, queryFirst, run, nowMs } from "@/lib/cms/db";
+import { cache } from "react";
 
 export type MaintenanceState = {
   enabled: boolean;
@@ -22,7 +23,7 @@ const DEFAULT_MAINTENANCE: MaintenanceState = {
   endAt: null,
 };
 
-export async function getSetting<T>(key: string, fallback: T): Promise<T> {
+export const getSetting = cache(async function getSetting<T>(key: string, fallback: T): Promise<T> {
   const db = await getDb();
   if (!db) return fallback;
   const row = await queryFirst<{ value: string }>(db, "SELECT value FROM site_settings WHERE key = ?", key);
@@ -32,7 +33,7 @@ export async function getSetting<T>(key: string, fallback: T): Promise<T> {
   } catch {
     return fallback;
   }
-}
+});
 
 export async function setSetting(db: D1Database, key: string, value: unknown, userId: string | null) {
   await run(
@@ -63,9 +64,9 @@ export function resolveMaintenance(raw: MaintenanceState, now = Date.now()): Mai
   return next;
 }
 
-export async function getMaintenance() {
+export const getMaintenance = cache(async function getMaintenance() {
   const stored = await getSetting<MaintenanceState>("maintenance", DEFAULT_MAINTENANCE);
   return resolveMaintenance(stored);
-}
+});
 
 export { DEFAULT_MAINTENANCE };

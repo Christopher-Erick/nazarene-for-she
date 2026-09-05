@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ProductBuyBox, ProductCard, productStills } from "@/components/shop/ProductCard";
-import { productHref, stillForProduct } from "@/lib/shop/catalog";
+import { productHref, catalogStill, stillForProduct } from "@/lib/shop/catalog";
 import type { ShopCategory, ShopProduct } from "@/lib/shop/types";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
@@ -60,7 +60,7 @@ export function ShopProductView({
               fill
               priority
               sizes="(max-width: 719px) 100vw, 50vw"
-              quality={90}
+              quality={75}
             />
           </div>
           {stills.length > 1 ? (
@@ -73,7 +73,7 @@ export function ShopProductView({
                   aria-label={`View image ${index + 1}`}
                   onClick={() => setActive(index)}
                 >
-                  <Image src={item.src} alt="" fill sizes="72px" />
+                  <Image src={catalogStill(item.src, "chip")} alt="" fill sizes="72px" quality={75} />
                 </button>
               ))}
             </div>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { pathCoveredByNav } from "@/lib/cms/nav";
 
 export function AdminShell({
@@ -118,6 +119,7 @@ export function AdminShell({
           </button>
           <p className="admin-top__place">{current?.label ?? "Desk"}</p>
           <div className="admin-top__links">
+            <ThemeToggle />
             <Link className="btn btn-ghost" href="/" target="_blank" rel="noreferrer">
               View website
             </Link>
@@ -131,8 +133,7 @@ export function AdminShell({
             children
           ) : (
             <p className="admin-flash admin-flash--error">
-              This page is not on your desk. Super Admin grants each role only the pages they should
-              see.
+              This page is not on your desk.
             </p>
           )}
         </div>

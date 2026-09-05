@@ -33,22 +33,23 @@
 }
 
 html[data-theme="dark"] {
-  --nfs-background: #f4ece3;
-  --nfs-surface: #fffaf4;
-  --nfs-muted: #6a5b6e;
-  --nfs-lavender: #efe4f2;
-  --nfs-line: #e4d6ea;
-  --chrome-bg: #1b0b1c;
+  --nfs-background: #1b0b1c;
+  --nfs-surface: #2a142c;
+  --nfs-text: #f7f1e8;
+  --nfs-muted: color-mix(in srgb, #f7f1e8 72%, #1b0b1c);
+  --nfs-lavender: #32183a;
+  --nfs-line: color-mix(in srgb, #e4c48a 22%, #1b0b1c);
+  --chrome-bg: #140810;
   --chrome-fg: #f7f1e8;
   --chrome-muted: color-mix(in srgb, #f7f1e8 70%, transparent);
   --chrome-line: color-mix(in srgb, #c47a2c 28%, transparent);
   --chrome-accent: #e4c48a;
-  --band-bg: #1b0b1c;
+  --band-bg: #24101f;
   --band-fg: #f7f1e8;
   --band-muted: color-mix(in srgb, #f7f1e8 75%, transparent);
   --band-line: color-mix(in srgb, #f7f1e8 14%, transparent);
   --band-accent: #e4c48a;
-  --shadow-deep: 0 28px 80px rgba(32, 10, 40, 0.28);
+  --shadow-deep: 0 28px 80px rgba(8, 2, 12, 0.45);
 }
 
 @theme inline {
@@ -2218,6 +2219,90 @@ html[data-theme="light"] .form-field textarea,
 html[data-theme="light"] .form-field select {
   border: 1.5px solid #c4a3c6;
   background: #fff;
+}
+
+html[data-theme="dark"] .form-field input,
+html[data-theme="dark"] .form-field textarea,
+html[data-theme="dark"] .form-field select,
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  border: 1.5px solid color-mix(in srgb, #e4c48a 28%, transparent);
+  background: var(--nfs-surface);
+  color: var(--nfs-text);
+}
+
+html[data-theme="dark"] .impact-card {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+html[data-theme="dark"] .impact-card-value,
+html[data-theme="dark"] .text-primary,
+html[data-theme="dark"] .text-primary-dark {
+  color: var(--color-accent-soft);
+}
+
+html[data-theme="dark"] .involve-feature {
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--nfs-surface));
+  color: var(--nfs-ivory);
+  border-color: var(--band-line);
+}
+
+html[data-theme="dark"] .involve-feature p {
+  color: color-mix(in srgb, var(--nfs-ivory) 82%, transparent);
+}
+
+html[data-theme="dark"] .involve-feature-cta,
+html[data-theme="dark"] .involve-feature .eyebrow {
+  color: var(--color-accent-soft);
+}
+
+html[data-theme="dark"] .involve-side {
+  background: var(--nfs-surface);
+  border: 1px solid var(--band-line);
+  color: var(--nfs-ivory);
+}
+
+html[data-theme="dark"] .involve-side p {
+  color: var(--nfs-muted);
+}
+
+html[data-theme="dark"] .involve-side:hover {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--nfs-surface));
+}
+
+html[data-theme="dark"] .kit-card {
+  background: color-mix(in srgb, var(--nfs-surface) 80%, transparent);
+  border-color: var(--band-line);
+  color: var(--nfs-ivory);
+}
+
+html[data-theme="dark"] .donation-cause[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--nfs-lavender);
+}
+
+html[data-theme="dark"] .donation-cause:not([aria-pressed="true"]) {
+  border-color: var(--band-line);
+  background: var(--nfs-surface);
+  color: var(--nfs-text);
+}
+
+html[data-theme="dark"] .placeholder-chip {
+  color: var(--color-accent-soft);
+  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+html[data-theme="dark"] .word-river-track {
+  color: var(--color-accent-soft);
+}
+
+html[data-theme="dark"] .site-footer a:hover,
+html[data-theme="dark"] .mobile-menu-link:hover,
+html[data-theme="dark"] .mobile-menu-link[aria-current="page"] {
+  color: var(--color-accent-soft);
 }
 
 html[data-theme="light"] .donation-cause:not([aria-pressed="true"]) {

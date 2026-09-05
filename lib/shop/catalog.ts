@@ -131,6 +131,29 @@ export function stillForProduct(product: ShopProduct, category?: ShopCategory | 
   return stillFor(product.categorySlug);
 }
 
+const CARD_STILLS: Record<string, string> = {
+  "/images/atmosphere-fabric.webp": "/images/shop/fabric-card.webp",
+  "/images/atmosphere-atelier.webp": "/images/shop/atelier-card.webp",
+  "/images/atmosphere-thread.webp": "/images/shop/thread-card.webp",
+};
+
+const CHIP_STILLS: Record<string, string> = {
+  "/images/atmosphere-fabric.webp": "/images/shop/fabric-chip.webp",
+  "/images/atmosphere-atelier.webp": "/images/shop/atelier-chip.webp",
+  "/images/atmosphere-thread.webp": "/images/shop/thread-chip.webp",
+};
+
+/** Smaller workshop stills for the rack and category rail so the shop does not decode full photographs. */
+export function catalogStill(src: string, variant: "card" | "chip") {
+  const map = variant === "chip" ? CHIP_STILLS : CARD_STILLS;
+  return map[src] ?? src;
+}
+
+export function stillForCard(product: ShopProduct, category?: ShopCategory | null) {
+  const still = stillForProduct(product, category);
+  return { ...still, src: catalogStill(still.src, "card") };
+}
+
 export function categoryRank(slug: string) {
   const index = (categoryOrder as readonly string[]).indexOf(slug);
   return index === -1 ? 1000 : index;

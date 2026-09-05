@@ -3,6 +3,7 @@ import { queryAll, queryFirst, run, newId, nowMs } from "@/lib/cms/db";
 import { hashPassword, passwordMeetsPolicy } from "@/lib/cms/password";
 import { destroyUserSessions } from "@/lib/cms/auth";
 import { isSuperAdmin } from "@/lib/cms/auth";
+import { isHiddenAccountRole, visibleAccounts } from "@/lib/cms/rbac";
 import { jsonNoStore } from "@/lib/security";
 import { parseBody, requestIp } from "@/lib/cms/http";
 import { audit } from "@/lib/cms/audit";
@@ -45,7 +46,7 @@ export async function GET(request: Request) {
   const gated = await requirePermission(request, "users.view");
   if (!gated.ok) return gated.response;
   const rows = await queryAll<UserRow>(gated.ctx.db, `${LIST_SQL} ORDER BY u.name ASC`);
-  return jsonNoStore({ ok: true, items: rows.map(publicUser) });
+  return jsonNoStore({ ok: true, items: visibleAccounts(gated.ctx.auth, rows).map(publicUser) });
 }
 
 export async function POST(request: Request) {
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
   }
   if (!ROLE_SLUGS.includes(role)) return apiError(400, "Unknown role.");
   if (role === "super_admin" && !isSuperAdmin(gated.ctx.auth)) {
-    return apiError(403, "Only Super Admin can assign the Super Admin role.");
+    return apiError(400, "Unknown role.");
   }
 
   const exists = await queryFirst<{ id: string }>(gated.ctx.db, "SELECT id FROM users WHERE email = ?", email);
@@ -109,17 +110,17 @@ export async function PATCH(request: Request) {
 
   const current = await queryFirst<UserRow>(gated.ctx.db, `${LIST_SQL} AND u.id = ?`, id);
   if (!current) return apiError(404, "User not found.");
+  if (!isSuperAdmin(gated.ctx.auth) && isHiddenAccountRole(current.role_slug)) {
+    return apiError(404, "User not found.");
+  }
 
   const nextRole = body.data.role != null ? String(body.data.role) : current.role_slug;
   if (!ROLE_SLUGS.includes(nextRole as RoleSlug)) return apiError(400, "Unknown role.");
   if (nextRole === "super_admin" && !isSuperAdmin(gated.ctx.auth)) {
-    return apiError(403, "Only Super Admin can assign the Super Admin role.");
-  }
-  if (!isSuperAdmin(gated.ctx.auth) && current.role_slug === "super_admin") {
-    return apiError(403, "Only Super Admin can change a Super Admin account.");
+    return apiError(400, "Unknown role.");
   }
   if (nextRole !== current.role_slug && !isSuperAdmin(gated.ctx.auth)) {
-    return apiError(403, "Only Super Admin can change another user's role.");
+    return apiError(403, "You cannot change another user's role.");
   }
 
   if (current.role_slug === "super_admin" && nextRole !== "super_admin") {

@@ -19,13 +19,13 @@ function payloadString(payload: Record<string, unknown>, key: string, fallback =
   return typeof value === "string" ? value : fallback;
 }
 
-export async function publishedPrograms(): Promise<ProgramWithStories[]> {
+export const publishedPrograms = cache(async function publishedPrograms(): Promise<ProgramWithStories[]> {
   const db = await getDb();
   if (!db) return staticPrograms;
   const rows = await listPublished(db, "programs");
   if (!rows.length) return staticPrograms;
   return rows.map(programFromRow);
-}
+});
 
 export async function publishedProgram(slug: string) {
   const db = await getDb();
@@ -57,13 +57,13 @@ function programFromRow(row: ContentRow): ProgramWithStories {
   };
 }
 
-export async function publishedEvents(): Promise<NfsEvent[]> {
+export const publishedEvents = cache(async function publishedEvents(): Promise<NfsEvent[]> {
   const db = await getDb();
   if (!db) return staticEvents;
   const rows = await listPublished(db, "events");
   if (!rows.length) return staticEvents;
   return rows.map(eventFromRow);
-}
+});
 
 export async function publishedEvent(slug: string) {
   const db = await getDb();
@@ -98,13 +98,13 @@ function eventFromRow(row: ContentRow): NfsEvent {
   };
 }
 
-export async function publishedStories(): Promise<Story[]> {
+export const publishedStories = cache(async function publishedStories(): Promise<Story[]> {
   const db = await getDb();
   if (!db) return staticStories;
   const rows = await listPublished(db, "stories");
   if (!rows.length) return staticStories;
   return rows.map(storyFromRow);
-}
+});
 
 export async function publishedStory(slug: string) {
   const db = await getDb();
@@ -157,7 +157,7 @@ export type PublicSitePage = {
   payload: Record<string, unknown>;
 };
 
-export async function publishedSitePage(slug: SitePageSlug): Promise<PublicSitePage> {
+export const publishedSitePage = cache(async function publishedSitePage(slug: SitePageSlug): Promise<PublicSitePage> {
   const fallback = sitePageBySlug(slug) ?? SITE_PAGES[0];
   const db = await getDb();
   if (db) {
@@ -186,7 +186,7 @@ export async function publishedSitePage(slug: SitePageSlug): Promise<PublicSiteP
     content: fallback.content,
     payload: {},
   };
-}
+});
 
 export const publishedGarments = cache(async function publishedGarments(): Promise<Garment[]> {
   const db = await getDb();
@@ -279,7 +279,7 @@ function garmentFromRow(row: ContentRow): Garment {
   };
 }
 
-export async function publishedImpact(): Promise<ImpactMetric[]> {
+export const publishedImpact = cache(async function publishedImpact(): Promise<ImpactMetric[]> {
   const db = await getDb();
   if (!db) return impactMetrics;
   const rows = await queryAll<{
@@ -297,7 +297,7 @@ export async function publishedImpact(): Promise<ImpactMetric[]> {
     status: row.status === "verified" ? "verified" : "awaiting-verification",
     note: row.note || undefined,
   }));
-}
+});
 
 export function girlsSupportedFromImpact(metrics: ImpactMetric[]) {
   const fallback = impactMetrics.find((item) => item.id === "girls-supported") ?? impactMetrics[0];
@@ -314,7 +314,7 @@ export function girlsSupportedFromImpact(metrics: ImpactMetric[]) {
   };
 }
 
-export async function publishedOrganization() {
+export const publishedOrganization = cache(async function publishedOrganization() {
   const stored = await getSetting<Record<string, unknown>>("organization", {});
   const text = (key: string, fallback: string) =>
     typeof stored[key] === "string" && String(stored[key]).trim() ? String(stored[key]) : fallback;
@@ -360,7 +360,7 @@ export async function publishedOrganization() {
     phone: text("phone", ""),
     whatsapp: String(stored.whatsapp ?? "").replace(/\D/g, ""),
   };
-}
+});
 
 export async function publishedDonations() {
   const stored = await getSetting<{

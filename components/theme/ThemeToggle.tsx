@@ -1,18 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { applyTheme, DEFAULT_THEME, readTheme, type Theme } from "@/lib/theme";
+import { applyTheme, type Theme } from "@/lib/theme";
+import { useTheme } from "@/components/theme/useTheme";
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
-
-  useEffect(() => {
-    const sync = () => setTheme(readTheme());
-    sync();
-    document.addEventListener("nfs-theme", sync);
-    return () => document.removeEventListener("nfs-theme", sync);
-  }, []);
-
+  const theme = useTheme();
   const next: Theme = theme === "light" ? "dark" : "light";
 
   return (

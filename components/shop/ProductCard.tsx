@@ -1,22 +1,23 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { analyticsEvents, trackEvent } from "@/lib/analytics";
 import { cloths, fitLabels, fitsForSizing, getCloth, stillForGarment, type ClothId, type GarmentFit } from "@/lib/data/shop";
 import {
   categoryHref,
+  catalogStill,
   lowestPriceIn,
   previewStillsForCategory,
   previewStillsForProduct,
   productHref,
-  stillForProduct,
+  stillForCard,
 } from "@/lib/shop/catalog";
 import { formatKes, stockLabel, stockTone } from "@/lib/shop/money";
 import type { ShopCategory, ShopProduct } from "@/lib/shop/types";
 import { useShopCatalog } from "@/components/shop/ShopCatalog";
-import { addToCart, useShopCart } from "@/components/shop/useShopCart";
+import { ShopImage } from "@/components/shop/ShopImage";
+import { addToCart } from "@/components/shop/useShopCart";
 
 export const PREVIEW_FRAMES = 4;
 export const PREVIEW_FRAME_MS = 4500;
@@ -59,14 +60,7 @@ export function CategoryPreviewCard({
   return (
     <article className="shop-card" id={`piece-${category.slug}`}>
       <Link href={href} className="shop-card__media" aria-label={`${category.name}. ${count} ${count === 1 ? "piece" : "pieces"} on this rack.`}>
-        <Image
-          key={`${category.id}-${active}`}
-          src={still.src}
-          alt=""
-          fill
-          sizes={CARD_IMAGE_SIZES}
-          quality={90}
-        />
+        <ShopImage src={catalogStill(still.src, "card")} alt="" sizes={CARD_IMAGE_SIZES} />
       </Link>
       <div className="shop-card__body">
         <p className="shop-card__tagline">{fromPrice == null ? "Pieces" : `From ${formatKes(fromPrice)}`}</p>
@@ -82,24 +76,24 @@ export function CategoryPreviewCard({
 export function ProductCard({
   product,
   category,
+  priority = false,
 }: {
   product: ShopProduct;
   category?: ShopCategory | null;
   variant?: "preview" | "full";
   index?: number;
+  priority?: boolean;
 }) {
   const resolved = useResolvedCategory(product, category);
   const href = productHref(product);
-  const still = stillForProduct(product, resolved);
-  const { items } = useShopCart();
-  const held = items.filter((item) => item.productId === product.id);
+  const still = stillForCard(product, resolved);
   const palette = clothsFor(product);
   const sizes = fitsForSizing(product.sizing);
   const [cloth, setCloth] = useState<ClothId | null>(null);
   const [fit, setFit] = useState<GarmentFit | null>(product.sizing === "one" ? "os" : null);
+  const [inCart, setInCart] = useState(false);
   const chosen = cloth ? getCloth(cloth) : null;
   const soldOut = product.stock <= 0;
-  const inCart = held.length > 0;
   const ready = Boolean(cloth && fit);
   const tone = stockTone(product.stock);
   const badge = soldOut ? "Sold out" : tone === "low" ? `Only ${product.stock} left` : null;
@@ -117,6 +111,7 @@ export function ProductCard({
     if (!cloth || !fit || soldOut) return;
     const status = addToCart(product, fit, cloth, 1);
     if (status === "added" || status === "updated") {
+      setInCart(true);
       trackEvent(analyticsEvents.atelierHeld, { slug: product.slug, cloth, fit });
     }
   }
@@ -125,7 +120,7 @@ export function ProductCard({
     <article className={`shop-card${tone === "low" ? " shop-card--low" : ""}`} id={`piece-${product.slug}`}>
       <Link href={href} className="shop-card__media" aria-label={`${product.name}. ${formatKes(product.priceKes)}.`}>
         {badge ? <span className={`shop-card__badge${tone === "low" ? " shop-card__badge--pulse" : ""}`}>{badge}</span> : null}
-        <Image src={still.src} alt={still.alt} fill sizes={CARD_IMAGE_SIZES} quality={90} />
+        <ShopImage src={still.src} alt={still.alt} sizes={CARD_IMAGE_SIZES} priority={priority} />
       </Link>
       <div className="shop-card__body">
         <p className="shop-card__tagline">{resolved?.name ?? product.categoryName}</p>

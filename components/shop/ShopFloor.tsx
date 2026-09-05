@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { ShopImage } from "@/components/shop/ShopImage";
 import { useShopCatalog } from "@/components/shop/ShopCatalog";
 import { cloths, shop, stillForGarment } from "@/lib/data/shop";
-import { categoryHref, sortCategories, sortProducts, stillForProduct } from "@/lib/shop/catalog";
+import { catalogStill, categoryHref, sortCategories, sortProducts, stillForCard, stillForProduct } from "@/lib/shop/catalog";
 import { formatKes } from "@/lib/shop/money";
 import type { ShopCategory, ShopProduct } from "@/lib/shop/types";
 
@@ -17,6 +17,8 @@ const QUICK = [
   { label: "Tote bags", slug: "tote" },
   { label: "Uniforms", slug: "uniform" },
 ] as const;
+
+const PAGE_SIZE = 8;
 
 type SortId = "rack" | "price_asc" | "price_desc" | "name";
 
@@ -55,6 +57,7 @@ export function ShopFloor({
     min: null,
     max: null,
   });
+  const [shown, setShown] = useState(PAGE_SIZE);
   const railRef = useRef<HTMLDivElement>(null);
 
   const chosen = categorySlug ? catalog.find((item) => item.slug === categorySlug) ?? null : null;
@@ -75,11 +78,16 @@ export function ShopFloor({
     return sortFiltered(next, sort);
   }, [chosen, ordered, priceBounds, query, sort]);
 
+  useEffect(() => {
+    setShown(PAGE_SIZE);
+  }, [chosen?.slug, query, sort, priceBounds]);
+
+  const visible = filtered.slice(0, shown);
   const spotlight = filtered.find((item) => item.stock > 0) ?? filtered[0] ?? ordered.find((item) => item.stock > 0) ?? null;
   const spotlightCategory = spotlight
     ? catalog.find((item) => item.slug === spotlight.categorySlug) ?? null
     : null;
-  const spotlightStill = spotlight ? stillForProduct(spotlight, spotlightCategory) : null;
+  const spotlightStill = spotlight ? stillForCard(spotlight, spotlightCategory) : null;
   const searching = Boolean(query.trim());
 
   function applyPrice(event: FormEvent) {
@@ -187,7 +195,7 @@ export function ShopFloor({
                 On the table
               </h2>
               <Link className="shop-spotlight__media" href={`/shop/${spotlight.categorySlug}/${spotlight.slug}`}>
-                <Image src={spotlightStill.src} alt={spotlightStill.alt} fill sizes="18.5rem" quality={90} />
+                <ShopImage src={spotlightStill.src} alt={spotlightStill.alt} sizes="18.5rem" priority />
                 <span className="shop-spotlight__badge">In the workshop</span>
               </Link>
               <h3 className="shop-spotlight__name">
@@ -312,12 +320,13 @@ export function ShopFloor({
           </div>
 
           <div className="product-grid">
-            {filtered.length ? (
-              filtered.map((item) => (
+            {visible.length ? (
+              visible.map((item, index) => (
                 <ProductCard
                   key={item.id}
                   product={item}
                   category={catalog.find((row) => row.slug === item.categorySlug)}
+                  priority={index < 2}
                 />
               ))
             ) : (
@@ -333,6 +342,13 @@ export function ShopFloor({
               </div>
             )}
           </div>
+          {filtered.length > shown ? (
+            <p className="shop-results__more">
+              <button className="btn btn-ghost" type="button" onClick={() => setShown((count) => count + PAGE_SIZE)}>
+                Show more pieces
+              </button>
+            </p>
+          ) : null}
         </div>
       </section>
 
@@ -383,7 +399,7 @@ function MoodChip({
   return (
     <Link className={`mood-chip${active ? " is-active" : ""}`} href={categoryHref(category.slug)} role="listitem">
       <span className="mood-chip__media" aria-hidden="true">
-        <Image src={still.src} alt="" fill sizes="72px" />
+        <ShopImage src={catalogStill(still.src, "chip")} alt="" sizes="72px" />
       </span>
       <span className="mood-chip__copy">
         <span className="mood-chip__parent">{category.eyebrow}</span>

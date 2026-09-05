@@ -36,6 +36,10 @@ export const ROLE_SLUGS = [
 
 export type RoleSlug = (typeof ROLE_SLUGS)[number];
 
+export const ASSIGNABLE_ROLE_SLUGS = ROLE_SLUGS.filter(
+  (slug): slug is Exclude<RoleSlug, "super_admin"> => slug !== "super_admin",
+);
+
 export const ROLE_LABELS: Record<RoleSlug, string> = {
   super_admin: "Super Admin",
   admin: "Admin",

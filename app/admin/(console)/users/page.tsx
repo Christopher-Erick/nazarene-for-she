@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { ROLE_LABELS, ROLE_SLUGS } from "@/lib/cms/permissions";
+import { ROLE_LABELS, ASSIGNABLE_ROLE_SLUGS } from "@/lib/cms/permissions";
 
 type User = {
   id: string;
@@ -65,8 +65,7 @@ export default function UsersPage() {
     <div className="admin-stack">
       <AdminHeader kicker="Access" title="People">
         <p>
-          These are the people who can sign in to Admin. Roles control what they may change. Only a
-          Super Admin can open Roles & access.
+          These are the people who can sign in to Admin. Roles control what they may change.
         </p>
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
@@ -90,7 +89,7 @@ export default function UsersPage() {
         <label>
           Role
           <select name="role" defaultValue="member">
-            {ROLE_SLUGS.filter((slug) => slug !== "super_admin").map((slug) => (
+            {ASSIGNABLE_ROLE_SLUGS.map((slug) => (
               <option key={slug} value={slug}>
                 {ROLE_LABELS[slug]}
               </option>

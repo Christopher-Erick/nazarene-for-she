@@ -13,7 +13,7 @@ import { HeaderCartLink } from "@/components/shop/CartTray";
 import { cn } from "@/lib/cn";
 import { supportCta } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
-import { DEFAULT_THEME, readTheme, type Theme } from "@/lib/theme";
+import { useTheme } from "@/components/theme/useTheme";
 
 function isPhotoHero(pathname: string) {
   if (pathname === "/") return true;
@@ -35,16 +35,9 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
+  const theme = useTheme();
   const overHero = (isPhotoHero(pathname) || isBandHero(pathname)) && !scrolled && !open;
   const onDark = theme === "dark" && overHero;
-
-  useEffect(() => {
-    const sync = () => setTheme(readTheme());
-    sync();
-    document.addEventListener("nfs-theme", sync);
-    return () => document.removeEventListener("nfs-theme", sync);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

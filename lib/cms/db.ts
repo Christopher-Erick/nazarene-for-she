@@ -1,30 +1,18 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { cloudflareEnv } from "@/lib/cms/cloudflare";
 
 export async function getDb() {
-  try {
-    const ctx = await getCloudflareContext({ async: true });
-    return ctx.env.DB ?? null;
-  } catch {
-    return null;
-  }
+  const env = await cloudflareEnv();
+  return env?.DB ?? null;
 }
 
 export async function getMediaBucket() {
-  try {
-    const ctx = await getCloudflareContext({ async: true });
-    return ctx.env.MEDIA ?? null;
-  } catch {
-    return null;
-  }
+  const env = await cloudflareEnv();
+  return env?.MEDIA ?? null;
 }
 
 export async function getWorkersAi() {
-  try {
-    const ctx = await getCloudflareContext({ async: true });
-    return ctx.env.AI ?? null;
-  } catch {
-    return null;
-  }
+  const env = await cloudflareEnv();
+  return env?.AI ?? null;
 }
 
 export function isMissingSchemaError(error: unknown) {

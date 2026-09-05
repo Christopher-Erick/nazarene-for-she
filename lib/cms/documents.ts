@@ -361,7 +361,7 @@ export function forceApproveStage(
   note = "",
 ): DocumentDecision {
   if (!isDocumentSuperAdmin(actor)) {
-    return { ok: false, message: "Only Super Admin can approve in an officer’s place." };
+    return { ok: false, message: "You cannot approve in an officer’s place." };
   }
   if (item.status !== "pending" || !item.currentStageRole) {
     return { ok: false, message: "This document is not waiting for an approval." };

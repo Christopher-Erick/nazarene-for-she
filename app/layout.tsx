@@ -1,13 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import { Fraunces, Outfit } from "next/font/google";
-import { SiteFooter } from "@/components/footer/SiteFooter";
-import { SiteHeader } from "@/components/navigation/SiteHeader";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { HashScroll } from "@/components/ui/HashScroll";
+import { SiteShell } from "@/components/layout/SiteShell";
 import { ThemeScript } from "@/components/theme/ThemeScript";
-import { SkipLink } from "@/components/ui/SkipLink";
-import { getMaintenance } from "@/lib/cms/settings";
 import { site } from "@/lib/data/site";
 import "./globals.css";
 
@@ -22,8 +16,9 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -82,11 +77,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const requestHeaders = await headers();
-  const isAdmin = requestHeaders.get("x-nfs-admin") === "1";
-  const maintenance = isAdmin ? null : await getMaintenance();
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-KE"
@@ -98,29 +89,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeScript />
       </head>
       <body className="min-h-full flex flex-col bg-background text-text font-sans">
-        {isAdmin ? (
-          children
-        ) : maintenance?.enabled ? (
-          <main id="main" className="flex-1 px-5 py-24">
-            <div className="mx-auto max-w-xl">
-              <p className="eyebrow text-accent">{site.name}</p>
-              <h1 className="mt-3 font-display text-4xl">{maintenance.title}</h1>
-              <p className="mt-4 text-lg text-muted">{maintenance.message}</p>
-              {maintenance.contact ? <p className="mt-4">{maintenance.contact}</p> : null}
-            </div>
-          </main>
-        ) : (
-          <>
-            <JsonLd />
-            <SkipLink />
-            <HashScroll />
-            <SiteHeader />
-            <main id="main" className="flex-1 pt-[var(--header-height)]">
-              {children}
-            </main>
-            <SiteFooter />
-          </>
-        )}
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

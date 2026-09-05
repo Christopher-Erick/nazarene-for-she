@@ -129,8 +129,7 @@ export function DocumentsDesk() {
         <p>
           Internal papers only — requisitions, minutes, and proof of payment. Everyone with access can
           open every paper at every stage, read an AI sketch, and add a note. Approvers still have to
-          open the file before they can sign. Super Admin grants that access in Roles & access; mail
-          only notifies, it is not the record.
+          open the file before they can sign. Mail only notifies, it is not the record.
         </p>
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
@@ -138,7 +137,7 @@ export function DocumentsDesk() {
       {data.desk.canAssignOfficers && data.desk.needsPatron ? (
         <p className="admin-flash">
           Patron is not assigned yet. Requisitions and proof of payment will stall after the Chair
-          until Super Admin names the Patron below.
+          until the Patron is named below.
         </p>
       ) : null}
 
@@ -193,7 +192,7 @@ export function DocumentsDesk() {
             paper on this desk.
           </p>
         ) : (
-          <p>You can open every paper on this desk. Super Admin has not assigned you an office yet.</p>
+          <p>You can open every paper on this desk. You have not been named to an office yet.</p>
         )}
       </div>
 
@@ -342,8 +341,8 @@ function OfficerPanel() {
     <form className="admin-form admin-form-wide" onSubmit={save}>
       <h2 className="admin-form-title font-display">Who holds each office</h2>
       <p className="admin-help admin-span-2">
-        Super Admin names every office. Being Chair or Secretary on the website does not put someone
-        on this chain. Grant CRUD in Roles & access, then name the people here.
+        You name every office. Being Chair or Secretary on the website does not put someone on this
+        chain. Grant the document pages in Roles & access, then name the people here.
       </p>
       {error ? <p className="admin-flash admin-flash--error admin-span-2">{error}</p> : null}
       {message ? <p className="admin-flash admin-flash--ok admin-span-2">{message}</p> : null}

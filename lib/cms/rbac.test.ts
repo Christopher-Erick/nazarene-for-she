@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { canAssignRole, hasPermission, isSuperAdmin } from "./rbac.ts";
+import { canAssignRole, hasPermission, isSuperAdmin, visibleAccounts } from "./rbac.ts";
 import type { PermissionActor } from "./rbac.ts";
 import { DEFAULT_ROLE_PERMISSIONS } from "./defaults.ts";
 
@@ -48,6 +48,26 @@ describe("RBAC", () => {
     assert.equal(hasPermission(treasurer, "documents.view"), false);
     assert.equal(hasPermission(treasurer, "pages.edit"), false);
     assert.equal(hasPermission(treasurer, "roles.view"), false);
+  });
+
+  it("hides Super Admin accounts from every other role", () => {
+    const rows = [
+      { id: "sa", role_slug: "super_admin" },
+      { id: "ad", role_slug: "admin" },
+      { id: "ch", role_slug: "chair" },
+    ];
+    assert.deepEqual(
+      visibleAccounts(actor("admin"), rows).map((row) => row.id),
+      ["ad", "ch"],
+    );
+    assert.deepEqual(
+      visibleAccounts(actor("chair"), rows).map((row) => row.id),
+      ["ad", "ch"],
+    );
+    assert.deepEqual(
+      visibleAccounts(actor("super_admin"), rows).map((row) => row.id),
+      ["sa", "ad", "ch"],
+    );
   });
 
   it("gives Member no CMS permissions", () => {

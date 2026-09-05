@@ -33,7 +33,7 @@ export async function PUT(request: Request) {
   const gated = await requireDocumentsDesk(request);
   if (!gated.ok) return gated.response;
   if (!isDocumentSuperAdmin(gated.ctx.actor)) {
-    return apiError(403, "Only Super Admin can assign document officers.");
+    return apiError(403, "You cannot assign document officers.");
   }
   const body = await parseBody(request);
   if (!body.ok) return body.response;
