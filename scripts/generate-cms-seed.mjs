@@ -16,6 +16,7 @@ const MODULES = [
   "roles",
   "maintenance",
   "privacy",
+  "documents",
 ];
 const ACTIONS = ["view", "create", "edit", "delete", "approve", "publish"];
 const ALL = MODULES.flatMap((cmsModule) => ACTIONS.map((action) => `${cmsModule}.${action}`));
@@ -37,7 +38,7 @@ function except(denied) {
 
 const MATRIX = {
   super_admin: ALL,
-  admin: except(["roles.", "maintenance."]),
+  admin: except(["roles.", "maintenance.", "documents."]),
   chair: [
     "pages.view",
     "pages.approve",

@@ -3,6 +3,8 @@ import { hasPermission as can } from "@/lib/cms/auth";
 import { queryFirst } from "@/lib/cms/db";
 import { jsonNoStore } from "@/lib/security";
 import { CONTENT_TYPES } from "@/lib/cms/content";
+import { listDocumentItems, loadOfficerContext, serializeDocument } from "@/lib/cms/document-store";
+import { canSeeDocument, isDocumentType } from "@/lib/cms/documents";
 
 export const runtime = "nodejs";
 
@@ -53,6 +55,20 @@ export async function GET(request: Request) {
   if (can(auth, "users.view")) {
     const users = await queryFirst<{ n: number }>(db, "SELECT COUNT(*) AS n FROM users WHERE status = 'active'");
     counts.users = users?.n ?? 0;
+  }
+
+  const desk = await loadOfficerContext(db, auth);
+  if (desk.allowed) {
+    const rows = await listDocumentItems(db);
+    const visible = rows.filter(
+      (row) =>
+        isDocumentType(row.type) &&
+        canSeeDocument(desk.actor, desk.officers, { type: row.type, submitterId: row.submitter_id }),
+    );
+    const waiting = visible
+      .map((row) => serializeDocument(row, desk.actor, desk.officers))
+      .filter((item) => item.waitingOnYou && item.status !== "archived");
+    counts.documents = waiting.length;
   }
 
   const activity = can(auth, "audit.view")

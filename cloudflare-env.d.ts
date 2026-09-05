@@ -22,11 +22,26 @@ interface R2Bucket {
   get(key: string): Promise<R2ObjectBody | null>;
 }
 
+interface WorkersAi {
+  toMarkdown(
+    files: Array<{ name: string; blob: Blob }>,
+    options?: unknown,
+  ): Promise<unknown>;
+  run(
+    model: string,
+    input: {
+      messages: Array<{ role: string; content: string }>;
+      max_tokens?: number;
+    },
+  ): Promise<unknown>;
+}
+
 interface CloudflareEnv {
   ASSETS: unknown;
   WORKER_SELF_REFERENCE: unknown;
   DB: D1Database;
   MEDIA: R2Bucket;
+  AI?: WorkersAi;
   CMS_BOOTSTRAP_TOKEN?: string;
   CMS_MAINTENANCE?: string;
 }

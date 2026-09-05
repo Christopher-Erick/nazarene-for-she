@@ -7,6 +7,7 @@ export function middleware(request: NextRequest) {
 
   if (path === "/admin" || path.startsWith("/admin/")) {
     requestHeaders.set("x-nfs-admin", "1");
+    requestHeaders.set("x-nfs-admin-path", path);
   }
 
   if (process.env.CMS_MAINTENANCE === "1") {

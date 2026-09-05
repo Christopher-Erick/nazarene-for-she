@@ -25,6 +25,7 @@ describe("RBAC", () => {
     assert.equal(hasPermission(admin, "roles.view"), false);
     assert.equal(hasPermission(admin, "roles.edit"), false);
     assert.equal(hasPermission(admin, "pages.edit"), true);
+    assert.equal(hasPermission(admin, "documents.view"), false);
     assert.equal(canAssignRole(admin, "super_admin"), false);
   });
 
@@ -36,6 +37,7 @@ describe("RBAC", () => {
     assert.equal(hasPermission(secretary, "pages.delete"), false);
     assert.equal(hasPermission(secretary, "atelier.create"), true);
     assert.equal(hasPermission(secretary, "atelier.publish"), false);
+    assert.equal(hasPermission(secretary, "documents.create"), false);
     assert.equal(hasPermission(secretary, "roles.view"), false);
   });
 
@@ -43,6 +45,7 @@ describe("RBAC", () => {
     const treasurer = actor("treasurer");
     assert.equal(hasPermission(treasurer, "donations.edit"), true);
     assert.equal(hasPermission(treasurer, "donations.publish"), true);
+    assert.equal(hasPermission(treasurer, "documents.view"), false);
     assert.equal(hasPermission(treasurer, "pages.edit"), false);
     assert.equal(hasPermission(treasurer, "roles.view"), false);
   });
@@ -50,6 +53,7 @@ describe("RBAC", () => {
   it("gives Member no CMS permissions", () => {
     const member = actor("member");
     assert.equal(hasPermission(member, "pages.view"), false);
+    assert.equal(hasPermission(member, "documents.view"), false);
     assert.equal(hasPermission(member, "users.view"), false);
     assert.equal(hasPermission(member, "roles.view"), false);
   });

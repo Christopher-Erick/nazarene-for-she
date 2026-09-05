@@ -12,7 +12,7 @@ function except(keys: PermissionKey[], denied: string[]) {
 
 export const DEFAULT_ROLE_PERMISSIONS = {
   super_admin: ALL,
-  admin: except(ALL, ["roles.", "maintenance."]),
+  admin: except(ALL, ["roles.", "maintenance.", "documents."]),
   chair: [
     "pages.view",
     "pages.approve",

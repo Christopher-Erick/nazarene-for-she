@@ -14,6 +14,7 @@ export const CMS_MODULES = [
   "roles",
   "maintenance",
   "privacy",
+  "documents",
 ] as const;
 
 export const CMS_ACTIONS = ["view", "create", "edit", "delete", "approve", "publish"] as const;

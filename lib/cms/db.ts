@@ -18,6 +18,15 @@ export async function getMediaBucket() {
   }
 }
 
+export async function getWorkersAi() {
+  try {
+    const ctx = await getCloudflareContext({ async: true });
+    return ctx.env.AI ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function isMissingSchemaError(error: unknown) {
   const text = error instanceof Error ? `${error.message} ${error.cause ?? ""}` : String(error);
   return /no such table/i.test(text);

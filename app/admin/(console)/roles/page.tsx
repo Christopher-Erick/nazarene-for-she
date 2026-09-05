@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { CMS_ACTIONS, CMS_MODULES, ROLE_LABELS, ROLE_SLUGS, type RoleSlug } from "@/lib/cms/permissions";
+import { CMS_ACTIONS, ROLE_LABELS, ROLE_SLUGS, type RoleSlug } from "@/lib/cms/permissions";
+import { GRANTABLE_ADMIN_PAGES, MATRIX_MODULES } from "@/lib/cms/nav";
 
 export default function RolesPage() {
   const [role, setRole] = useState<RoleSlug>("admin");
@@ -51,7 +52,11 @@ export default function RolesPage() {
   return (
     <div className="admin-stack">
       <AdminHeader kicker="Access" title="Roles & permissions">
-        <p>Only Super Admin can open this page. Other roles receive 403 if they request it directly.</p>
+        <p>
+          Super Admin decides which admin pages each role can see. Untick <strong>Show</strong> to
+          hide that desk from their menu, from Today, and if they type the address. Today and My
+          account always stay. Roles & access and Maintenance stay Super Admin only.
+        </p>
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
       {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
@@ -69,9 +74,51 @@ export default function RolesPage() {
         {role === "super_admin" ? (
           <p className="admin-note">Super Admin always has every permission. Those boxes cannot be turned off.</p>
         ) : (
-          <p className="text-sm text-muted">Tick what this role may do, then save.</p>
+          <p className="text-sm text-muted">
+            Tick the pages this role may open, then the actions they may take. Document pages start
+            empty — grant view here or they will not see Documents at all.
+          </p>
         )}
       </div>
+
+      {role !== "super_admin" ? (
+        <section className="admin-group">
+          <div className="admin-section-head">
+            <h2 className="font-display">Pages they can open</h2>
+          </div>
+          <p className="admin-help">
+            These are the /admin desks. A closed box means that page is hidden from this role.
+          </p>
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Show</th>
+                </tr>
+              </thead>
+              <tbody>
+                {GRANTABLE_ADMIN_PAGES.map((page) => (
+                    <tr key={page.href}>
+                      <td>
+                        {page.label}
+                        <p className="admin-help">{page.href}</p>
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={checked(page.module, "view")}
+                          onChange={() => toggle(page.module, "view")}
+                          aria-label={`Show ${page.label}`}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
       <div className="admin-table-wrap">
         <table className="admin-matrix">
           <thead>
@@ -83,7 +130,7 @@ export default function RolesPage() {
             </tr>
           </thead>
           <tbody>
-            {CMS_MODULES.map((module) => (
+            {MATRIX_MODULES.map((module) => (
               <tr key={module}>
                 <td>{module}</td>
                 {CMS_ACTIONS.map((action) => (

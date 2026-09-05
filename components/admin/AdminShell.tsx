@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
+import { pathCoveredByNav } from "@/lib/cms/nav";
 
 export function AdminShell({
   userName,
@@ -22,6 +23,10 @@ export function AdminShell({
   const [openedFor, setOpenedFor] = useState(pathname);
   const open = menuOpen && openedFor === pathname;
   const groups = [...new Set(nav.map((item) => item.group))];
+  const pageAllowed = pathCoveredByNav(
+    pathname,
+    nav.map((item) => item.href),
+  );
 
   function isCurrent(href: string) {
     if (href === "/admin") return pathname === "/admin";
@@ -121,7 +126,16 @@ export function AdminShell({
             </Link>
           </div>
         </div>
-        <div className="admin-content">{children}</div>
+        <div className="admin-content">
+          {pageAllowed ? (
+            children
+          ) : (
+            <p className="admin-flash admin-flash--error">
+              This page is not on your desk. Super Admin grants each role only the pages they should
+              see.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

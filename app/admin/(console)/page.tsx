@@ -17,6 +17,7 @@ const CARDS: Array<{ key: string; href: string; label: string; hint: string }> =
   { key: "stories", href: "/admin/stories", label: "Stories", hint: "Consented voices" },
   { key: "events", href: "/admin/events", label: "Events", hint: "Days in the community" },
   { key: "atelier", href: "/admin/shop", label: "Shop", hint: "Categories, pieces, stock and orders" },
+  { key: "documents", href: "/admin/documents", label: "Documents", hint: "Internal papers waiting on you" },
   { key: "media", href: "/admin/media", label: "Photographs", hint: "Workshop and atmosphere" },
   { key: "users", href: "/admin/users", label: "People", hint: "Who can sign in" },
 ];
@@ -42,6 +43,12 @@ const ACTION_LABELS: Record<string, string> = {
   ATELIER_CREATED: "Added a shop category",
   SETTINGS_CHANGED: "Changed settings",
   DONATION_UPDATED: "Updated donation details",
+  DOCUMENT_SUBMITTED: "Filed a document",
+  DOCUMENT_APPROVE: "Approved a document stage",
+  DOCUMENT_DECLINE: "Declined a document",
+  DOCUMENT_REQUEST_CHANGES: "Asked for document changes",
+  DOCUMENT_REPLACED: "Replaced a document file",
+  DOCUMENT_OFFICERS_UPDATED: "Updated document officers",
 };
 
 export default function AdminDashboardPage() {

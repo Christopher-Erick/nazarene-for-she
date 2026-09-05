@@ -1089,3 +1089,126 @@ ul.admin-group {
     padding: 1rem 1rem 2.75rem;
   }
 }
+
+.doc-chain {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.doc-chain li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--admin-line);
+  background: #fff;
+  font-size: 0.84rem;
+}
+
+.doc-chain li.is-done {
+  background: color-mix(in srgb, var(--admin-live) 10%, white);
+}
+
+.doc-chain li.is-current {
+  border-color: var(--admin-primary);
+  box-shadow: inset 3px 0 0 var(--admin-gold);
+}
+
+.doc-chain li.is-stopped {
+  background: color-mix(in srgb, var(--admin-danger) 8%, white);
+}
+
+.doc-chain--compact {
+  gap: 0.2rem;
+}
+
+.doc-chain--compact li {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.72rem;
+}
+
+.doc-side {
+  display: grid;
+  gap: 1.2rem;
+}
+
+@media (min-width: 1040px) {
+  .admin-editor .doc-side {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 4.35rem;
+    margin-top: 0;
+  }
+
+  .admin-editor .doc-side .admin-workflow {
+    grid-column: auto;
+    position: static;
+    margin-top: 0;
+  }
+}
+
+.doc-preview .doc-file img,
+.doc-frame {
+  width: 100%;
+  min-height: 22rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-canvas);
+}
+
+.doc-preview .doc-file img {
+  min-height: 0;
+  max-height: 28rem;
+  object-fit: contain;
+}
+
+.doc-preview h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.doc-decline {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-lavender);
+}
+
+.doc-decline p + p {
+  margin-top: 0.4rem;
+}
+
+.doc-notes li {
+  margin-bottom: 0.75rem;
+}
+
+.doc-notes p {
+  flex: 1 1 100%;
+}
+
+.doc-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.doc-ai {
+  margin-top: 0;
+  padding: 0.9rem 1rem 1.05rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-canvas);
+}
+
+.doc-ai__body {
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.doc-ai p + p {
+  margin-top: 0.45rem;
+}

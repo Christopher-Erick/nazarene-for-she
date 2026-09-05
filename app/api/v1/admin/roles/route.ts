@@ -55,7 +55,7 @@ export async function PUT(request: Request) {
     keys = allPermissionKeys();
   }
   if (roleSlug !== "super_admin") {
-    keys = keys.filter((key) => !key.startsWith("roles."));
+    keys = keys.filter((key) => !key.startsWith("roles.") && !key.startsWith("maintenance."));
   }
 
   const role = await queryFirst<{ id: string }>(gated.ctx.db, "SELECT id FROM roles WHERE slug = ?", roleSlug);

@@ -27,5 +27,9 @@
       "binding": "MEDIA",
       "bucket_name": "nazarene-for-she-media"
     }
-  ]
+  ],
+  "ai": {
+    "binding": "AI",
+    "remote": true
+  }
 }
