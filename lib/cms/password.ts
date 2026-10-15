@@ -1,4 +1,6 @@
-const ITERATIONS = 210_000;
+/** Cloudflare Workers reject PBKDF2 above 100,000 iterations, so this is the most the live site can use. */
+export const ITERATIONS = 100_000;
+const MAX_ITERATIONS = 100_000;
 const KEY_LENGTH = 32;
 
 function toB64(bytes: ArrayBuffer | Uint8Array) {
@@ -41,7 +43,8 @@ export async function verifyPassword(password: string, stored: string) {
   const parts = stored.split("$");
   if (parts.length !== 5 || parts[0] !== "pbkdf2" || parts[1] !== "sha256") return false;
   const iterations = Number(parts[2]);
-  if (!Number.isFinite(iterations) || iterations < 10_000) return false;
+  // A hash made with more iterations than Workers allow cannot be checked here; reset that password.
+  if (!Number.isFinite(iterations) || iterations < 10_000 || iterations > MAX_ITERATIONS) return false;
   const salt = fromB64(parts[3] ?? "");
   const expected = fromB64(parts[4] ?? "");
   const actual = await derive(password, salt, iterations);

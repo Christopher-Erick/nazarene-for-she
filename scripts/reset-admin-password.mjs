@@ -15,7 +15,7 @@ import { createInterface } from "node:readline";
 import { fileURLToPath } from "node:url";
 
 const DB_NAME = "nazarene-for-she";
-const ITERATIONS = 210_000; // must match lib/cms/password.ts
+const ITERATIONS = 100_000; // must match lib/cms/password.ts (Cloudflare Workers allow at most 100,000)
 const KEY_LENGTH = 32;
 const target = process.argv.includes("--local") ? "--local" : "--remote";
 
