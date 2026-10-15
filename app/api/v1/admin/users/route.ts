@@ -23,8 +23,9 @@ type UserRow = {
   role_name: string;
 };
 
-function publicUser(row: UserRow) {
+function publicUser(row: UserRow, selfId?: string) {
   return {
+    self: row.id === selfId,
     id: row.id,
     name: row.name,
     email: row.email,
@@ -46,7 +47,8 @@ export async function GET(request: Request) {
   const gated = await requirePermission(request, "users.view");
   if (!gated.ok) return gated.response;
   const rows = await queryAll<UserRow>(gated.ctx.db, `${LIST_SQL} ORDER BY u.name ASC`);
-  return jsonNoStore({ ok: true, items: visibleAccounts(gated.ctx.auth, rows).map(publicUser) });
+  const items = visibleAccounts(gated.ctx.auth, rows).map((row) => publicUser(row, gated.ctx.auth.user.id));
+  return jsonNoStore({ ok: true, items });
 }
 
 export async function POST(request: Request) {
@@ -112,6 +114,11 @@ export async function PATCH(request: Request) {
   if (!current) return apiError(404, "User not found.");
   if (!isSuperAdmin(gated.ctx.auth) && isHiddenAccountRole(current.role_slug)) {
     return apiError(404, "User not found.");
+  }
+
+  const newPassword = typeof body.data.password === "string" ? body.data.password : "";
+  if (newPassword && !passwordMeetsPolicy(newPassword)) {
+    return apiError(400, "Password must be at least 14 characters and include upper, lower, number, and symbol.");
   }
 
   const nextRole = body.data.role != null ? String(body.data.role) : current.role_slug;
@@ -182,14 +189,12 @@ export async function PATCH(request: Request) {
     });
   }
 
-  if (typeof body.data.password === "string" && body.data.password) {
-    if (!passwordMeetsPolicy(body.data.password)) {
-      return apiError(400, "Password must be at least 14 characters and include upper, lower, number, and symbol.");
-    }
+  if (newPassword) {
+    // Signs them out everywhere, so the old password stops working at once.
     await run(
       gated.ctx.db,
       "UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?",
-      await hashPassword(body.data.password),
+      await hashPassword(newPassword),
       nowMs(),
       id,
     );

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
@@ -12,6 +13,7 @@ type User = {
   status: string;
   role: string;
   roleName: string;
+  self?: boolean;
 };
 
 export default function UsersPage() {
@@ -19,6 +21,8 @@ export default function UsersPage() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [adding, setAdding] = useState(false);
+  const [resettingId, setResettingId] = useState<string | null>(null);
+  const [savingPassword, setSavingPassword] = useState(false);
 
   async function load() {
     const data = await adminFetch("/api/v1/admin/users");
@@ -70,6 +74,35 @@ export default function UsersPage() {
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not update user.");
+    }
+  }
+
+  async function setPassword(user: User, event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
+    const password = String(form.get("password") ?? "");
+    setError("");
+    setNotice("");
+    if (password !== String(form.get("confirm") ?? "")) {
+      setError("The two passwords do not match.");
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      await adminFetch("/api/v1/admin/users", {
+        method: "PATCH",
+        body: JSON.stringify({ id: user.id, password }),
+      });
+      formEl.reset();
+      setResettingId(null);
+      setNotice(
+        `${user.name}'s password has been changed and they have been signed out everywhere. Give them the new password privately; they can change it under My account.`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not change the password.");
+    } finally {
+      setSavingPassword(false);
     }
   }
 
@@ -144,7 +177,40 @@ export default function UsersPage() {
               >
                 {user.status === "active" ? "Pause access" : "Allow sign-in again"}
               </button>
+              {user.self ? (
+                <Link className="btn btn-ghost" href="/admin/account">
+                  Change my password
+                </Link>
+              ) : (
+                <button
+                  className="btn btn-ghost"
+                  type="button"
+                  aria-expanded={resettingId === user.id}
+                  onClick={() => setResettingId(resettingId === user.id ? null : user.id)}
+                >
+                  {resettingId === user.id ? "Cancel" : "Set new password"}
+                </button>
+              )}
             </div>
+            {resettingId === user.id ? (
+              <form className="admin-form mt-4" onSubmit={(event) => setPassword(user, event)}>
+                <label>
+                  New password for {user.name}
+                  <input name="password" type="password" autoComplete="new-password" required minLength={14} maxLength={128} />
+                </label>
+                <label>
+                  Type it again
+                  <input name="confirm" type="password" autoComplete="new-password" required minLength={14} maxLength={128} />
+                </label>
+                <p className="text-sm text-muted">
+                  At least 14 characters with upper and lower case, a number and a symbol. They will be signed out
+                  everywhere.
+                </p>
+                <button className="btn btn-plum" type="submit" disabled={savingPassword}>
+                  {savingPassword ? "Saving…" : "Save new password"}
+                </button>
+              </form>
+            ) : null}
           </article>
           ))
         ) : (
