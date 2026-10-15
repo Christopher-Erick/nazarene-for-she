@@ -48,7 +48,7 @@ export async function GET(request: Request) {
   if (!gated.ok) return gated.response;
   const rows = await queryAll<UserRow>(gated.ctx.db, `${LIST_SQL} ORDER BY u.name ASC`);
   const items = visibleAccounts(gated.ctx.auth, rows).map((row) => publicUser(row, gated.ctx.auth.user.id));
-  return jsonNoStore({ ok: true, items });
+  return jsonNoStore({ ok: true, items, viewerIsSuperAdmin: isSuperAdmin(gated.ctx.auth) });
 }
 
 export async function POST(request: Request) {
@@ -137,6 +137,18 @@ export async function PATCH(request: Request) {
   }
 
   const name = body.data.name != null ? String(body.data.name).trim().slice(0, 120) : current.name;
+  if (!name) return apiError(400, "A name is required.");
+
+  // The email is the sign-in name, so only a Super Admin may change it.
+  const email = body.data.email != null ? String(body.data.email).toLowerCase().trim() : current.email;
+  const emailChanged = email !== current.email;
+  if (emailChanged) {
+    if (!isSuperAdmin(gated.ctx.auth)) return apiError(403, "Only a Super Admin can change someone's email.");
+    if (!isPublicContactEmail(email)) return apiError(400, "Enter a valid email address.");
+    const taken = await queryFirst<{ id: string }>(gated.ctx.db, "SELECT id FROM users WHERE email = ? AND id != ?", email, id);
+    if (taken) return apiError(409, "That email is already in use.");
+  }
+
   const status = body.data.status != null ? String(body.data.status) : current.status;
   if (!["active", "disabled"].includes(status)) return apiError(400, "Invalid status.");
   if (status === "disabled" && current.role_slug === "super_admin") {
@@ -147,8 +159,9 @@ export async function PATCH(request: Request) {
 
   await run(
     gated.ctx.db,
-    "UPDATE users SET name = ?, status = ?, updated_at = ? WHERE id = ?",
+    "UPDATE users SET name = ?, email = ?, status = ?, updated_at = ? WHERE id = ?",
     name,
+    email,
     status,
     nowMs(),
     id,
@@ -163,6 +176,18 @@ export async function PATCH(request: Request) {
       resourceType: "user",
       resourceId: id,
       metadata: { from: current.role_slug, to: nextRole },
+      ip: requestIp(request),
+    });
+  }
+
+  if (emailChanged) {
+    await audit({
+      db: gated.ctx.db,
+      userId: gated.ctx.auth.user.id,
+      action: "EMAIL_CHANGED",
+      resourceType: "user",
+      resourceId: id,
+      metadata: { from: current.email, to: email },
       ip: requestIp(request),
     });
   }

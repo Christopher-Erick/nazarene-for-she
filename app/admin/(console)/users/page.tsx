@@ -22,16 +22,23 @@ export default function UsersPage() {
   const [notice, setNotice] = useState("");
   const [adding, setAdding] = useState(false);
   const [resettingId, setResettingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [viewerIsSuperAdmin, setViewerIsSuperAdmin] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
 
-  async function load() {
-    const data = await adminFetch("/api/v1/admin/users");
+  function applyList(data: Record<string, unknown>) {
     setItems((data.items as User[]) ?? []);
+    setViewerIsSuperAdmin(data.viewerIsSuperAdmin === true);
+  }
+
+  async function load() {
+    applyList(await adminFetch("/api/v1/admin/users"));
   }
 
   useEffect(() => {
     adminFetch("/api/v1/admin/users")
-      .then((data) => setItems((data.items as User[]) ?? []))
+      .then(applyList)
       .catch((err: Error) => setError(err.message));
   }, []);
 
@@ -74,6 +81,32 @@ export default function UsersPage() {
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not update user.");
+    }
+  }
+
+  async function saveProfile(user: User, event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    setError("");
+    setNotice("");
+    setSavingProfile(true);
+    const patch: Record<string, string> = { name: String(form.get("name") ?? "") };
+    if (viewerIsSuperAdmin) {
+      patch.email = String(form.get("email") ?? "");
+      if (!user.self) patch.role = String(form.get("role") ?? user.role);
+    }
+    try {
+      await adminFetch("/api/v1/admin/users", {
+        method: "PATCH",
+        body: JSON.stringify({ id: user.id, ...patch }),
+      });
+      setEditingId(null);
+      setNotice(`${patch.name}'s profile has been saved.`);
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save the profile.");
+    } finally {
+      setSavingProfile(false);
     }
   }
 
@@ -177,6 +210,17 @@ export default function UsersPage() {
               >
                 {user.status === "active" ? "Pause access" : "Allow sign-in again"}
               </button>
+              <button
+                className="btn btn-ghost"
+                type="button"
+                aria-expanded={editingId === user.id}
+                onClick={() => {
+                  setResettingId(null);
+                  setEditingId(editingId === user.id ? null : user.id);
+                }}
+              >
+                {editingId === user.id ? "Cancel edit" : "Edit"}
+              </button>
               {user.self ? (
                 <Link className="btn btn-ghost" href="/admin/account">
                   Change my password
@@ -186,12 +230,51 @@ export default function UsersPage() {
                   className="btn btn-ghost"
                   type="button"
                   aria-expanded={resettingId === user.id}
-                  onClick={() => setResettingId(resettingId === user.id ? null : user.id)}
+                  onClick={() => {
+                    setEditingId(null);
+                    setResettingId(resettingId === user.id ? null : user.id);
+                  }}
                 >
                   {resettingId === user.id ? "Cancel" : "Set new password"}
                 </button>
               )}
             </div>
+            {editingId === user.id ? (
+              <form className="admin-form mt-4" onSubmit={(event) => saveProfile(user, event)}>
+                <label>
+                  Name
+                  <input name="name" defaultValue={user.name} required maxLength={120} />
+                </label>
+                {viewerIsSuperAdmin ? (
+                  <label>
+                    Email (used to sign in)
+                    <input name="email" type="email" defaultValue={user.email} required />
+                  </label>
+                ) : null}
+                {viewerIsSuperAdmin && !user.self ? (
+                  <label>
+                    Role
+                    <select name="role" defaultValue={user.role}>
+                      {(user.role === "super_admin" ? ["super_admin", ...ASSIGNABLE_ROLE_SLUGS] : ASSIGNABLE_ROLE_SLUGS).map(
+                        (slug) => (
+                          <option key={slug} value={slug}>
+                            {ROLE_LABELS[slug as keyof typeof ROLE_LABELS]}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+                ) : null}
+                {viewerIsSuperAdmin ? (
+                  <p className="text-sm text-muted">
+                    A new email must be verified in Cloudflare Email Routing before reset emails can reach it.
+                  </p>
+                ) : null}
+                <button className="btn btn-plum" type="submit" disabled={savingProfile}>
+                  {savingProfile ? "Saving…" : "Save profile"}
+                </button>
+              </form>
+            ) : null}
             {resettingId === user.id ? (
               <form className="admin-form mt-4" onSubmit={(event) => setPassword(user, event)}>
                 <label>
