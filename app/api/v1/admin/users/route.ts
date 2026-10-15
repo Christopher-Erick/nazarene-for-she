@@ -117,6 +117,10 @@ export async function PATCH(request: Request) {
   }
 
   const newPassword = typeof body.data.password === "string" ? body.data.password : "";
+  // Only a Super Admin may set someone's password or edit their profile (name, email, role).
+  if (newPassword && !isSuperAdmin(gated.ctx.auth)) {
+    return apiError(403, "Only a Super Admin can change someone's password.");
+  }
   if (newPassword && !passwordMeetsPolicy(newPassword)) {
     return apiError(400, "Password must be at least 14 characters and include upper, lower, number, and symbol.");
   }
@@ -138,6 +142,9 @@ export async function PATCH(request: Request) {
 
   const name = body.data.name != null ? String(body.data.name).trim().slice(0, 120) : current.name;
   if (!name) return apiError(400, "A name is required.");
+  if (name !== current.name && !isSuperAdmin(gated.ctx.auth)) {
+    return apiError(403, "Only a Super Admin can edit someone's profile.");
+  }
 
   // The email is the sign-in name, so only a Super Admin may change it.
   const email = body.data.email != null ? String(body.data.email).toLowerCase().trim() : current.email;

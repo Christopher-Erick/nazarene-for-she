@@ -90,11 +90,11 @@ export default function UsersPage() {
     setError("");
     setNotice("");
     setSavingProfile(true);
-    const patch: Record<string, string> = { name: String(form.get("name") ?? "") };
-    if (viewerIsSuperAdmin) {
-      patch.email = String(form.get("email") ?? "");
-      if (!user.self) patch.role = String(form.get("role") ?? user.role);
-    }
+    const patch: Record<string, string> = {
+      name: String(form.get("name") ?? ""),
+      email: String(form.get("email") ?? ""),
+    };
+    if (!user.self) patch.role = String(form.get("role") ?? user.role);
     try {
       await adminFetch("/api/v1/admin/users", {
         method: "PATCH",
@@ -210,6 +210,7 @@ export default function UsersPage() {
               >
                 {user.status === "active" ? "Pause access" : "Allow sign-in again"}
               </button>
+              {viewerIsSuperAdmin ? (
               <button
                 className="btn btn-ghost"
                 type="button"
@@ -221,11 +222,12 @@ export default function UsersPage() {
               >
                 {editingId === user.id ? "Cancel edit" : "Edit"}
               </button>
+              ) : null}
               {user.self ? (
                 <Link className="btn btn-ghost" href="/admin/account">
                   Change my password
                 </Link>
-              ) : (
+              ) : viewerIsSuperAdmin ? (
                 <button
                   className="btn btn-ghost"
                   type="button"
@@ -237,7 +239,7 @@ export default function UsersPage() {
                 >
                   {resettingId === user.id ? "Cancel" : "Set new password"}
                 </button>
-              )}
+              ) : null}
             </div>
             {editingId === user.id ? (
               <form className="admin-form mt-4" onSubmit={(event) => saveProfile(user, event)}>
@@ -245,13 +247,11 @@ export default function UsersPage() {
                   Name
                   <input name="name" defaultValue={user.name} required maxLength={120} />
                 </label>
-                {viewerIsSuperAdmin ? (
-                  <label>
-                    Email (used to sign in)
-                    <input name="email" type="email" defaultValue={user.email} required />
-                  </label>
-                ) : null}
-                {viewerIsSuperAdmin && !user.self ? (
+                <label>
+                  Email (used to sign in)
+                  <input name="email" type="email" defaultValue={user.email} required />
+                </label>
+                {!user.self ? (
                   <label>
                     Role
                     <select name="role" defaultValue={user.role}>
@@ -265,11 +265,9 @@ export default function UsersPage() {
                     </select>
                   </label>
                 ) : null}
-                {viewerIsSuperAdmin ? (
-                  <p className="text-sm text-muted">
-                    A new email must be verified in Cloudflare Email Routing before reset emails can reach it.
-                  </p>
-                ) : null}
+                <p className="text-sm text-muted">
+                  A new email must be verified in Cloudflare Email Routing before reset emails can reach it.
+                </p>
                 <button className="btn btn-plum" type="submit" disabled={savingProfile}>
                   {savingProfile ? "Saving…" : "Save profile"}
                 </button>
