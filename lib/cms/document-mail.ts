@@ -1,4 +1,5 @@
-import { isPublicContactEmail, sanitizeHeaderValue } from "@/lib/security";
+import { isPublicContactEmail } from "@/lib/security";
+import { sendResend } from "@/lib/cms/mail";
 import { site } from "@/lib/data/site";
 import { OFFICER_LABELS, type DocumentOfficerRole, type DocumentStatus } from "@/lib/cms/documents";
 
@@ -28,37 +29,6 @@ export function uniqueMailPeople(people: MailPerson[]) {
     out.push({ ...person, email });
   }
   return out;
-}
-
-async function sendResend(to: string[], subject: string, text: string) {
-  const key = process.env.RESEND_API_KEY;
-  if (!key || !to.length) return false;
-  const from = process.env.CONTACT_FROM ?? "Nazarene for She <noreply@nazarene-for-she.org>";
-  const recipients = to.slice(0, 40);
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [recipients[0]],
-        ...(recipients.length > 1 ? { bcc: recipients.slice(1) } : {}),
-        subject: sanitizeHeaderValue(subject, 180),
-        text,
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!response.ok) {
-      console.error("[documents] mail rejected", response.status);
-    }
-    return response.ok;
-  } catch (error) {
-    console.error("[documents] mail failed", error);
-    return false;
-  }
 }
 
 export function waitingProgress(status: DocumentStatus, currentStageRole: string, typeLabel: string) {

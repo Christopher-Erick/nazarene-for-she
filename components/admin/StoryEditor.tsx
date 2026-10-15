@@ -34,6 +34,8 @@ export function StoryEditor({ id }: { id: string }) {
         portraitAlt: form.get("portraitAlt"),
         transformation: form.get("transformation"),
         aspiration: form.get("aspiration"),
+        authorName: form.get("authorName"),
+        authorTitle: form.get("authorTitle"),
         relatedProgramSlugs: related,
       },
     });
@@ -92,6 +94,24 @@ export function StoryEditor({ id }: { id: string }) {
         <label className="admin-span-2">
           Aspiration
           <textarea name="aspiration" rows={3} defaultValue={String(payload.aspiration ?? "")} />
+        </label>
+        <label>
+          Written by
+          <input
+            name="authorName"
+            defaultValue={String(payload.authorName ?? "")}
+            placeholder="e.g. Christopher Erick Otieno"
+            maxLength={120}
+          />
+        </label>
+        <label>
+          Writer’s title
+          <input
+            name="authorTitle"
+            defaultValue={String(payload.authorTitle ?? "")}
+            placeholder="e.g. Communications Lead"
+            maxLength={120}
+          />
         </label>
         <label>
           Portrait

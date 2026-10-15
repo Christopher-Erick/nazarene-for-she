@@ -13,6 +13,10 @@ export type Story = {
   transformation: string;
   aspiration: string;
   relatedProgramSlugs: string[];
+  /** Who wrote the story up, shown as a byline, e.g. "Christopher Erick Otieno". */
+  authorName?: string;
+  /** The writer's role, e.g. "Communications Lead". */
+  authorTitle?: string;
 };
 
 /**

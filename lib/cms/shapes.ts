@@ -39,6 +39,8 @@ export function storyPayload(input: Record<string, unknown>) {
     portraitAlt: clip(input.portraitAlt, "", 240),
     transformation: clip(input.transformation, "", 2000),
     aspiration: clip(input.aspiration, "", 2000),
+    authorName: clip(input.authorName, "", 120),
+    authorTitle: clip(input.authorTitle, "", 120),
     relatedProgramSlugs: stringList(input.relatedProgramSlugs).slice(0, 12),
     age: Number.isFinite(ageRaw) && ageRaw >= 1 && ageRaw <= 120 ? Math.round(ageRaw) : undefined,
   };

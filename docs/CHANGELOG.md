@@ -29,3 +29,15 @@
 - Cleanup: removed Next.js starter SVGs and the unused `lib/rate-limit.ts` shim;
   full-size photo originals moved from `public/` to `assets/library-originals/`
   so they are no longer deployed.
+
+## Story bylines and admin password reset
+
+- Stories: "Written by" name and title fields in Admin → Stories; shown under the
+  story title, as a closing "Story written by" section, on story cards, and as the
+  Article author in JSON-LD. The home teaser chip now reflects consent status.
+- Admin: "Forgot your password?" on the sign-in page emails a one-hour, single-use
+  link (Resend) to /admin/reset-password; using it signs out other sessions and
+  clears the sign-in lockout. Requires RESEND_API_KEY as a Worker secret.
+- `npm run admin:reset-password`: sets a password straight in D1 from a terminal,
+  for when no mail is configured.
+- Hero slideshow uses an allowed next/image quality (75).

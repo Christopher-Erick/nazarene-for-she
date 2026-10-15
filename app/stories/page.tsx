@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui/PageIntro";
+import { StoryByline } from "@/components/storytelling/StoryByline";
 import { publishedStories } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
@@ -40,6 +41,7 @@ export default async function StoriesPage() {
               </p>
               <h2 className="mt-3 font-display text-3xl">{story.firstName}</h2>
               <p className="mt-2 text-muted">{story.community}</p>
+              <StoryByline story={story} className="mt-2 text-sm text-muted" />
             </Link>
           </article>
         ))}

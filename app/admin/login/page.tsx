@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminFetch, ensureCsrf } from "@/components/admin/adminFetch";
@@ -59,6 +60,9 @@ export default function AdminLoginPage() {
             {pending ? "Signing in…" : "Sign in"}
           </button>
         </form>
+        <p className="admin-login-lede mt-6">
+          <Link href="/admin/forgot-password">Forgot your password?</Link>
+        </p>
       </div>
     </main>
   );

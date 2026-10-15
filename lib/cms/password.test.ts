@@ -17,4 +17,11 @@ describe("password hashing", () => {
     assert.equal(await verifyPassword("ValidPassphrase1!", stored), true);
     assert.equal(await verifyPassword("WrongPassphrase1!", stored), false);
   });
+
+  it("accepts hashes made by the admin password-reset script", async () => {
+    const { hashPassword: scriptHash } = await import("../../scripts/reset-admin-password.mjs");
+    const stored = await scriptHash("ValidPassphrase1!");
+    assert.equal(await verifyPassword("ValidPassphrase1!", stored), true);
+    assert.equal(await verifyPassword("WrongPassphrase1!", stored), false);
+  });
 });

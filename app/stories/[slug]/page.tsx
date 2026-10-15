@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { TrackView } from "@/components/analytics/TrackView";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
+import { StoryAuthorSection, StoryByline } from "@/components/storytelling/StoryByline";
 import { stories } from "@/lib/data/stories";
 import { publishedStory, publishedProgram } from "@/lib/cms/public-content";
 import { analyticsEvents } from "@/lib/analytics";
@@ -51,7 +52,10 @@ export default async function StoryPage({
           "@context": "https://schema.org",
           "@type": "Article",
           headline: `${story.firstName} — Her Story`,
-          author: { "@type": "Organization", name: site.name },
+          author: story.authorName
+            ? { "@type": "Person", name: story.authorName, jobTitle: story.authorTitle || undefined }
+            : { "@type": "Organization", name: site.name },
+          publisher: { "@type": "Organization", name: site.name },
         }
       : null;
 
@@ -81,6 +85,7 @@ export default async function StoryPage({
           ) : null}
           <h1 className="display-lg mt-4">{story.firstName}</h1>
           <p className="mt-3 text-ivory/75">{story.community}</p>
+          <StoryByline story={story} className="mt-4 text-sm tracking-wide text-ivory/85" />
         </div>
       </header>
       <div className="mx-auto max-w-3xl px-5 py-16 sm:px-8">
@@ -91,6 +96,7 @@ export default async function StoryPage({
         <StoryBlock title="With Nazarene for She" body={story.experience} />
         <StoryBlock title="Transformation" body={story.transformation} />
         <StoryBlock title="What she hopes for" body={story.aspiration} />
+        <StoryAuthorSection story={story} />
 
         {relatedPrograms.length > 0 ? (
           <section className="border-t border-line py-10">

@@ -63,7 +63,7 @@ export function HeroPhotoSlideshow() {
                   fill
                   priority={index === 0}
                   loading={index === 0 ? "eager" : "lazy"}
-                  quality={index === 0 ? 75 : 70}
+                  quality={75}
                   sizes="100vw"
                   className="hero-slideshow__photo object-cover"
                 />

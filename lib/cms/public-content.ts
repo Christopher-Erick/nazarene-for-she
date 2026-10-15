@@ -131,6 +131,8 @@ function storyFromRow(row: ContentRow): Story {
     relatedProgramSlugs: Array.isArray(payload.relatedProgramSlugs)
       ? payload.relatedProgramSlugs.filter((item): item is string => typeof item === "string")
       : [],
+    authorName: payloadString(payload, "authorName").trim() || undefined,
+    authorTitle: payloadString(payload, "authorTitle").trim() || undefined,
   };
 }
 

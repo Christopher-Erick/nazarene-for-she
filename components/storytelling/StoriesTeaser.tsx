@@ -3,6 +3,7 @@ import Link from "next/link";
 import { publishedStories } from "@/lib/cms/public-content";
 import { Reveal } from "@/components/experience/Reveal";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { StoryByline } from "@/components/storytelling/StoryByline";
 
 export async function StoriesTeaser() {
   const stories = await publishedStories();
@@ -34,10 +35,13 @@ export async function StoriesTeaser() {
                       className="object-cover"
                     />
                   </div>
-                  <p className="placeholder-chip mt-4">Consent pending</p>
+                  <p className="placeholder-chip mt-4">
+                    {story.status === "placeholder" ? "Consent pending" : "Her story"}
+                  </p>
                   <h3 className="mt-3 font-display text-2xl transition-colors group-hover:text-primary">
                     {story.firstName}
                   </h3>
+                  <StoryByline story={story} className="mt-2 text-sm text-muted" />
                 </Link>
               </article>
             </Reveal>

@@ -32,6 +32,13 @@ describe("website-shaped payloads", () => {
     assert.equal(payload.firstName, "A maker’s story");
   });
 
+  it("keeps the story author's name and title for the byline", () => {
+    const payload = storyPayload({ authorName: "  Christopher Erick Otieno ", authorTitle: "Communications Lead" });
+    assert.equal(payload.authorName, "Christopher Erick Otieno");
+    assert.equal(payload.authorTitle, "Communications Lead");
+    assert.equal(storyPayload({}).authorName, "");
+  });
+
   it("keeps programme buttons on this site", () => {
     const payload = programPayload({ ctaHref: "/donate?cause=dignity-kits", donationCategory: "Dignity Kits" });
     assert.equal(payload.ctaHref, "/donate?cause=dignity-kits");
