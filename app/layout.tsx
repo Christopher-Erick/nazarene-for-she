@@ -1,24 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { site } from "@/lib/data/site";
 import "./globals.css";
 
-const outfit = Outfit({
+// Fonts live in app/fonts (SIL Open Font License, see OFL-*.txt) so builds never download from
+// Google. Each file is the latin variable font covering every weight the site uses.
+const outfit = localFont({
+  src: "./fonts/outfit-latin.woff2",
   variable: "--font-outfit",
-  subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: "400 700",
 });
 
-const fraunces = Fraunces({
+const fraunces = localFont({
+  src: [
+    { path: "./fonts/fraunces-latin.woff2", weight: "500 700", style: "normal" },
+    { path: "./fonts/fraunces-latin-italic.woff2", weight: "500 700", style: "italic" },
+  ],
   variable: "--font-fraunces",
-  subsets: ["latin"],
   display: "swap",
   preload: false,
-  style: ["normal", "italic"],
-  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
