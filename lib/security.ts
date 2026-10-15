@@ -114,34 +114,6 @@ export function jsonNoStore(body: unknown, init?: ResponseInit) {
   return Response.json(body, { ...init, headers });
 }
 
-export function isSafeWebhookUrl(url: string) {
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== "https:") return false;
-    const host = parsed.hostname.toLowerCase();
-    if (
-      host === "localhost" ||
-      host.endsWith(".local") ||
-      host === "127.0.0.1" ||
-      host === "::1" ||
-      host.startsWith("10.") ||
-      host.startsWith("192.168.") ||
-      /^172\.(1[6-9]|2\d|3[0-1])\./.test(host) ||
-      host.endsWith(".internal")
-    ) {
-      return false;
-    }
-    const allow = process.env.CONTACT_WEBHOOK_ALLOWED_HOSTS;
-    if (allow) {
-      const allowed = allow.split(",").map((part) => part.trim().toLowerCase()).filter(Boolean);
-      if (!allowed.includes(host)) return false;
-    }
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export function escapeJsonForScript(data: unknown) {
   return JSON.stringify(data).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
 }

@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -88,6 +88,20 @@ function createBucket() {
   }
 }
 
+/** Keep mail settings (CONTACT_FROM, CONTACT_INBOX) when the config is rewritten. */
+function existingVars() {
+  try {
+    const text = readFileSync(wranglerPath, "utf8");
+    const match = text.match(/"vars"\s*:\s*\{([^}]*)\}/);
+    if (!match) return {};
+    const vars = {};
+    for (const [, key, value] of match[1].matchAll(/"([A-Z_]+)"\s*:\s*"([^"]*)"/g)) vars[key] = value;
+    return vars;
+  } catch {
+    return {};
+  }
+}
+
 function writeWranglerConfig(databaseId, includeR2) {
   const config = {
     $schema: "node_modules/wrangler/config-schema.json",
@@ -115,6 +129,12 @@ function writeWranglerConfig(databaseId, includeR2) {
     ],
     ai: { binding: "AI" },
     images: { binding: "IMAGES" },
+    routes: [
+      { pattern: "nazareneforshe.org", custom_domain: true },
+      { pattern: "www.nazareneforshe.org", custom_domain: true },
+    ],
+    send_email: [{ name: "EMAIL" }],
+    vars: { ...existingVars() },
   };
   if (includeR2) {
     config.r2_buckets = [

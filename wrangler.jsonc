@@ -35,5 +35,25 @@
   // instead of sending the original file to every device.
   "images": {
     "binding": "IMAGES"
+  },
+  // The site's own domain (bought on Cloudflare). Deploy attaches it to this Worker and creates
+  // the DNS records; www is redirected to the bare domain in next.config.ts.
+  "routes": [
+    { "pattern": "nazareneforshe.org", "custom_domain": true },
+    { "pattern": "www.nazareneforshe.org", "custom_domain": true }
+  ],
+  // Cloudflare Email Service: every email the site sends (contact, donations, shop, documents,
+  // password reset). The sender domain must be onboarded under Compute → Email Service.
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ],
+  "vars": {
+    // Sender on the domain onboarded under Compute → Email Service. Empty = no mail.
+    "CONTACT_FROM": "Nazarene for She <noreply@nazareneforshe.org>",
+    // Organisation inbox for contact, donation and shop notes.
+    "CONTACT_INBOX": "nazareneforshe@gmail.com"
   }
 }
+

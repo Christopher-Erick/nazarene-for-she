@@ -40,7 +40,3 @@ Tokens: plum `#5e2063`, gold accent, ivory, Fraunces (display) + Outfit (UI).
 Shared primitives: `ButtonLink`, `BrandMark`, form field CSS, `Reveal` for scroll
 motion. Do not introduce a second CSS or state library.
 
-## Platform chrome
-
-Preserve `public/__grok/`, PreviewHostBridge, branding injector, and any
-prewired `src/lib/auth` / `src/lib/db` stubs if present — do not strip for demos.

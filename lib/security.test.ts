@@ -4,7 +4,6 @@ import {
   escapeJsonForScript,
   isHttpsPublicUrl,
   isPublicContactEmail,
-  isSafeWebhookUrl,
   sanitizeHeaderValue,
 } from "./security.ts";
 
@@ -20,15 +19,6 @@ describe("escapeJsonForScript", () => {
     assert.equal(html.includes("<"), false);
     assert.equal(html.includes(">"), false);
     assert.match(html, /\\u003c/);
-  });
-});
-
-describe("isSafeWebhookUrl", () => {
-  it("rejects non-https and private hosts", () => {
-    assert.equal(isSafeWebhookUrl("http://example.com/hook"), false);
-    assert.equal(isSafeWebhookUrl("https://127.0.0.1/hook"), false);
-    assert.equal(isSafeWebhookUrl("https://192.168.1.10/hook"), false);
-    assert.equal(isSafeWebhookUrl("https://hooks.example.com/path"), true);
   });
 });
 

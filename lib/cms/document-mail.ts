@@ -1,5 +1,5 @@
 import { isPublicContactEmail } from "@/lib/security";
-import { sendResend } from "@/lib/cms/mail";
+import { sendMail } from "@/lib/cms/mail";
 import { site } from "@/lib/data/site";
 import { OFFICER_LABELS, type DocumentOfficerRole, type DocumentStatus } from "@/lib/cms/documents";
 
@@ -61,6 +61,10 @@ function subjectFor(kind: DocumentMailKind, typeLabel: string, title: string, pr
   }
 }
 
+function sendList(to: string[], subject: string, text: string) {
+  return sendMail({ to, subject, text });
+}
+
 export async function notifyDocumentDesk(input: {
   itemId: string;
   reference: string;
@@ -78,11 +82,6 @@ export async function notifyDocumentDesk(input: {
 }) {
   const people = uniqueMailPeople([...input.watchers, ...input.urgent]);
   if (!people.length) return;
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[documents] RESEND_API_KEY is not set — desk mail was skipped. The written record is still on the desk.");
-    return;
-  }
-
   const url = deskUrl(input.itemId);
   const progress = waitingProgress(input.status, input.currentStageRole, input.typeLabel);
   const actorLine = `${input.actorName}${input.actorEmail ? ` <${input.actorEmail}>` : ""}`;
@@ -110,7 +109,7 @@ export async function notifyDocumentDesk(input: {
     (input.kind === "submitted" || input.kind === "approved" || input.kind === "replaced" || input.kind === "changes_requested");
 
   const jobs: Array<Promise<boolean>> = [
-    sendResend(
+    sendList(
       people.map((person) => person.email),
       subjectFor(input.kind, input.typeLabel, input.title, progress, input.reference),
       fyiText,
@@ -119,7 +118,7 @@ export async function notifyDocumentDesk(input: {
 
   if (sendUrgent) {
     jobs.push(
-      sendResend(
+      sendList(
         urgent.map((person) => person.email),
         `[URGENT] Your review is needed: ${input.title}`,
         [

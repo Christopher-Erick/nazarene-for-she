@@ -23,7 +23,7 @@ export const site = {
   url:
     process.env.NEXT_PUBLIC_SITE_URL ||
     (process.env.NODE_ENV === "production"
-      ? "https://nazarene-for-she.workers.dev"
+      ? "https://nazareneforshe.org"
       : "http://localhost:3000"),
   locale: "en_KE",
   country: "Kenya",

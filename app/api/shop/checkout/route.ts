@@ -116,6 +116,7 @@ export async function POST(request: Request) {
     const delivered = await notifyWorkshop({
       subject: `Shop order ${result.order.reference}`,
       text,
+      replyTo: result.order.customerEmail,
     });
     if (!delivered) {
       console.error("[shop] order saved but workshop mail is not configured");

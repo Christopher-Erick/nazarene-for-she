@@ -37,7 +37,15 @@
   Article author in JSON-LD. The home teaser chip now reflects consent status.
 - Admin: "Forgot your password?" on the sign-in page emails a one-hour, single-use
   link (Resend) to /admin/reset-password; using it signs out other sessions and
-  clears the sign-in lockout. Requires RESEND_API_KEY as a Worker secret.
+  clears the sign-in lockout.
 - `npm run admin:reset-password`: sets a password straight in D1 from a terminal,
   for when no mail is configured.
 - Hero slideshow uses an allowed next/image quality (75).
+
+## Mail stays on Cloudflare
+
+- All outgoing mail (contact, donation, shop orders, document desk, password reset)
+  now uses the Cloudflare Email Service `EMAIL` binding via `lib/cms/mail.ts`.
+  Resend and the outbound webhook option are removed, with `isSafeWebhookUrl`.
+- Contact, donation and shop mails set Reply-To to the visitor, so the inbox can
+  answer directly.

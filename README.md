@@ -49,10 +49,21 @@ The only verified impact figure on the site is **600+ girls currently supported*
 
 `/api/contact` and `/api/donation` validate input (Zod), enforce same-origin, rate-limit per isolate, reject oversized bodies, and **fail closed** (503) when mail is not configured or delivery fails.
 
-Configure one of:
+All mail goes through **Cloudflare Email Service** (the `EMAIL` binding in `wrangler.jsonc`):
+contact and donation notes, shop orders, document-desk pings and admin password-reset links.
+No third-party mail provider is used.
 
-- `RESEND_API_KEY` + `CONTACT_INBOX` (+ optional `CONTACT_FROM`)
-- `CONTACT_WEBHOOK_URL` (+ recommended `CONTACT_WEBHOOK_ALLOWED_HOSTS`)
+One-time setup:
+
+1. The site lives on **nazareneforshe.org** (registered on Cloudflare). `wrangler.jsonc` → `routes`
+   attaches it and `www.` to the Worker on every deploy; `www` redirects to the bare domain.
+2. In the dashboard open **Compute → Email Service → Email Sending → Onboard Domain** and pick
+   `nazareneforshe.org` (Cloudflare adds the SPF, DKIM and DMARC records).
+3. `wrangler.jsonc` → `vars` already sends as `Nazarene for She <noreply@nazareneforshe.org>`
+   and delivers form mail to `CONTACT_INBOX`.
+4. On the Workers Free plan Cloudflare only delivers to **verified destination addresses**
+   (Email Routing → Destination addresses): verify the inbox and each admin's email there.
+   The Workers Paid plan removes that limit.
 
 Set `NEXT_PUBLIC_SITE_URL` to the canonical live origin.
 

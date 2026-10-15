@@ -1,13 +1,13 @@
 import { contactSchema } from "@/lib/validation/contact";
 import {
   clientKey,
-  isSafeWebhookUrl,
   isSameOrigin,
   jsonNoStore,
   rateLimit,
   readJsonBody,
   sanitizeHeaderValue,
 } from "@/lib/security";
+import { sendToInbox } from "@/lib/cms/mail";
 
 export const runtime = "nodejs";
 
@@ -62,14 +62,15 @@ export async function POST(request: Request) {
   const subject = sanitizeHeaderValue(
     `Nazarene for She — ${parsed.data.intent} from ${parsed.data.name}`,
   );
-  const delivered = await deliver({
+  const delivered = await sendToInbox({
     subject,
     text: formatMessage(parsed.data),
+    replyTo: parsed.data.email,
   });
 
   if (!delivered) {
     const production = process.env.NODE_ENV === "production";
-    console.error("[contact] delivery unavailable — configure CONTACT_WEBHOOK_URL or RESEND_API_KEY + CONTACT_INBOX");
+    console.error("[contact] delivery unavailable — set up Cloudflare Email (EMAIL binding, CONTACT_FROM, CONTACT_INBOX)");
     return jsonNoStore(
       {
         ok: false,
@@ -104,43 +105,4 @@ function formatMessage(data: {
     "",
     data.message,
   ].join("\n");
-}
-
-async function deliver({ subject, text }: { subject: string; text: string }) {
-  const webhook = process.env.CONTACT_WEBHOOK_URL;
-  if (webhook) {
-    if (!isSafeWebhookUrl(webhook)) {
-      console.error("[contact] CONTACT_WEBHOOK_URL rejected by allowlist/SSRF guard");
-      return false;
-    }
-    const response = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, text }),
-      signal: AbortSignal.timeout(10_000),
-    });
-    return response.ok;
-  }
-
-  const key = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_INBOX;
-  if (key && to) {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.CONTACT_FROM ?? "Nazarene for She <noreply@nazarene-for-she.org>",
-        to: [to],
-        subject,
-        text,
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
-    return response.ok;
-  }
-
-  return false;
 }

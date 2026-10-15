@@ -6,7 +6,8 @@ import { jsonNoStore, rateLimit, clientKey, isSameOrigin } from "@/lib/security"
 import { parseBody, requestIp } from "@/lib/cms/http";
 import { audit } from "@/lib/cms/audit";
 import { isPublicContactEmail } from "@/lib/security";
-import { RESET_TTL_MS, resetBaseUrl, resetLink, sendResetMail } from "@/lib/cms/password-reset";
+import { RESET_TTL_MS, resetBaseUrl, resetLink, resetMailText } from "@/lib/cms/password-reset";
+import { sendMail } from "@/lib/cms/mail";
 
 export const runtime = "nodejs";
 
@@ -48,8 +49,12 @@ export async function POST(request: Request) {
       now,
     );
     const link = resetLink(resetBaseUrl(request.url), token);
-    const sent = await sendResetMail(email, user.name, link);
-    if (!sent) console.warn("[password-reset] RESEND_API_KEY is not set or mail failed — no reset email went out.");
+    const sent = await sendMail({
+      to: [email],
+      subject: "Reset your Nazarene for She admin password",
+      text: resetMailText(user.name, link),
+    });
+    if (!sent) console.warn("[password-reset] Cloudflare Email is not set up or rejected the message — no reset email went out.");
     await audit({
       db,
       userId: user.id,

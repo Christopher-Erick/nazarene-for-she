@@ -1,5 +1,3 @@
-import { sendResend } from "./mail.ts";
-
 export const RESET_TTL_MS = 60 * 60 * 1000;
 export const RESET_PATH = "/admin/reset-password";
 
@@ -36,8 +34,4 @@ export function resetMailText(name: string, link: string) {
     "",
     "— Nazarene for She website",
   ].join("\n");
-}
-
-export async function sendResetMail(email: string, name: string, link: string) {
-  return sendResend([email], "Reset your Nazarene for She admin password", resetMailText(name, link));
 }

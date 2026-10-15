@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 /**
- * CSP is intentionally practical for Next.js + Cloudflare preview chrome.
- * Do not remove https://grok.com — required by the hosting platform.
+ * CSP is intentionally practical for Next.js on Cloudflare. Everything is served from
+ * this site's own origin; no third-party script, frame or connect host is allowed.
  */
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -13,9 +13,9 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://grok.com https://*.grok.com",
-  "connect-src 'self' https://grok.com https://*.grok.com",
-  "frame-src 'self' https://grok.com https://*.grok.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "connect-src 'self'",
+  "frame-src 'self'",
   "upgrade-insecure-requests",
 ].join("; ");
 
@@ -34,6 +34,17 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    // One canonical address: www.nazareneforshe.org → nazareneforshe.org.
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.nazareneforshe.org" }],
+        destination: "https://nazareneforshe.org/:path*",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31536000,

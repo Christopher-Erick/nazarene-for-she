@@ -10,7 +10,7 @@ Product choices that cannot be fully inferred from code. Each has a
 | Public contact email | `nazareneforshe@gmail.com` from the January 2021 constitution; phone still unpublished | Implemented |
 | Mission / vision | Use constitution Article 2 wording (light grammar correction only) | Implemented |
 | Photos / stories | Atmosphere images only until consented portraits and stories arrive | Waiting |
-| Mail transport | Prefer Resend (`RESEND_API_KEY` + `CONTACT_INBOX`); webhook optional with host allowlist | Operator config |
+| Mail transport | Cloudflare Email Service only (`EMAIL` binding, `CONTACT_FROM`, `CONTACT_INBOX`); no third-party mail | Implemented; domain onboarding is operator config |
 | Analytics | Keep lightweight `trackEvent` stub; no third-party pixel until privacy review | Implemented |
 | CMS | Stay on `lib/data/*` until content volume justifies Sanity/Contentful | Deferred |
 | Global API rate limit | Soft in-process now; add Cloudflare WAF/Rate Limiting before campaign spikes | Documented in SCALE |
