@@ -113,6 +113,8 @@ function writeWranglerConfig(databaseId, includeR2) {
         migrations_dir: "migrations",
       },
     ],
+    ai: { binding: "AI" },
+    images: { binding: "IMAGES" },
   };
   if (includeR2) {
     config.r2_buckets = [

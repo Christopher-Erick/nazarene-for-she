@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
@@ -20,6 +20,7 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openedFor, setOpenedFor] = useState(pathname);
   const open = menuOpen && openedFor === pathname;
@@ -56,7 +57,8 @@ export function AdminShell({
 
   async function logout() {
     await adminFetch("/api/v1/admin/session", { method: "DELETE" });
-    window.location.href = "/admin/login";
+    router.replace("/admin/login");
+    router.refresh();
   }
 
   const current =

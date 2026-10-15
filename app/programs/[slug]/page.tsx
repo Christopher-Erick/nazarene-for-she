@@ -37,9 +37,8 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = await publishedProgram(slug);
+  const [program, stories] = await Promise.all([publishedProgram(slug), publishedStories()]);
   if (!program) notFound();
-  const stories = await publishedStories();
   const related = stories.filter((story) => program.relatedStorySlugs.includes(story.slug));
 
   const jsonLd = {

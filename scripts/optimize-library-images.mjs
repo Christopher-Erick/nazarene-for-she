@@ -2,6 +2,8 @@ import { mkdir, readdir } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
+// Full-size originals live outside public/ so they are not deployed; only the WebP output is served.
+const SRC = path.join(process.cwd(), "assets", "library-originals");
 const LIB = path.join(process.cwd(), "public", "images", "library");
 const MAX_WIDTH = 2400;
 const WEBP_QUALITY = 82;
@@ -22,7 +24,7 @@ const RENAME = {
 };
 
 async function optimizeFile(file) {
-  const input = path.join(LIB, file);
+  const input = path.join(SRC, file);
   const outputName = RENAME[file] ?? `${path.parse(file).name}.webp`;
   const output = path.join(LIB, outputName);
 
@@ -39,7 +41,7 @@ async function optimizeFile(file) {
 }
 
 await mkdir(LIB, { recursive: true });
-const files = (await readdir(LIB)).filter((f) => /\.(jpe?g|png)$/i.test(f));
+const files = (await readdir(SRC)).filter((f) => /\.(jpe?g|png)$/i.test(f));
 const results = [];
 
 for (const file of files) {

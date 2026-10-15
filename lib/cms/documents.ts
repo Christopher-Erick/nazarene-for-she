@@ -182,7 +182,6 @@ export function heldOfficerRoles(actor: DocumentActor, officers: OfficerMap) {
 
 export function canOpenDocumentsDesk(
   auth: { user: { id: string; role_slug: RoleSlug }; permissions: Set<PermissionKey> },
-  _officerUserIds?: Iterable<string>,
 ) {
   if (isSuperAdmin(auth)) return true;
   return hasPermission(auth, "documents.view");

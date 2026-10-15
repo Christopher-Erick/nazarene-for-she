@@ -141,8 +141,7 @@
 }
 
 .shop-filter__select,
-.shop-filter__input,
-.shop-pdp .shop-field {
+.shop-filter__input {
   width: 100%;
   min-height: 3.15rem;
   padding: 0.8rem 1rem;
@@ -154,11 +153,6 @@
   font: inherit;
   font-weight: 450;
   box-shadow: inset 0 0 0 1px var(--shop-line);
-}
-
-.shop-pdp .shop-field {
-  max-width: 8rem;
-  margin-bottom: 0.35rem;
 }
 
 .shop-pdp__qty {
@@ -205,8 +199,7 @@
 }
 
 .shop-filter__select:focus,
-.shop-filter__input:focus,
-.shop-pdp .shop-field:focus {
+.shop-filter__input:focus {
   outline: none;
   box-shadow:
     inset 0 0 0 1px var(--shop-plum),

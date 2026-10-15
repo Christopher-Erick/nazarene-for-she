@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getDb, queryAll, queryFirst } from "@/lib/cms/db";
 import { getPublishedBySlug, listPublished, parsePayload, type ContentRow } from "@/lib/cms/content";
 import { getSetting } from "@/lib/cms/settings";
@@ -8,7 +9,6 @@ import { impactMetrics, type ImpactMetric } from "@/lib/data/impact";
 import { programs as staticPrograms, type ProgramWithStories } from "@/lib/data/programs";
 import { stories as staticStories, type Story } from "@/lib/data/stories";
 import { garments as staticGarments, type Garment } from "@/lib/data/shop";
-import { cache } from "react";
 import { SITE_PAGES, type SitePageSlug, sitePageBySlug } from "@/lib/cms/site-pages";
 import { categoryFromGarment, sortCategories, sortProducts, staticProducts } from "@/lib/shop/catalog";
 import { listPublishedProducts, productFromRow } from "@/lib/shop/products";
@@ -27,14 +27,14 @@ export const publishedPrograms = cache(async function publishedPrograms(): Promi
   return rows.map(programFromRow);
 });
 
-export async function publishedProgram(slug: string) {
+export const publishedProgram = cache(async function publishedProgram(slug: string) {
   const db = await getDb();
   if (db) {
     const row = await getPublishedBySlug(db, "programs", slug);
     if (row) return programFromRow(row);
   }
   return staticPrograms.find((item) => item.slug === slug) ?? null;
-}
+});
 
 function programFromRow(row: ContentRow): ProgramWithStories {
   const payload = parsePayload(row.payload);
@@ -65,14 +65,14 @@ export const publishedEvents = cache(async function publishedEvents(): Promise<N
   return rows.map(eventFromRow);
 });
 
-export async function publishedEvent(slug: string) {
+export const publishedEvent = cache(async function publishedEvent(slug: string) {
   const db = await getDb();
   if (db) {
     const row = await getPublishedBySlug(db, "events", slug);
     if (row) return eventFromRow(row);
   }
   return staticEvents.find((item) => item.slug === slug) ?? null;
-}
+});
 
 function eventFromRow(row: ContentRow): NfsEvent {
   const payload = parsePayload(row.payload);
@@ -106,14 +106,14 @@ export const publishedStories = cache(async function publishedStories(): Promise
   return rows.map(storyFromRow);
 });
 
-export async function publishedStory(slug: string) {
+export const publishedStory = cache(async function publishedStory(slug: string) {
   const db = await getDb();
   if (db) {
     const row = await getPublishedBySlug(db, "stories", slug);
     if (row) return storyFromRow(row);
   }
   return staticStories.find((item) => item.slug === slug) ?? null;
-}
+});
 
 function storyFromRow(row: ContentRow): Story {
   const payload = parsePayload(row.payload);
@@ -140,11 +140,11 @@ export async function publishedPages() {
   return listPublished(db, "pages");
 }
 
-export async function publishedPage(slug: string) {
+export const publishedPage = cache(async function publishedPage(slug: string) {
   const db = await getDb();
   if (!db) return null;
   return getPublishedBySlug(db, "pages", slug);
-}
+});
 
 export type PublicSitePage = {
   slug: SitePageSlug;
@@ -204,14 +204,14 @@ export const publishedGarments = cache(async function publishedGarments(): Promi
     .map(({ row }) => garmentFromRow(row));
 });
 
-export async function publishedGarment(slug: string) {
+export const publishedGarment = cache(async function publishedGarment(slug: string) {
   const db = await getDb();
   if (db) {
     const row = await getPublishedBySlug(db, "atelier", slug);
     if (row) return garmentFromRow(row);
   }
   return staticGarments.find((item) => item.slug === slug) ?? null;
-}
+});
 
 function categoryFromRow(row: ContentRow): ShopCategory {
   const garment = garmentFromRow(row);
@@ -234,7 +234,7 @@ export const publishedCategories = cache(async function publishedCategories(): P
   return sortCategories(staticGarments.map((garment) => categoryFromGarment(garment)));
 });
 
-export async function publishedCategory(slug: string) {
+export const publishedCategory = cache(async function publishedCategory(slug: string) {
   const db = await getDb();
   if (db) {
     const row = await getPublishedBySlug(db, "atelier", slug);
@@ -242,7 +242,7 @@ export async function publishedCategory(slug: string) {
   }
   const garment = staticGarments.find((item) => item.slug === slug);
   return garment ? categoryFromGarment(garment) : null;
-}
+});
 
 export const publishedProducts = cache(async function publishedProducts(): Promise<ShopProduct[]> {
   const db = await getDb();
@@ -362,7 +362,7 @@ export const publishedOrganization = cache(async function publishedOrganization(
   };
 });
 
-export async function publishedDonations() {
+export const publishedDonations = cache(async function publishedDonations() {
   const stored = await getSetting<{
     intro?: string;
     methods?: DonationMethod[];
@@ -373,14 +373,14 @@ export async function publishedDonations() {
     methods: Array.isArray(stored.methods) && stored.methods.length ? stored.methods : donationMethods,
     note: stored.note || "",
   };
-}
+});
 
-export async function publishedPrivacy() {
+export const publishedPrivacy = cache(async function publishedPrivacy() {
   return getSetting<{ title: string; body: string }>("privacy_policy", {
     title: "Privacy",
     body: "",
   });
-}
+});
 
 export async function settingValue<T>(key: string, fallback: T) {
   return getSetting(key, fallback);

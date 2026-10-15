@@ -1,11 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { adminFetch, ensureCsrf } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export default function AdminLoginPage() {
+  const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -23,7 +25,8 @@ export default function AdminLoginPage() {
           password: String(form.get("password") ?? ""),
         }),
       });
-      window.location.href = "/admin";
+      router.replace("/admin");
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign in.");
       setPending(false);

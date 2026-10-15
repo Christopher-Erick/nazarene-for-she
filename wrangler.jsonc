@@ -30,5 +30,10 @@
   ],
   "ai": {
     "binding": "AI"
+  },
+  // Cloudflare Images: lets OpenNext resize next/image requests (AVIF/WebP per screen width)
+  // instead of sending the original file to every device.
+  "images": {
+    "binding": "IMAGES"
   }
 }

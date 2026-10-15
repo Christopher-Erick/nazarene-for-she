@@ -136,10 +136,6 @@ export function officerMapFrom(rows: OfficerRow[]): OfficerMap {
   return map;
 }
 
-export function officerUserIdsFrom(rows: OfficerRow[]) {
-  return new Set(rows.map((row) => row.user_id).filter((id): id is string => Boolean(id)));
-}
-
 export async function loadOfficerContext(db: D1Database, auth: AuthContext) {
   const rows = await listOfficers(db);
   const officers = officerMapFrom(rows);
@@ -148,7 +144,7 @@ export async function loadOfficerContext(db: D1Database, auth: AuthContext) {
     rows,
     officers,
     actor,
-    allowed: canOpenDocumentsDesk(auth, officerUserIdsFrom(rows)),
+    allowed: canOpenDocumentsDesk(auth),
   };
 }
 

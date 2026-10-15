@@ -154,7 +154,7 @@ export function EventsCalendar({
                 data-has-event={hasEvent ? "true" : "false"}
                 data-upcoming={upcoming ? "true" : "false"}
                 aria-current={isToday ? "date" : undefined}
-                aria-pressed={isSelected}
+                aria-selected={isSelected}
                 aria-label={hasEvent ? `${dayLabel}, ${names}` : dayLabel}
                 onClick={() => selectDay(cell.dateKey, cell.inCurrentMonth)}
               >

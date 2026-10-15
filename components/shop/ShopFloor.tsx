@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ShopImage } from "@/components/shop/ShopImage";
 import { useShopCatalog } from "@/components/shop/ShopCatalog";
@@ -57,7 +57,6 @@ export function ShopFloor({
     min: null,
     max: null,
   });
-  const [shown, setShown] = useState(PAGE_SIZE);
   const railRef = useRef<HTMLDivElement>(null);
 
   const chosen = categorySlug ? catalog.find((item) => item.slug === categorySlug) ?? null : null;
@@ -78,9 +77,10 @@ export function ShopFloor({
     return sortFiltered(next, sort);
   }, [chosen, ordered, priceBounds, query, sort]);
 
-  useEffect(() => {
-    setShown(PAGE_SIZE);
-  }, [chosen?.slug, query, sort, priceBounds]);
+  // Paging resets whenever the filters change; derived during render instead of in an effect.
+  const filterKey = [chosen?.slug ?? "", query, sort, priceBounds.min, priceBounds.max].join("|");
+  const [paging, setPaging] = useState({ key: filterKey, shown: PAGE_SIZE });
+  const shown = paging.key === filterKey ? paging.shown : PAGE_SIZE;
 
   const visible = filtered.slice(0, shown);
   const spotlight = filtered.find((item) => item.stock > 0) ?? filtered[0] ?? ordered.find((item) => item.stock > 0) ?? null;
@@ -344,7 +344,11 @@ export function ShopFloor({
           </div>
           {filtered.length > shown ? (
             <p className="shop-results__more">
-              <button className="btn btn-ghost" type="button" onClick={() => setShown((count) => count + PAGE_SIZE)}>
+              <button
+                className="btn btn-ghost"
+                type="button"
+                onClick={() => setPaging({ key: filterKey, shown: shown + PAGE_SIZE })}
+              >
                 Show more pieces
               </button>
             </p>

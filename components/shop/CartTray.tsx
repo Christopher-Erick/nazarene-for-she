@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { fitLabels, getCloth } from "@/lib/data/shop";
 import { formatKes } from "@/lib/shop/money";
@@ -26,6 +26,7 @@ function noticeCopy(detail: CartNotice) {
 
 export function CartTray({ whatsappEnabled = false }: { whatsappEnabled?: boolean }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { items } = useShopCart();
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -45,7 +46,7 @@ export function CartTray({ whatsappEnabled = false }: { whatsappEnabled?: boolea
   function goToCart(event: MouseEvent<HTMLAnchorElement>) {
     if (pathname !== "/shop") return;
     event.preventDefault();
-    window.location.href = "/shop/checkout";
+    router.push("/shop/checkout");
     setOpen(false);
   }
 

@@ -520,22 +520,6 @@ ul.admin-group {
   border-color: var(--admin-danger);
 }
 
-.admin-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  width: fit-content;
-  max-width: 100%;
-  padding: 0.28rem;
-  background: var(--admin-paper);
-  border: 1px solid var(--admin-line);
-}
-
-.admin-tabs .btn {
-  min-height: 2.25rem;
-  padding: 0.35rem 0.85rem;
-}
-
 .admin-form {
   display: grid;
   gap: 0.9rem;
@@ -671,12 +655,6 @@ ul.admin-group {
   border: 1px solid var(--admin-line);
   padding: 0.9rem;
   background: color-mix(in srgb, var(--admin-lavender) 40%, white);
-}
-
-.admin-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 }
 
 .admin-piece-grid {
@@ -1012,12 +990,6 @@ ul.admin-group {
 
 .admin-login-card .btn {
   width: 100%;
-}
-
-.admin-section-title {
-  margin: 0;
-  font-size: 1.2rem;
-  line-height: 1.2;
 }
 
 @media (max-width: 1040px) {

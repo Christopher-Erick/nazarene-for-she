@@ -1,29 +1,42 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { cloudflareEnv } from "@/lib/cms/cloudflare";
+import { DEFAULT_MAINTENANCE, resolveMaintenance, type MaintenanceState } from "@/lib/cms/maintenance";
 
-export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-  const requestHeaders = new Headers(request.headers);
+/**
+ * Kept as `middleware.ts` on purpose: Next 16 renames it to `proxy.ts`, but proxy
+ * always runs on the Node.js runtime, which OpenNext on Cloudflare only supports
+ * experimentally. Revisit once @opennextjs/cloudflare supports it officially.
+ */
 
-  if (path === "/admin" || path.startsWith("/admin/")) {
-    requestHeaders.set("x-nfs-admin", "1");
-    requestHeaders.set("x-nfs-admin-path", path);
+const MAINTENANCE_TTL_MS = 15_000;
+let stored: { value: MaintenanceState; until: number } | null = null;
+
+/** Maintenance row from D1, held per isolate for a few seconds so pages do not pay a query each. */
+async function storedMaintenance(): Promise<MaintenanceState> {
+  if (stored && stored.until > Date.now()) return stored.value;
+  let value = DEFAULT_MAINTENANCE;
+  try {
+    const env = await cloudflareEnv();
+    const row = await env?.DB?.prepare("SELECT value FROM site_settings WHERE key = ?")
+      .bind("maintenance")
+      .first<{ value: string }>();
+    if (row) value = { ...DEFAULT_MAINTENANCE, ...(JSON.parse(row.value) as Partial<MaintenanceState>) };
+  } catch {
+    // No database (or no table yet): the site stays open.
   }
+  stored = { value, until: Date.now() + MAINTENANCE_TTL_MS };
+  return value;
+}
 
-  if (process.env.CMS_MAINTENANCE === "1") {
-    const allowed =
-      path.startsWith("/admin") ||
-      path.startsWith("/api/v1/admin") ||
-      path.startsWith("/_next") ||
-      path === "/maintenance";
-    if (!allowed) {
-      return NextResponse.rewrite(new URL("/maintenance", request.url));
-    }
+export async function middleware(request: NextRequest) {
+  if (resolveMaintenance(await storedMaintenance()).enabled) {
+    return NextResponse.rewrite(new URL("/maintenance", request.url));
   }
-
-  return NextResponse.next({ request: { headers: requestHeaders } });
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/admin", "/((?!_next/static|_next/image|favicon.ico|images/|api/v1/public/).*)"],
+  // Public pages only: admin, APIs, the maintenance page and static files never need the check.
+  matcher: ["/((?!_next/|api/|admin|maintenance|images/|favicon.ico|robots.txt|sitemap.xml|opengraph-image).*)"],
 };
