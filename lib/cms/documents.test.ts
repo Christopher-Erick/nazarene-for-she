@@ -35,7 +35,7 @@ const officers: OfficerMap = {
   chair: "chair-1",
   secretary: "sec-1",
   treasurer: "treas-1",
-  patron: "patron-1",
+  admin: "admin-1",
   vice_secretary: "vsec-1",
   vice_chair: "vc-1",
 };
@@ -59,7 +59,7 @@ describe("document approval desk", () => {
     const requisition = startSubmission("requisition", chair, officers, now);
     assert.equal(requisition.ok, true);
     if (!requisition.ok) return;
-    assert.equal(requisition.next.currentStageRole, "patron");
+    assert.equal(requisition.next.currentStageRole, "admin");
     assert.equal(requisition.events.some((event) => event.action === "auto_approved"), true);
 
     const minutes = startSubmission("minutes", secretary, officers, now);
@@ -116,12 +116,12 @@ describe("document approval desk", () => {
     assert.equal(canSeeDocumentType(actor("member-2", "member", []), officers, "requisition"), false);
   });
 
-  it("treats Patron as an assigned person, not a website role", () => {
-    const memberPatron = actor("patron-1", "member");
+  it("treats the Admin office as an assigned person, not a website role", () => {
+    const memberAdmin = actor("admin-1", "member");
     const randomMember = actor("member-2", "member");
-    assert.equal(holdsOfficerRole(memberPatron, officers, "patron"), true);
-    assert.equal(holdsOfficerRole(randomMember, officers, "patron"), false);
-    assert.equal(canSeeDocumentType(memberPatron, officers, "requisition"), true);
+    assert.equal(holdsOfficerRole(memberAdmin, officers, "admin"), true);
+    assert.equal(holdsOfficerRole(randomMember, officers, "admin"), false);
+    assert.equal(canSeeDocumentType(memberAdmin, officers, "requisition"), true);
     assert.equal(canSeeDocumentType(randomMember, officers, "requisition"), true);
     assert.equal(canSubmitType(randomMember, officers, "requisition"), false);
     assert.equal(canSeeDocumentType(actor("member-3", "member", []), officers, "requisition"), false);
@@ -142,11 +142,11 @@ describe("document approval desk", () => {
   });
 
   it("requesting changes returns the file to the start of the chain", () => {
-    const patron = actor("patron-1", "member");
+    const officeAdmin = actor("admin-1", "member");
     const started = startSubmission("requisition", actor("chair-1", "chair"), officers, 1);
     assert.equal(started.ok, true);
     if (!started.ok) return;
-    const asked = requestChanges(started.next, patron, officers, 2, "Please attach the three quotations.");
+    const asked = requestChanges(started.next, officeAdmin, officers, 2, "Please attach the three quotations.");
     assert.equal(asked.ok, true);
     if (!asked.ok) return;
     assert.equal(asked.next.status, "changes_requested");
@@ -183,7 +183,7 @@ describe("document approval desk", () => {
     const forced = forceApproveStage(started.next, root, 2, "Chair is travelling.");
     assert.equal(forced.ok, true);
     if (!forced.ok) return;
-    assert.equal(forced.next.currentStageRole, "patron");
+    assert.equal(forced.next.currentStageRole, "admin");
     assert.equal(forced.events[0].onBehalfOfRole, "chair");
     assert.equal(forceApproveStage(started.next, actor("admin-1", "admin"), 2, "no").ok, false);
     assert.equal(canSubmitType(actor("member-1", "member", []), officers, "requisition"), false);

@@ -47,7 +47,7 @@ type DeskPayload = {
     roles: Array<{ role: string; label: string }>;
     isSuperAdmin?: boolean;
     canAssignOfficers?: boolean;
-    needsPatron?: boolean;
+    needsAdmin?: boolean;
     user: { id: string; name: string; role: string };
   };
 };
@@ -134,10 +134,10 @@ export function DocumentsDesk() {
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
       {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
-      {data.desk.canAssignOfficers && data.desk.needsPatron ? (
+      {data.desk.canAssignOfficers && data.desk.needsAdmin ? (
         <p className="admin-flash">
-          Patron is not assigned yet. Requisitions and proof of payment will stall after the Chair
-          until the Patron is named below.
+          The Admin office is not assigned yet. Requisitions and proof of payment will stall after the Chair
+          until the Admin is named below.
         </p>
       ) : null}
 

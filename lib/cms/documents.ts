@@ -20,7 +20,8 @@ export const DOCUMENT_OFFICER_ROLES = [
   "secretary",
   "vice_secretary",
   "treasurer",
-  "patron",
+  // The organisation's Admin office (formerly called Patron). An assigned person, not a website role.
+  "admin",
 ] as const;
 export type DocumentOfficerRole = (typeof DOCUMENT_OFFICER_ROLES)[number];
 
@@ -30,8 +31,8 @@ export const DOCUMENT_TYPE_DEFS = {
     label: "Requisition",
     prefix: "REQ",
     submitRoles: ["chair", "secretary"],
-    chain: ["chair", "patron", "treasurer"],
-    editRoles: ["secretary", "patron"],
+    chain: ["chair", "admin", "treasurer"],
+    editRoles: ["secretary", "admin"],
   },
   minutes: {
     slug: "minutes",
@@ -46,7 +47,7 @@ export const DOCUMENT_TYPE_DEFS = {
     label: "Proof of payment",
     prefix: "POP",
     submitRoles: ["treasurer"],
-    chain: ["treasurer", "chair", "patron"],
+    chain: ["treasurer", "chair", "admin"],
     editRoles: ["secretary"],
   },
 } as const satisfies Record<
@@ -142,7 +143,7 @@ export const OFFICER_LABELS: Record<DocumentOfficerRole, string> = {
   secretary: ROLE_LABELS.secretary,
   vice_secretary: ROLE_LABELS.vice_secretary,
   treasurer: ROLE_LABELS.treasurer,
-  patron: "Patron",
+  admin: "Admin",
 };
 
 export function isDocumentType(value: string): value is DocumentTypeSlug {

@@ -576,7 +576,7 @@ export function deskMeta(auth: AuthContext, actor: DocumentActor, officers: Offi
     roles: heldOfficerRoles(actor, officers).map((role) => ({ role, label: OFFICER_LABELS[role] })),
     isSuperAdmin: isDocumentSuperAdmin(actor),
     canAssignOfficers: isDocumentSuperAdmin(actor),
-    needsPatron: !officers.patron,
+    needsAdmin: !officers.admin,
     user: { id: auth.user.id, name: auth.user.name, role: auth.user.role_name },
   };
 }
