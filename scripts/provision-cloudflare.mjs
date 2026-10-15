@@ -133,6 +133,7 @@ function writeWranglerConfig(databaseId, includeR2) {
       { pattern: "nazareneforshe.org", custom_domain: true },
       { pattern: "www.nazareneforshe.org", custom_domain: true },
     ],
+    workers_dev: true,
     send_email: [{ name: "EMAIL" }],
     vars: { ...existingVars() },
   };

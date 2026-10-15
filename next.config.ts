@@ -35,13 +35,16 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
-    // One canonical address: www.nazareneforshe.org → nazareneforshe.org.
+    // One canonical address: www and the old workers.dev address both → nazareneforshe.org.
     // The home page gets its own rule: on Cloudflare an empty `:path*` was sent out literally.
-    const www = [{ type: "host" as const, value: "www.nazareneforshe.org" }];
-    return [
-      { source: "/", has: www, destination: "https://nazareneforshe.org/", permanent: true },
-      { source: "/:path+", has: www, destination: "https://nazareneforshe.org/:path+", permanent: true },
-    ];
+    const oldHosts = ["www.nazareneforshe.org", "nazarene-for-she.christophererick.workers.dev"];
+    return oldHosts.flatMap((value) => {
+      const has = [{ type: "host" as const, value }];
+      return [
+        { source: "/", has, destination: "https://nazareneforshe.org/", permanent: true },
+        { source: "/:path+", has, destination: "https://nazareneforshe.org/:path+", permanent: true },
+      ];
+    });
   },
   images: {
     formats: ["image/avif", "image/webp"],

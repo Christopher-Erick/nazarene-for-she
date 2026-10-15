@@ -42,6 +42,9 @@
     { "pattern": "nazareneforshe.org", "custom_domain": true },
     { "pattern": "www.nazareneforshe.org", "custom_domain": true }
   ],
+  // Keep the old nazarene-for-she.christophererick.workers.dev address answering (Wrangler turns it
+  // off once routes exist); next.config.ts redirects it to nazareneforshe.org so old links work.
+  "workers_dev": true,
   // Cloudflare Email Service: every email the site sends (contact, donations, shop, documents,
   // password reset). The sender domain must be onboarded under Compute → Email Service.
   "send_email": [
