@@ -6,7 +6,9 @@ import {
   CSRF_COOKIE,
   csrfCookie,
   destroySession,
+  clearPreviewCookie,
   loadAuth,
+  PREVIEW_COOKIE,
   readCookie,
   SESSION_COOKIE,
   sessionCookie,
@@ -43,7 +45,7 @@ export async function GET(request: Request) {
     return jsonNoStore({ ok: false, user: null, csrf }, { headers });
   }
 
-  const auth = await loadAuth(db, readCookie(request, SESSION_COOKIE));
+  const auth = await loadAuth(db, readCookie(request, SESSION_COOKIE), readCookie(request, PREVIEW_COOKIE));
   if (!auth) return jsonNoStore({ ok: true, user: null, csrf }, { headers });
   return jsonNoStore({ ok: true, user: publicUser(auth), csrf }, { headers });
 }
@@ -98,6 +100,8 @@ export async function POST(request: Request) {
   const headers = new Headers();
   headers.append("Set-Cookie", sessionCookie(token, secure));
   headers.append("Set-Cookie", csrfCookie(csrf, secure));
+  // A fresh sign-in always starts as yourself.
+  headers.append("Set-Cookie", clearPreviewCookie(secure));
   return jsonNoStore({ ok: true, user: auth ? publicUser(auth) : null, csrf }, { headers });
 }
 

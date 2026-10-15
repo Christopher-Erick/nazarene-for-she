@@ -5,6 +5,9 @@ import { hasPermission, isSuperAdmin } from "@/lib/cms/rbac";
 
 export const SESSION_COOKIE = "nfs_session";
 export const CSRF_COOKIE = "nfs_csrf";
+/** Role a Super Admin is previewing the desk as. Only honoured for a real Super Admin, and only narrows access. */
+export const PREVIEW_COOKIE = "nfs_preview";
+export const PREVIEW_TTL_S = 2 * 60 * 60;
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 
 export type CmsUser = {
@@ -19,9 +22,15 @@ export type CmsUser = {
 export type AuthContext = {
   user: CmsUser;
   permissions: Set<PermissionKey>;
+  /** Set while a Super Admin previews another role: user.role_* and permissions are that role's; changes are blocked. */
+  preview?: { realRoleSlug: RoleSlug; realRoleName: string };
 };
 
-export async function loadAuth(db: D1Database, token: string | undefined): Promise<AuthContext | null> {
+export async function loadAuth(
+  db: D1Database,
+  token: string | undefined,
+  previewRole?: string | null,
+): Promise<AuthContext | null> {
   if (!token) return null;
   const tokenHash = await sha256Hex(token);
   const row = await queryFirst<{
@@ -55,7 +64,7 @@ export async function loadAuth(db: D1Database, token: string | undefined): Promi
     row.id,
   );
 
-  return {
+  const auth: AuthContext = {
     user: {
       id: row.id,
       name: row.name,
@@ -66,6 +75,37 @@ export async function loadAuth(db: D1Database, token: string | undefined): Promi
     },
     permissions: new Set(permissionRows.map((item: { id: string }) => item.id as PermissionKey)),
   };
+  if (previewRole && previewRole !== "super_admin" && isSuperAdmin(auth)) {
+    return (await previewAuth(db, auth, previewRole)) ?? auth;
+  }
+  return auth;
+}
+
+/** The same person, seen with another role's menu and permissions. */
+async function previewAuth(db: D1Database, real: AuthContext, roleSlug: string): Promise<AuthContext | null> {
+  const role = await queryFirst<{ slug: RoleSlug; name: string }>(db, "SELECT slug, name FROM roles WHERE slug = ?", roleSlug);
+  if (!role || role.slug === "super_admin") return null;
+  const rows = await queryAll<{ id: string }>(
+    db,
+    `SELECT p.id FROM role_permissions rp
+     JOIN permissions p ON p.id = rp.permission_id
+     JOIN roles r ON r.id = rp.role_id
+     WHERE r.slug = ?`,
+    role.slug,
+  );
+  return {
+    user: { ...real.user, role_slug: role.slug, role_name: role.name },
+    permissions: new Set(rows.map((item) => item.id as PermissionKey)),
+    preview: { realRoleSlug: real.user.role_slug, realRoleName: real.user.role_name },
+  };
+}
+
+export function previewCookie(role: string, secure: boolean) {
+  return `${PREVIEW_COOKIE}=${encodeURIComponent(role)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${PREVIEW_TTL_S}${secure ? "; Secure" : ""}`;
+}
+
+export function clearPreviewCookie(secure: boolean) {
+  return `${PREVIEW_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure ? "; Secure" : ""}`;
 }
 
 export { hasPermission, isSuperAdmin };
@@ -142,6 +182,7 @@ export function clearSessionCookies(secure: boolean) {
   return [
     `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${extra}`,
     `${CSRF_COOKIE}=; Path=/; SameSite=Lax; Max-Age=0${extra}`,
+    clearPreviewCookie(secure),
   ];
 }
 

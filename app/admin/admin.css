@@ -821,6 +821,27 @@ ul.admin-group {
   border-color: color-mix(in srgb, var(--admin-live) 28%, var(--admin-line));
 }
 
+/* Super Admin "Preview as…" picker and the banner shown while previewing. */
+.admin-preview-pick select {
+  min-height: 2.5rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--admin-line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.admin-preview-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.75rem 1.25rem 0;
+  border-color: var(--admin-accent, var(--admin-line));
+}
+
 .admin-flash--error {
   background: color-mix(in srgb, var(--admin-danger) 8%, white);
   border-color: color-mix(in srgb, var(--admin-danger) 28%, var(--admin-line));

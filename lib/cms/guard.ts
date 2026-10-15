@@ -6,6 +6,7 @@ import {
   hasPermission,
   isSuperAdmin,
   loadAuth,
+  PREVIEW_COOKIE,
   readCookie,
   SESSION_COOKIE,
 } from "@/lib/cms/auth";
@@ -44,8 +45,16 @@ export async function requireAuth(request: Request): Promise<{ ok: true; ctx: Gu
   const dbResult = await requireDb();
   if (!dbResult.ok) return dbResult;
   const token = readCookie(request, SESSION_COOKIE);
-  const auth = await loadAuth(dbResult.db, token);
+  const auth = await loadAuth(dbResult.db, token, readCookie(request, PREVIEW_COOKIE));
   if (!auth) return { ok: false, response: apiError(401, "Please sign in.") };
+  // Previewing another role is look-only: nothing may be saved until the preview ends.
+  const mutating = request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS";
+  if (auth.preview && mutating) {
+    return {
+      ok: false,
+      response: apiError(403, `You are previewing as ${auth.user.role_name}. Exit preview to make changes.`),
+    };
+  }
   return { ok: true, ctx: { db: dbResult.db, auth } };
 }
 
