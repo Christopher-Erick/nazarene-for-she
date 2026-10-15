@@ -36,13 +36,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
     // One canonical address: www.nazareneforshe.org → nazareneforshe.org.
+    // The home page gets its own rule: on Cloudflare an empty `:path*` was sent out literally.
+    const www = [{ type: "host" as const, value: "www.nazareneforshe.org" }];
     return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.nazareneforshe.org" }],
-        destination: "https://nazareneforshe.org/:path*",
-        permanent: true,
-      },
+      { source: "/", has: www, destination: "https://nazareneforshe.org/", permanent: true },
+      { source: "/:path+", has: www, destination: "https://nazareneforshe.org/:path+", permanent: true },
     ];
   },
   images: {
