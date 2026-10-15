@@ -79,7 +79,9 @@ export function ShopDesk() {
 
   async function addPiece(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    // Keep the form: React clears event.currentTarget once this handler awaits.
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     try {
       await adminFetch("/api/v1/admin/shop/products", {
         method: "POST",
@@ -92,7 +94,7 @@ export function ShopDesk() {
           sizing: String(form.get("sizing") ?? "body"),
         }),
       });
-      event.currentTarget.reset();
+      formEl.reset();
       setAdding(false);
       setMessage("Draft piece created. Publish it when it should appear on the rack.");
       await refreshShop();
@@ -103,7 +105,9 @@ export function ShopDesk() {
 
   async function addCategory(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    // Keep the form: React clears event.currentTarget once this handler awaits.
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     try {
       await categories.create({
         title: String(form.get("title") ?? ""),
@@ -118,7 +122,7 @@ export function ShopDesk() {
           still: "atelier",
         },
       });
-      event.currentTarget.reset();
+      formEl.reset();
       setAddingCategory(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not add that category.");

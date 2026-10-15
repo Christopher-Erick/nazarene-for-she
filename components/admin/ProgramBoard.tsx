@@ -15,7 +15,9 @@ export function ProgramBoard() {
 
   async function add(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    // Keep the form: React clears event.currentTarget once this handler awaits.
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     const name = String(form.get("name") ?? "");
     try {
       await create({
@@ -30,7 +32,7 @@ export function ProgramBoard() {
           impact: "",
         },
       });
-      event.currentTarget.reset();
+      formEl.reset();
       setOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not add that programme.");

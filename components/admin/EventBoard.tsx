@@ -79,7 +79,9 @@ export function EventBoard() {
 
   async function add(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    // Keep the form: React clears event.currentTarget once this handler awaits.
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     try {
       await create({
         title: String(form.get("title") ?? ""),
@@ -93,7 +95,7 @@ export function EventBoard() {
           featured: false,
         },
       });
-      event.currentTarget.reset();
+      formEl.reset();
       setOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not add that event.");

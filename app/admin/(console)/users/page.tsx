@@ -17,6 +17,8 @@ type User = {
 export default function UsersPage() {
   const [items, setItems] = useState<User[]>([]);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [adding, setAdding] = useState(false);
 
   async function load() {
     const data = await adminFetch("/api/v1/admin/users");
@@ -31,7 +33,12 @@ export default function UsersPage() {
 
   async function create(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    // Keep the form: React clears event.currentTarget once this handler awaits.
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
+    setAdding(true);
+    setError("");
+    setNotice("");
     try {
       await adminFetch("/api/v1/admin/users", {
         method: "POST",
@@ -42,10 +49,15 @@ export default function UsersPage() {
           role: form.get("role"),
         }),
       });
-      event.currentTarget.reset();
+      formEl.reset();
+      setNotice(
+        `${String(form.get("name"))} can now sign in at /admin/login with ${String(form.get("email"))} and the temporary password you chose. Give them the password privately and ask them to change it under My account.`,
+      );
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not create user.");
+      setError(err instanceof Error ? err.message : "Could not add this person.");
+    } finally {
+      setAdding(false);
     }
   }
 
@@ -69,10 +81,15 @@ export default function UsersPage() {
         </p>
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
+      {notice ? <p className="admin-flash admin-flash--ok">{notice}</p> : null}
       <section className="admin-group">
         <div className="admin-section-head">
-          <h2 className="font-display">Invite</h2>
+          <h2 className="font-display">Add a person</h2>
         </div>
+        <p className="text-sm text-muted">
+          This creates their sign-in straight away. No email is sent: share the temporary password with them
+          yourself, and they can change it under My account or with Forgot password.
+        </p>
         <form className="admin-form" onSubmit={create}>
         <label>
           Name
@@ -96,8 +113,8 @@ export default function UsersPage() {
             ))}
           </select>
         </label>
-        <button className="btn btn-plum" type="submit">
-          Invite to Admin
+        <button className="btn btn-plum" type="submit" disabled={adding}>
+          {adding ? "Adding…" : "Add person"}
         </button>
       </form>
       </section>
@@ -131,7 +148,7 @@ export default function UsersPage() {
           </article>
           ))
         ) : (
-          <p className="admin-empty">No people on this desk yet. Invite someone above.</p>
+          <p className="admin-empty">No people on this desk yet. Add someone above.</p>
         )}
       </div>
       </section>
