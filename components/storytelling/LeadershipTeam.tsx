@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LeadershipCarousel } from "@/components/storytelling/LeadershipCarousel";
 import { initials, type LeadershipMember } from "@/lib/cms/leadership";
 
 /**
@@ -18,7 +19,7 @@ export function LeadershipTeam({ members, intro }: { members: LeadershipMember[]
         {intro ? <p className="mt-4 max-w-2xl text-lg text-muted">{intro}</p> : null}
       </div>
 
-      <ul className="leadership__grid" data-count={Math.min(members.length, 3)}>
+      <LeadershipCarousel count={members.length}>
         {members.map((member, index) => (
           <li key={member.id} className="leader-card">
             <figure className="leader-card__portrait">
@@ -48,7 +49,7 @@ export function LeadershipTeam({ members, intro }: { members: LeadershipMember[]
             </div>
           </li>
         ))}
-      </ul>
+      </LeadershipCarousel>
     </section>
   );
 }

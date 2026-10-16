@@ -3,7 +3,7 @@ import { publishedDonations } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Support A Girl",
+  title: "Donate: Keep a Girl in School",
   description:
     "Give toward dignity kits, menstrual health, vocational training, entrepreneurship or general support. M-Pesa, bank and M-Changa details are published when the organisation confirms them.",
   path: "/donate",

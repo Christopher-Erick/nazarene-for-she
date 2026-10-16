@@ -103,8 +103,8 @@ export function DonationInquiryForm({
           {status === "loading"
             ? "Sending…"
             : status === "success"
-              ? "Note sent"
-              : "Send confirmation note"}
+              ? "Thank You — Received"
+              : "Tell Us About Your Gift"}
         </button>
       </form>
     </div>

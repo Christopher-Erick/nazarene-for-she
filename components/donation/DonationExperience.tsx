@@ -87,7 +87,7 @@ export function DonationExperience({
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <button type="button" className="give-path is-current text-left" onClick={startGiveWizard}>
                 <span className="eyebrow">Give</span>
-                <span className="mt-2 block font-display text-xl">Support A Girl</span>
+                <span className="mt-2 block font-display text-xl">Keep a Girl in School</span>
                 <span className="mt-2 block text-sm theme-muted">
                   A gift toward pads, skill and community.
                 </span>

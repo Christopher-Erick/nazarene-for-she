@@ -26,7 +26,7 @@ const programDefs: Program[] = [
     impact:
       "Girls who understand their bodies can stay in class, ask for what they need, and make informed choices.",
     donationCategory: "Menstrual Health",
-    cta: { label: "Help her stay in school", href: "/donate?cause=menstrual-health" },
+    cta: { label: "Keep Her in School", href: "/donate?cause=menstrual-health" },
     visual: libraryImages.menstrualHealth,
   },
   {
@@ -40,7 +40,7 @@ const programDefs: Program[] = [
     impact:
       "A kit is not a transaction. It is a practical way to remove a barrier between a girl and her education.",
     donationCategory: "Dignity Kits",
-    cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
+    cta: { label: "Give a Dignity Kit", href: "/donate?cause=dignity-kits" },
     visual: libraryImages.dignityKit,
   },
   {
@@ -54,7 +54,7 @@ const programDefs: Program[] = [
     impact:
       "A girl with a mentor is less likely to face hard choices alone.",
     donationCategory: "Mentorship",
-    cta: { label: "Walk beside her", href: "/get-involved#mentor" },
+    cta: { label: "Become a Mentor", href: "/get-involved#mentor" },
     visual: libraryImages.mentorship,
   },
   {
@@ -68,7 +68,7 @@ const programDefs: Program[] = [
     impact:
       "Faith is offered as strength and belonging, not as a condition of receiving help.",
     donationCategory: "General Support",
-    cta: { label: "Pray with us", href: "/get-involved#pray" },
+    cta: { label: "Join Us in Prayer", href: "/get-involved#pray" },
     visual: "/images/atmosphere-community.webp",
   },
   {
@@ -82,8 +82,8 @@ const programDefs: Program[] = [
     impact:
       "Skill is a form of dignity that lasts longer than a single donation.",
     donationCategory: "Vocational Training",
-    cta: { label: "Support her skill", href: "/donate?cause=vocational-training" },
-    secondaryCta: { label: "Wear her work", href: "/shop" },
+    cta: { label: "Fund Her Training", href: "/donate?cause=vocational-training" },
+    secondaryCta: { label: "Shop What She Made", href: "/shop" },
     visual: "/images/atmosphere-atelier.webp",
   },
   {
@@ -97,8 +97,8 @@ const programDefs: Program[] = [
     impact:
       "Enterprise is how a skill becomes a future.",
     donationCategory: "Entrepreneurship",
-    cta: { label: "Invest in her enterprise", href: "/donate?cause=entrepreneurship" },
-    secondaryCta: { label: "Wear her work", href: "/shop" },
+    cta: { label: "Back Her First Business", href: "/donate?cause=entrepreneurship" },
+    secondaryCta: { label: "Shop What She Made", href: "/shop" },
     visual: "/images/atmosphere-atelier.webp",
   },
   {
@@ -112,7 +112,7 @@ const programDefs: Program[] = [
     impact:
       "Skills compound. Each one she gains makes the next opportunity more reachable.",
     donationCategory: "Vocational Training",
-    cta: { label: "Expand her capacity", href: "/donate?cause=vocational-training" },
+    cta: { label: "Equip the Workshop", href: "/donate?cause=vocational-training" },
     visual: "/images/atmosphere-fabric.webp",
   },
   {
@@ -126,7 +126,7 @@ const programDefs: Program[] = [
     impact:
       "Awareness is protection. Young girls deserve facts about their health, not silence.",
     donationCategory: "Menstrual Health",
-    cta: { label: "Support health education", href: "/donate?cause=menstrual-health" },
+    cta: { label: "Fund Health Education", href: "/donate?cause=menstrual-health" },
     visual: "/images/atmosphere-community.webp",
   },
   {
@@ -140,7 +140,7 @@ const programDefs: Program[] = [
     impact:
       "Independence is the point. Charity is the starting path, not the destination.",
     donationCategory: "General Support",
-    cta: { label: "Build her future with us", href: "/donate?cause=general" },
+    cta: { label: "Give Toward Her Future", href: "/donate?cause=general" },
     visual: "/images/atmosphere-rooftops.webp",
   },
 ];

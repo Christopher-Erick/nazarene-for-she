@@ -52,7 +52,7 @@ const eventDefs: NfsEvent[] = [
     locationDetail: "Venue confirmed with registered families before the day.",
     visual: libraryImages.padDistribution1,
     relatedProgramSlug: "dignity-kits",
-    cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
+    cta: { label: "Give a Dignity Kit", href: "/donate?cause=dignity-kits" },
     featured: true,
   },
   {
@@ -68,7 +68,7 @@ const eventDefs: NfsEvent[] = [
     location: "Congo, Kawangware",
     visual: libraryImages.mentorship,
     relatedProgramSlug: "mentorship",
-    cta: { label: "Offer to mentor", href: "/contact?intent=mentorship" },
+    cta: { label: "Become a Mentor", href: "/contact?intent=mentorship" },
     featured: true,
   },
   {
@@ -84,7 +84,7 @@ const eventDefs: NfsEvent[] = [
     location: "Congo, Kawangware",
     visual: libraryImages.skill,
     relatedProgramSlug: "vocational-training",
-    cta: { label: "Support vocational training", href: "/donate?cause=vocational" },
+    cta: { label: "Fund Her Training", href: "/donate?cause=vocational-training" },
   },
   {
     slug: "discipleship-gathering-july-2026",
@@ -99,7 +99,7 @@ const eventDefs: NfsEvent[] = [
     location: "Congo, Kawangware",
     visual: libraryImages.community,
     relatedProgramSlug: "discipleship",
-    cta: { label: "Pray with us", href: "/get-involved#pray" },
+    cta: { label: "Join Us in Prayer", href: "/get-involved#pray" },
   },
   {
     slug: "pad-distribution-may-2026",
@@ -114,7 +114,7 @@ const eventDefs: NfsEvent[] = [
     location: "Congo, Kawangware",
     visual: libraryImages.padDistribution2,
     relatedProgramSlug: "dignity-kits",
-    cta: { label: "Help provide a dignity kit", href: "/donate?cause=dignity-kits" },
+    cta: { label: "Give a Dignity Kit", href: "/donate?cause=dignity-kits" },
   },
   {
     slug: "menstrual-health-workshop-march-2026",
@@ -129,7 +129,7 @@ const eventDefs: NfsEvent[] = [
     location: "Congo, Kawangware",
     visual: libraryImages.menstrualHealth,
     relatedProgramSlug: "menstrual-health",
-    cta: { label: "Support this work", href: "/donate" },
+    cta: { label: "Give to This Work", href: "/donate" },
   },
 ];
 

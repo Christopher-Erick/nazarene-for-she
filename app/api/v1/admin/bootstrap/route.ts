@@ -1,5 +1,5 @@
 import { getDb, queryFirst } from "@/lib/cms/db";
-import { hashPassword, passwordMeetsPolicy } from "@/lib/cms/password";
+import { hashPassword, passwordMeetsPolicy, sha256Hex } from "@/lib/cms/password";
 import { audit } from "@/lib/cms/audit";
 import { nowMs, newId, run } from "@/lib/cms/db";
 import { jsonNoStore, rateLimit, clientKey, isSameOrigin } from "@/lib/security";
@@ -17,22 +17,21 @@ export async function POST(request: Request) {
     return jsonNoStore({ ok: false, message: "Please wait before trying again." }, { status: 429 });
   }
 
+  const closed = () => jsonNoStore({ ok: false, message: "Bootstrap is not available." }, { status: 403 });
+
   const expected = process.env.CMS_BOOTSTRAP_TOKEN?.trim();
-  if (!expected || expected.length < 24) {
-    return jsonNoStore({ ok: false, message: "Bootstrap is not configured." }, { status: 403 });
-  }
-  const provided = request.headers.get("x-bootstrap-token") ?? "";
-  if (provided !== expected) {
-    return jsonNoStore({ ok: false, message: "Bootstrap is not configured." }, { status: 403 });
-  }
+  if (!expected || expected.length < 24) return closed();
 
   const db = await getDb();
   if (!db) return jsonNoStore({ ok: false, message: "The content database is not configured." }, { status: 503 });
 
+  // Only ever usable on an empty site: once any account exists the endpoint is inert, token or not.
   const existing = await queryFirst<{ n: number }>(db, "SELECT COUNT(*) AS n FROM users");
-  if ((existing?.n ?? 0) > 0) {
-    return jsonNoStore({ ok: false, message: "The first administrator has already been created." }, { status: 409 });
-  }
+  if ((existing?.n ?? 0) > 0) return closed();
+
+  // Compare digests, not the raw strings, so timing does not reveal how much of the token matched.
+  const provided = request.headers.get("x-bootstrap-token") ?? "";
+  if ((await sha256Hex(provided)) !== (await sha256Hex(expected))) return closed();
 
   const body = await parseBody(request);
   if (!body.ok) return body.response;

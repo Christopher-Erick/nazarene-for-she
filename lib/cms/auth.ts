@@ -145,14 +145,23 @@ export async function destroyUserSessions(db: D1Database, userId: string) {
   await db.prepare("DELETE FROM sessions WHERE user_id = ?").bind(userId).run();
 }
 
+let dummyHash: Promise<string> | null = null;
+
 export async function authenticateUser(db: D1Database, email: string, password: string) {
   const user = await queryFirst<{
     id: string;
     password_hash: string;
     status: string;
   }>(db, "SELECT id, password_hash, status FROM users WHERE email = ?", email.toLowerCase().trim());
-  if (!user) return { ok: false as const, reason: "invalid" as const };
-  if (user.status !== "active") return { ok: false as const, reason: "disabled" as const };
+  if (!user || user.status !== "active") {
+    // Spend the same time as a real password check, so response timing does not reveal which
+    // emails have an account.
+    dummyHash ??= hashPassword(randomToken(16));
+    await verifyPassword(password, await dummyHash);
+    return user
+      ? { ok: false as const, reason: "disabled" as const }
+      : { ok: false as const, reason: "invalid" as const };
+  }
   const valid = await verifyPassword(password, user.password_hash);
   if (!valid) return { ok: false as const, reason: "invalid" as const };
   await db.prepare("UPDATE users SET last_login_at = ? WHERE id = ?").bind(Date.now(), user.id).run();

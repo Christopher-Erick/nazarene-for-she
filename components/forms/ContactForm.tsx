@@ -102,7 +102,7 @@ export function ContactForm({ initialIntent }: { initialIntent?: string }) {
         {status === "error" ? <p className="form-failure">{message}</p> : null}
       </div>
       <button className="btn btn-plum" type="submit" disabled={busy}>
-        {status === "loading" ? "Sending…" : status === "success" ? "Message sent" : "Send message"}
+        {status === "loading" ? "Sending…" : status === "success" ? "Message Sent" : "Send Message"}
       </button>
     </form>
   );

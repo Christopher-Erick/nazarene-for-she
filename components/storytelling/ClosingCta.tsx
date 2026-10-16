@@ -17,7 +17,7 @@ export function ClosingCta() {
           <div className="mt-12 flex flex-col justify-center gap-3 sm:flex-row">
             <ButtonLink href={supportCta.href}>{supportCta.label}</ButtonLink>
             <ButtonLink href="/shop" variant="ghost">
-              Wear her work
+              Shop What She Made
             </ButtonLink>
           </div>
         </Reveal>

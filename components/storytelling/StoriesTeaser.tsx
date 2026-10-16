@@ -49,7 +49,7 @@ export async function StoriesTeaser() {
         </div>
         <div className="mt-12">
           <ButtonLink href="/stories" variant="plum">
-            Read story frames
+            Visit Her Stories
           </ButtonLink>
         </div>
       </div>

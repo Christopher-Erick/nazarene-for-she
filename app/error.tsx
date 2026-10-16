@@ -20,7 +20,7 @@ export default function ErrorPage({
           Try again
         </button>
         <ButtonLink href="/" variant="ghost">
-          Return to Her Story
+          Back to Home
         </ButtonLink>
       </div>
     </section>

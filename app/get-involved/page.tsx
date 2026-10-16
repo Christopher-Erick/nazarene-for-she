@@ -80,7 +80,7 @@ export default async function GetInvolvedPage() {
           <p className="mt-6 text-lg text-muted">{mentorBody}</p>
           <div className="mt-10">
             <ButtonLink href="/contact?intent=mentorship" variant="plum">
-              Offer to mentor
+              Become a Mentor
             </ButtonLink>
           </div>
         </div>

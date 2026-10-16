@@ -120,13 +120,13 @@ export default async function StoryPage({
 
         <div className="mt-8 flex flex-wrap gap-3 border-t border-line pt-10">
           <ButtonLink href="/stories" variant="ghost">
-            All stories
+            Back to All Stories
           </ButtonLink>
           <ButtonLink href={supportCta.href} variant="plum">
             {supportCta.label}
           </ButtonLink>
           <ButtonLink href="/get-involved" variant="ghost">
-            Get involved
+            Find Your Way to Help
           </ButtonLink>
         </div>
       </div>

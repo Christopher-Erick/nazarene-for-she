@@ -20,7 +20,7 @@ export function DignityKitSection() {
           </p>
           <p className="mt-4 theme-muted">This is not a shop. It is how a barrier is removed.</p>
           <div className="mt-8">
-            <ButtonLink href="/donate?cause=dignity-kits">Help Provide a Dignity Kit</ButtonLink>
+            <ButtonLink href="/donate?cause=dignity-kits">Give a Dignity Kit</ButtonLink>
           </div>
         </Reveal>
         <Reveal delay={0.1}>

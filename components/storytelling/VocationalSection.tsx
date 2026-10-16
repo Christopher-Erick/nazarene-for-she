@@ -121,9 +121,9 @@ export function VocationalSection() {
           ))}
         </ol>
         <div className="mt-12 flex flex-wrap gap-3">
-          <ButtonLink href="/programs/vocational-training">Discover the craft</ButtonLink>
+          <ButtonLink href="/programs/vocational-training">See How She Learns a Trade</ButtonLink>
           <ButtonLink href="/shop" variant="ghost">
-            Wear her work
+            Shop What She Made
           </ButtonLink>
         </div>
       </div>

@@ -4,32 +4,45 @@ import type { NextConfig } from "next";
  * CSP is intentionally practical for Next.js on Cloudflare. Everything is served from
  * this site's own origin; no third-party script, frame or connect host is allowed.
  */
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "frame-ancestors 'none'",
-  "form-action 'self'",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-  "connect-src 'self'",
-  "frame-src 'self'",
-  "upgrade-insecure-requests",
-].join("; ");
+const isProduction = process.env.NODE_ENV === "production";
+
+/** Everything comes from this site; eval is only allowed for the dev server's hot reload. */
+function contentSecurityPolicy(frameAncestors: "'none'" | "'self'") {
+  return [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    `frame-ancestors ${frameAncestors}`,
+    "form-action 'self'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    "style-src 'self' 'unsafe-inline'",
+    `script-src 'self' 'unsafe-inline'${isProduction ? "" : " 'unsafe-eval'"}`,
+    "connect-src 'self'",
+    // The documents desk previews papers from this site in a frame; nothing else is framed.
+    "frame-src 'self'",
+    "worker-src 'self' blob:",
+    "manifest-src 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+  },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
   { key: "X-DNS-Prefetch-Control", value: "on" },
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  { key: "Content-Security-Policy", value: contentSecurityPolicy },
+  { key: "Content-Security-Policy", value: contentSecurityPolicy("'none'") },
 ];
 
 const nextConfig: NextConfig = {
@@ -62,6 +75,14 @@ const nextConfig: NextConfig = {
               { key: "Cache-Control", value: "no-store, must-revalidate" },
             ]
           : securityHeaders,
+      },
+      {
+        // A paper's file is shown inside the documents desk (same site), so it alone may be framed by us.
+        source: "/api/v1/admin/documents/:id/file",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy("'self'") },
+        ],
       },
       {
         source: "/images/:path*",

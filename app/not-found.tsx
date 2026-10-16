@@ -11,9 +11,9 @@ export default function NotFound() {
           conversation if you were looking for a way to walk with us.
         </p>
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href="/">Return to Her Story</ButtonLink>
+          <ButtonLink href="/">Back to Home</ButtonLink>
           <ButtonLink href="/contact" variant="ghost">
-            Start a Conversation
+            Contact Us
           </ButtonLink>
         </div>
       </div>

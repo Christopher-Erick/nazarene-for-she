@@ -35,7 +35,7 @@ export function CinematicHero({
         </p>
 
         <div className="hero-actions hero-copy">
-          <ButtonLink href="#reality">See Her Story</ButtonLink>
+          <ButtonLink href="#reality">See What She Faces</ButtonLink>
           <ButtonLink href={supportCta.href} variant="ivory">
             {supportCta.label}
           </ButtonLink>

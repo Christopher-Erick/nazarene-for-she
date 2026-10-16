@@ -13,7 +13,7 @@ export type NavItem = (typeof primaryNav)[number];
 
 export const supportCta = {
   href: "/donate?give",
-  label: "Support A Girl",
+  label: "Keep a Girl in School",
 } as const;
 
 export const footerNav = {
@@ -35,7 +35,7 @@ export const footerNav = {
   involved: [
     { href: "/get-involved", label: "Ways to Walk With Her" },
     { href: "/events", label: "Upcoming Events" },
-    { href: "/donate?give", label: "Support A Girl" },
+    { href: "/donate?give", label: "Keep a Girl in School" },
     { href: "/shop", label: "Shop" },
     { href: "/contact", label: "Start a Conversation" },
     { href: "/get-involved#pray", label: "Pray" },

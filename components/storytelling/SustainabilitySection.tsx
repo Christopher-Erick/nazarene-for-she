@@ -28,10 +28,10 @@ export function SustainabilitySection() {
         </ol>
         <div className="mt-16 flex flex-col gap-3 sm:flex-row">
           <ButtonLink href="/about" variant="plum">
-            Why we exist
+            Read Our Story
           </ButtonLink>
           <ButtonLink href="/partnership" variant="ghost">
-            Partner in the longer work
+            Partner for the Long Term
           </ButtonLink>
         </div>
       </div>

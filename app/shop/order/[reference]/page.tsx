@@ -81,7 +81,7 @@ export default async function ShopOrderPage({
               </a>
             ) : null}
             <ButtonLink href="/shop" variant="ghost">
-              Back to the shop
+              Keep Shopping
             </ButtonLink>
           </div>
         </section>

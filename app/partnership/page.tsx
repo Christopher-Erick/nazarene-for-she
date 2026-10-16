@@ -40,7 +40,7 @@ export default async function PartnershipPage() {
         </div>
         <div className="mt-16">
           <ButtonLink href="/contact?intent=partnership" variant="plum">
-            Start a partnership conversation
+            Start a Partnership
           </ButtonLink>
         </div>
       </div>

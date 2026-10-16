@@ -41,7 +41,7 @@ export async function EventsTeaser() {
 
         <div className="mt-10">
           <ButtonLink href="/events" variant="plum">
-            View all events
+            See Upcoming Events
           </ButtonLink>
         </div>
       </div>

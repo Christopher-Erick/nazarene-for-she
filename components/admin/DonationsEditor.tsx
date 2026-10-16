@@ -61,7 +61,7 @@ export function DonationsEditor() {
         method: "PUT",
         body: JSON.stringify({ key: "donations", value: { intro, note, methods } }),
       });
-      setMessage("Saved. Payment details appear on Support A Girl when they are not marked as placeholders.");
+      setMessage("Saved. Payment details appear on the Donate page when they are not marked as placeholders.");
       setError("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save.");
@@ -74,7 +74,7 @@ export function DonationsEditor() {
 
   return (
     <form className="admin-stack" onSubmit={save}>
-      <AdminHeader kicker="Support A Girl" title="Donations" previewHref="/donate">
+      <AdminHeader kicker="Donate page" title="Donations" previewHref="/donate">
         <p>
           M-Pesa, bank and M-Changa are the ways visitors can give. Leave a field marked as a
           placeholder until the organisation confirms the official number. Never invent paybill or
@@ -86,7 +86,7 @@ export function DonationsEditor() {
       <div className="admin-form">
         <h2 className="admin-form-title font-display">Opening copy</h2>
         <label>
-          Opening on Support A Girl
+          Opening text on the Donate page
           <textarea rows={4} value={intro} onChange={(event) => setIntro(event.target.value)} />
         </label>
         <label>

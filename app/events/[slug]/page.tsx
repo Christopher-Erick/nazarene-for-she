@@ -144,11 +144,11 @@ export default async function EventPage({
                 </ButtonLink>
               ) : (
                 <ButtonLink href="/events" variant="plum">
-                  View upcoming events
+                  See Upcoming Events
                 </ButtonLink>
               )}
               <ButtonLink href="/contact" variant="ghost">
-                Ask a question
+                Ask About This Event
               </ButtonLink>
             </div>
           </div>
@@ -171,7 +171,7 @@ export default async function EventPage({
 
       <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
         <ButtonLink href="/events" variant="ghost">
-          All events
+          Back to All Events
         </ButtonLink>
       </section>
     </>

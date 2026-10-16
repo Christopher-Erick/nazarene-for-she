@@ -39,10 +39,10 @@ export function BeliefSection() {
           <p className="prose-nfs mt-6">{site.description}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/programs" variant="plum">
-              Explore Our Work
+              See How We Help
             </ButtonLink>
             <ButtonLink href="/donate" variant="ghost">
-              Support Her Journey
+              Fund Her Next Step
             </ButtonLink>
           </div>
         </Reveal>

@@ -40,7 +40,7 @@ export function FaithSection() {
             )}
           </ul>
           <div className="mt-8">
-            <ButtonLink href="/get-involved#pray">Pray with us</ButtonLink>
+            <ButtonLink href="/get-involved#pray">Join Us in Prayer</ButtonLink>
           </div>
         </Reveal>
       </div>

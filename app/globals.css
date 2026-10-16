@@ -2971,3 +2971,73 @@ html.request-tray-open .site-footer {
     transform: none;
   }
 }
+
+/* Leadership on phones: one swipeable, auto-advancing row instead of a long column. */
+.leadership__dots {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .leadership__grid {
+    display: flex;
+    gap: 1rem;
+    margin-inline: -1.25rem;
+    padding: 0.25rem 1.25rem 0.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .leadership__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .leader-card {
+    flex: 0 0 82%;
+    scroll-snap-align: center;
+  }
+
+  /* Only one card: let it use the full width. */
+  .leadership__grid[data-count="1"] .leader-card {
+    flex-basis: 100%;
+  }
+
+  .leader-card:hover {
+    transform: none;
+  }
+
+  .leadership__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .leadership__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--nfs-primary) 25%, transparent);
+    transition: width 250ms ease, background 250ms ease;
+  }
+
+  .leadership__dot.is-active {
+    width: 1.6rem;
+    background: var(--nfs-accent);
+  }
+
+  /* Big enough to tap: the visible dot is small, the hit area is not. */
+  .leadership__dot {
+    position: relative;
+  }
+
+  .leadership__dot::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -0.35rem;
+  }
+}

@@ -123,7 +123,7 @@ export default async function ProgramPage({
         )}
         <div className="mt-10 flex flex-wrap gap-3">
           <ButtonLink href="/programs" variant="ghost">
-            All programmes
+            See All Programmes
           </ButtonLink>
           <ButtonLink href={program.cta.href} variant="plum">
             {program.cta.label}

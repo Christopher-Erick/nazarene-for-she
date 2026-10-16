@@ -10,7 +10,7 @@ const LINKS = [
   {
     href: "/admin/donations",
     title: "Donations",
-    body: "Support A Girl opening copy and official payment details.",
+    body: "Donate page opening text and official payment details.",
   },
   {
     href: "/admin/pages",
