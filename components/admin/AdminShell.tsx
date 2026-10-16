@@ -7,13 +7,13 @@ import { adminFetch } from "@/components/admin/adminFetch";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { pathCoveredByNav } from "@/lib/cms/nav";
-import { ASSIGNABLE_ROLE_SLUGS, ROLE_LABELS } from "@/lib/cms/permissions";
 
 export function AdminShell({
   userName,
   roleName,
   canPreview = false,
   previewRoleName = null,
+  previewRoles = [],
   nav,
   children,
 }: {
@@ -23,6 +23,8 @@ export function AdminShell({
   canPreview?: boolean;
   /** Set while previewing: the role being viewed. */
   previewRoleName?: string | null;
+  /** Roles that can be previewed (every role except Super Admin). */
+  previewRoles?: { slug: string; name: string }[];
   nav: { href: string; label: string; group: string }[];
   children: React.ReactNode;
 }) {
@@ -161,9 +163,9 @@ export function AdminShell({
                   aria-label="Preview the desk as a role"
                 >
                   <option value="">Preview as…</option>
-                  {ASSIGNABLE_ROLE_SLUGS.map((slug) => (
-                    <option key={slug} value={slug}>
-                      {ROLE_LABELS[slug]}
+                  {previewRoles.map((role) => (
+                    <option key={role.slug} value={role.slug}>
+                      {role.name}
                     </option>
                   ))}
                 </select>

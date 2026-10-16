@@ -1,27 +1,102 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { CMS_ACTIONS, ROLE_LABELS, ROLE_SLUGS, type RoleSlug } from "@/lib/cms/permissions";
+import { CMS_ACTIONS } from "@/lib/cms/permissions";
 import { GRANTABLE_ADMIN_PAGES, MATRIX_MODULES } from "@/lib/cms/nav";
 
+type RoleInfo = { slug: string; name: string; description: string; builtIn: boolean; user_count: number };
+
 export default function RolesPage() {
-  const [role, setRole] = useState<RoleSlug>("admin");
+  const [role, setRole] = useState("admin");
+  const [roles, setRoles] = useState<RoleInfo[]>([]);
   const [matrix, setMatrix] = useState<Record<string, string[]>>({});
+  const [creating, setCreating] = useState(false);
+  const [renaming, setRenaming] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  async function load() {
-    const data = await adminFetch("/api/v1/admin/roles");
+  function apply(data: Record<string, unknown>) {
     setMatrix((data.matrix as Record<string, string[]>) ?? {});
+    setRoles((data.roles as RoleInfo[]) ?? []);
+  }
+
+  async function load() {
+    apply(await adminFetch("/api/v1/admin/roles"));
   }
 
   useEffect(() => {
     adminFetch("/api/v1/admin/roles")
-      .then((data) => setMatrix((data.matrix as Record<string, string[]>) ?? {}))
+      .then(apply)
       .catch((err: Error) => setError(err.message));
   }, []);
+
+  const current = roles.find((item) => item.slug === role);
+  const roleName = current?.name ?? role;
+
+  async function createRole(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
+    setError("");
+    setMessage("");
+    setCreating(true);
+    try {
+      const data = await adminFetch("/api/v1/admin/roles", {
+        method: "POST",
+        body: JSON.stringify({
+          name: form.get("name"),
+          description: form.get("description"),
+          copyFrom: form.get("copyFrom"),
+        }),
+      });
+      const created = data.role as RoleInfo;
+      formEl.reset();
+      await load();
+      setRole(created.slug);
+      setMessage(
+        `${created.name} created. Tick what they may do below, then save. You can now give it to people under People.`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not create the role.");
+    } finally {
+      setCreating(false);
+    }
+  }
+
+  async function renameRole(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    setError("");
+    setMessage("");
+    try {
+      await adminFetch("/api/v1/admin/roles", {
+        method: "PATCH",
+        body: JSON.stringify({ role, name: form.get("name"), description: form.get("description") }),
+      });
+      setRenaming(false);
+      await load();
+      setMessage("Role details saved.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save the role.");
+    }
+  }
+
+  async function deleteRole() {
+    if (!current || current.builtIn) return;
+    if (!confirm(`Delete the ${current.name} role? This cannot be undone.`)) return;
+    setError("");
+    setMessage("");
+    try {
+      await adminFetch(`/api/v1/admin/roles?role=${encodeURIComponent(current.slug)}`, { method: "DELETE" });
+      setRole("admin");
+      await load();
+      setMessage(`${current.name} deleted.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not delete the role.");
+    }
+  }
 
   function checked(module: string, action: string) {
     return (matrix[role] ?? []).includes(`${module}.${action}`);
@@ -60,17 +135,96 @@ export default function RolesPage() {
       </AdminHeader>
       {error ? <p className="admin-flash admin-flash--error">{error}</p> : null}
       {message ? <p className="admin-flash admin-flash--ok">{message}</p> : null}
+      <details className="admin-form">
+        <summary className="admin-form-title font-display">Create a role</summary>
+        <form className="admin-stack mt-3" onSubmit={createRole}>
+          <label>
+            Role name
+            <input name="name" required minLength={2} maxLength={60} placeholder="e.g. Youth Coordinator" />
+          </label>
+          <label>
+            What this role is for (optional)
+            <input name="description" maxLength={240} placeholder="e.g. Runs mentorship sessions and events" />
+          </label>
+          <label>
+            Start with the permissions of
+            <select name="copyFrom" defaultValue="">
+              <option value="">Nothing: I will tick them myself</option>
+              {roles
+                .filter((item) => item.slug !== "super_admin")
+                .map((item) => (
+                  <option key={item.slug} value={item.slug}>
+                    {item.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <button className="btn btn-plum" type="submit" disabled={creating}>
+            {creating ? "Creating…" : "Create role"}
+          </button>
+        </form>
+      </details>
+
       <div className="admin-form">
         <label>
           Role
-          <select value={role} onChange={(event) => setRole(event.target.value as RoleSlug)}>
-            {ROLE_SLUGS.map((slug) => (
-              <option key={slug} value={slug}>
-                {ROLE_LABELS[slug]}
+          <select
+            value={role}
+            onChange={(event) => {
+              setRole(event.target.value);
+              setRenaming(false);
+            }}
+          >
+            {roles.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {`${item.name}${item.builtIn ? "" : " (custom)"} · ${item.user_count} ${item.user_count === 1 ? "person" : "people"}`}
               </option>
             ))}
           </select>
         </label>
+        {current?.description ? <p className="admin-help">{current.description}</p> : null}
+        {current && !current.builtIn ? (
+          renaming ? (
+            <form className="admin-stack" onSubmit={renameRole}>
+              <label>
+                Role name
+                <input name="name" defaultValue={current.name} required minLength={2} maxLength={60} />
+              </label>
+              <label>
+                What this role is for
+                <input name="description" defaultValue={current.description} maxLength={240} />
+              </label>
+              <div className="admin-piece-actions">
+                <button className="btn btn-plum" type="submit">
+                  Save role details
+                </button>
+                <button className="btn btn-ghost" type="button" onClick={() => setRenaming(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="admin-piece-actions">
+              <button className="btn btn-ghost" type="button" onClick={() => setRenaming(true)}>
+                Rename
+              </button>
+              <button
+                className="btn admin-danger"
+                type="button"
+                onClick={deleteRole}
+                disabled={current.user_count > 0}
+              >
+                Delete role
+              </button>
+              {current.user_count > 0 ? (
+                <span className="admin-help">
+                  To delete it, first give its {current.user_count} {current.user_count === 1 ? "person" : "people"}{" "}
+                  another role under People.
+                </span>
+              ) : null}
+            </div>
+          )
+        ) : null}
         {role === "super_admin" ? (
           <p className="admin-note">Super Admin always has every permission. Those boxes cannot be turned off.</p>
         ) : (
@@ -151,7 +305,7 @@ export default function RolesPage() {
       </div>
       <div className="admin-toolbar">
         <button className="btn btn-plum" type="button" onClick={save} disabled={role === "super_admin"}>
-          Save {ROLE_LABELS[role]}
+          Save {roleName}
         </button>
       </div>
     </div>

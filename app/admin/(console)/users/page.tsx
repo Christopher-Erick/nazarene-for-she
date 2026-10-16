@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { adminFetch } from "@/components/admin/adminFetch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { ROLE_LABELS, ASSIGNABLE_ROLE_SLUGS } from "@/lib/cms/permissions";
 
 type User = {
   id: string;
@@ -25,11 +24,13 @@ export default function UsersPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [savingProfile, setSavingProfile] = useState(false);
   const [viewerIsSuperAdmin, setViewerIsSuperAdmin] = useState(false);
+  const [roles, setRoles] = useState<{ slug: string; name: string }[]>([]);
   const [savingPassword, setSavingPassword] = useState(false);
 
   function applyList(data: Record<string, unknown>) {
     setItems((data.items as User[]) ?? []);
     setViewerIsSuperAdmin(data.viewerIsSuperAdmin === true);
+    setRoles((data.roles as { slug: string; name: string }[]) ?? []);
   }
 
   async function load() {
@@ -171,10 +172,10 @@ export default function UsersPage() {
         </label>
         <label>
           Role
-          <select name="role" defaultValue="member">
-            {ASSIGNABLE_ROLE_SLUGS.map((slug) => (
-              <option key={slug} value={slug}>
-                {ROLE_LABELS[slug]}
+          <select name="role" defaultValue="member" key={roles.length}>
+            {roles.map((role) => (
+              <option key={role.slug} value={role.slug}>
+                {role.name}
               </option>
             ))}
           </select>
@@ -255,10 +256,10 @@ export default function UsersPage() {
                   <label>
                     Role
                     <select name="role" defaultValue={user.role}>
-                      {(user.role === "super_admin" ? ["super_admin", ...ASSIGNABLE_ROLE_SLUGS] : ASSIGNABLE_ROLE_SLUGS).map(
-                        (slug) => (
-                          <option key={slug} value={slug}>
-                            {ROLE_LABELS[slug as keyof typeof ROLE_LABELS]}
+                      {(user.role === "super_admin" ? [{ slug: "super_admin", name: "Super Admin" }, ...roles] : roles).map(
+                        (role) => (
+                          <option key={role.slug} value={role.slug}>
+                            {role.name}
                           </option>
                         ),
                       )}

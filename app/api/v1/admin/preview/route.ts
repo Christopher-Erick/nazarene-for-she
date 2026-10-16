@@ -1,6 +1,6 @@
 import { apiError, requireDb, verifyMutationCsrf } from "@/lib/cms/guard";
 import { clearPreviewCookie, isSuperAdmin, loadAuth, previewCookie, readCookie, SESSION_COOKIE } from "@/lib/cms/auth";
-import { ASSIGNABLE_ROLE_SLUGS } from "@/lib/cms/permissions";
+import { isAssignableRole } from "@/lib/cms/roles";
 import { audit } from "@/lib/cms/audit";
 import { isSecureRequest, parseBody, requestIp } from "@/lib/cms/http";
 import { jsonNoStore } from "@/lib/security";
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   const body = await parseBody(request);
   if (!body.ok) return body.response;
   const role = String(body.data.role ?? "");
-  if (!(ASSIGNABLE_ROLE_SLUGS as readonly string[]).includes(role)) return apiError(400, "Unknown role.");
+  if (!(await isAssignableRole(real.db, role))) return apiError(400, "Unknown role.");
 
   await audit({
     db: real.db,

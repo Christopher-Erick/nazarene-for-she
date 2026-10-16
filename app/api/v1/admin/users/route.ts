@@ -7,7 +7,7 @@ import { isHiddenAccountRole, visibleAccounts } from "@/lib/cms/rbac";
 import { jsonNoStore } from "@/lib/security";
 import { parseBody, requestIp } from "@/lib/cms/http";
 import { audit } from "@/lib/cms/audit";
-import { ROLE_SLUGS, type RoleSlug } from "@/lib/cms/permissions";
+import { isAssignableRole, listAssignableRoles } from "@/lib/cms/roles";
 import { isPublicContactEmail } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -48,7 +48,8 @@ export async function GET(request: Request) {
   if (!gated.ok) return gated.response;
   const rows = await queryAll<UserRow>(gated.ctx.db, `${LIST_SQL} ORDER BY u.name ASC`);
   const items = visibleAccounts(gated.ctx.auth, rows).map((row) => publicUser(row, gated.ctx.auth.user.id));
-  return jsonNoStore({ ok: true, items, viewerIsSuperAdmin: isSuperAdmin(gated.ctx.auth) });
+  const roles = (await listAssignableRoles(gated.ctx.db)).map((role) => ({ slug: role.slug, name: role.name }));
+  return jsonNoStore({ ok: true, items, roles, viewerIsSuperAdmin: isSuperAdmin(gated.ctx.auth) });
 }
 
 export async function POST(request: Request) {
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
   const email = String(body.data.email ?? "").toLowerCase().trim();
   const name = String(body.data.name ?? "").trim().slice(0, 120);
   const password = String(body.data.password ?? "");
-  const role = String(body.data.role ?? "member") as RoleSlug;
+  const role = String(body.data.role ?? "member");
 
   if (!name || !isPublicContactEmail(email)) {
     return apiError(400, "A valid name and email are required.");
@@ -68,10 +69,7 @@ export async function POST(request: Request) {
   if (!passwordMeetsPolicy(password)) {
     return apiError(400, "Password must be at least 14 characters and include upper, lower, number, and symbol.");
   }
-  if (!ROLE_SLUGS.includes(role)) return apiError(400, "Unknown role.");
-  if (role === "super_admin" && !isSuperAdmin(gated.ctx.auth)) {
-    return apiError(400, "Unknown role.");
-  }
+  if (!(await isAssignableRole(gated.ctx.db, role))) return apiError(400, "Unknown role.");
 
   const exists = await queryFirst<{ id: string }>(gated.ctx.db, "SELECT id FROM users WHERE email = ?", email);
   if (exists) return apiError(409, "That email is already in use.");
@@ -126,8 +124,8 @@ export async function PATCH(request: Request) {
   }
 
   const nextRole = body.data.role != null ? String(body.data.role) : current.role_slug;
-  if (!ROLE_SLUGS.includes(nextRole as RoleSlug)) return apiError(400, "Unknown role.");
-  if (nextRole === "super_admin" && !isSuperAdmin(gated.ctx.auth)) {
+  // Super Admin can only stay Super Admin here; nobody is promoted to it from the admin.
+  if (nextRole !== current.role_slug && !(await isAssignableRole(gated.ctx.db, nextRole))) {
     return apiError(400, "Unknown role.");
   }
   if (nextRole !== current.role_slug && !isSuperAdmin(gated.ctx.auth)) {
