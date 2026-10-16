@@ -1,6 +1,8 @@
 import { PageIntro } from "@/components/ui/PageIntro";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { publishedOrganization, publishedSitePage } from "@/lib/cms/public-content";
+import { LeadershipTeam } from "@/components/storytelling/LeadershipTeam";
+import { publishedLeadership, publishedOrganization, publishedSitePage } from "@/lib/cms/public-content";
+import { aboutContent as aboutDefaults } from "@/lib/data/about";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -11,7 +13,15 @@ export const metadata = pageMetadata({
 });
 
 export default async function AboutPage() {
-  const [aboutContent, page] = await Promise.all([publishedOrganization(), publishedSitePage("about")]);
+  const [aboutContent, page, team] = await Promise.all([
+    publishedOrganization(),
+    publishedSitePage("about"),
+    publishedLeadership(),
+  ]);
+  // With a team listed, the Leadership text becomes the team's introduction (unless it is still the
+  // placeholder) and the team gets its own section below.
+  const leadershipIntro =
+    aboutContent.leadership.body !== aboutDefaults.leadership.body ? aboutContent.leadership.body : "";
   const sections = [
     aboutContent.whoWeAre,
     aboutContent.ourStory,
@@ -19,7 +29,7 @@ export default async function AboutPage() {
     aboutContent.faith,
     aboutContent.community,
     aboutContent.sustainability,
-    aboutContent.leadership,
+    ...(team.length ? [] : [aboutContent.leadership]),
   ];
 
   return (
@@ -54,6 +64,8 @@ export default async function AboutPage() {
             </div>
           </aside>
         </div>
+
+        <LeadershipTeam members={team} intro={leadershipIntro} />
 
         <section className="mt-24">
           <h2 className="display-md">{aboutContent.objectives.title}</h2>

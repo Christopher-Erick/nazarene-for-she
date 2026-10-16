@@ -2,6 +2,7 @@ import { cache } from "react";
 import { getDb, queryAll, queryFirst } from "@/lib/cms/db";
 import { getPublishedBySlug, listPublished, parsePayload, type ContentRow } from "@/lib/cms/content";
 import { getSetting } from "@/lib/cms/settings";
+import { LEADERSHIP_SETTING_KEY, normalizeLeadership, type LeadershipMember } from "@/lib/cms/leadership";
 import { aboutContent } from "@/lib/data/about";
 import { donationIntro, donationMethods, type DonationMethod } from "@/lib/data/donation";
 import { events as staticEvents, type NfsEvent } from "@/lib/data/events";
@@ -362,6 +363,11 @@ export const publishedOrganization = cache(async function publishedOrganization(
     phone: text("phone", ""),
     whatsapp: String(stored.whatsapp ?? "").replace(/\D/g, ""),
   };
+});
+
+/** Leadership team for Why We Exist, in the order the admin arranged it. */
+export const publishedLeadership = cache(async function publishedLeadership(): Promise<LeadershipMember[]> {
+  return normalizeLeadership(await getSetting<unknown>(LEADERSHIP_SETTING_KEY, []));
 });
 
 export const publishedDonations = cache(async function publishedDonations() {

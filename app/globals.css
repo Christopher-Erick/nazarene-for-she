@@ -2826,3 +2826,148 @@ html.request-tray-open .site-footer {
     opacity: 1 !important;
   }
 }
+
+/* ---------- Leadership team (Why We Exist) ---------- */
+.leadership__grid {
+  display: grid;
+  gap: 2.5rem 2rem;
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .leadership__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .leadership__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* One or two people: keep cards portrait-sized instead of stretching across the page. */
+  .leadership__grid[data-count="1"] {
+    grid-template-columns: minmax(0, 22rem);
+  }
+  .leadership__grid[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 22rem));
+  }
+}
+
+.leader-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--nfs-line);
+  background: var(--nfs-surface);
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.leader-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 44px -28px color-mix(in srgb, var(--nfs-plum) 55%, transparent);
+}
+
+.leader-card__portrait {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--nfs-plum);
+}
+
+.leader-card__photo {
+  object-fit: cover;
+  object-position: 50% 30%;
+  transition: transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.leader-card:hover .leader-card__photo {
+  transform: scale(1.04);
+}
+
+/* Soft plum veil at the foot of the portrait so it settles into the card. */
+.leader-card__portrait::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  background: linear-gradient(to top, color-mix(in srgb, var(--nfs-plum) 55%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* No photo yet: woven plum tile with gold initials. */
+.leader-card__monogram {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--nfs-accent-soft) 7%, transparent) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--nfs-accent-soft) 5%, transparent) 0 2px, transparent 2px 9px),
+    radial-gradient(circle at 30% 20%, var(--nfs-primary), var(--nfs-plum) 72%);
+  color: var(--nfs-accent-soft);
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: clamp(3rem, 8vw, 4.75rem);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.leader-card__index {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.2rem 0.5rem;
+  background: color-mix(in srgb, var(--nfs-plum) 70%, transparent);
+  color: var(--nfs-accent-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.leader-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.leader-card__title {
+  color: var(--nfs-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.leader-card__name {
+  margin-top: 0.4rem;
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+
+.leader-card__thread {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin: 1rem 0;
+  background: linear-gradient(90deg, var(--nfs-accent), color-mix(in srgb, var(--nfs-accent) 0%, transparent));
+}
+
+.leader-card__bio {
+  color: var(--nfs-muted);
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leader-card,
+  .leader-card__photo {
+    transition: none;
+  }
+  .leader-card:hover,
+  .leader-card:hover .leader-card__photo {
+    transform: none;
+  }
+}

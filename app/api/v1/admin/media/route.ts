@@ -1,21 +1,12 @@
 import { requirePermission, apiError } from "@/lib/cms/guard";
-import { getMediaBucket } from "@/lib/cms/db";
-import { queryAll, run, newId, nowMs } from "@/lib/cms/db";
+import { queryAll, run, nowMs } from "@/lib/cms/db";
+import { storeImage } from "@/lib/cms/media-store";
 import { jsonNoStore } from "@/lib/security";
 import { audit } from "@/lib/cms/audit";
 import { requestIp } from "@/lib/cms/http";
 import { slugify } from "@/lib/cms/sanitize";
 
 export const runtime = "nodejs";
-
-const ALLOWED: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-  "image/gif": "gif",
-  "image/avif": "avif",
-};
-const MAX_BYTES = 8 * 1024 * 1024;
 
 export async function GET(request: Request) {
   const gated = await requirePermission(request, "media.view");
@@ -34,50 +25,18 @@ export async function POST(request: Request) {
 
   const form = await request.formData();
   const file = form.get("file");
-  if (!(file instanceof File)) return apiError(400, "A file is required.");
-  if (file.size > MAX_BYTES) return apiError(400, "Files must be 8MB or smaller.");
-  const mime = file.type;
-  const ext = ALLOWED[mime];
-  if (!ext) return apiError(400, "Only JPEG, PNG, WebP, GIF, and AVIF images are allowed.");
-  const name = file.name.toLowerCase();
-  if (name.endsWith(".svg") || name.endsWith(".html") || name.endsWith(".js") || name.includes("\0")) {
-    return apiError(400, "That file type is not allowed.");
-  }
-
-  const bucket = await getMediaBucket();
-  const id = newId();
-  const key = `cms/${new Date().getUTCFullYear()}/${id}.${ext}`;
-  const bytes = new Uint8Array(await file.arrayBuffer());
-
-  let publicUrl = `/api/v1/public/media/${id}`;
-  if (bucket) {
-    await bucket.put(key, bytes, { httpMetadata: { contentType: mime } });
-  } else {
-    publicUrl = "";
-  }
-
-  const title = String(form.get("title") ?? file.name).slice(0, 160);
-  await run(
-    gated.ctx.db,
-    `INSERT INTO media (
-      id, title, description, alt_text, category, mime_type, extension, size_bytes, storage_key, public_url,
-      associated_type, associated_id, uploaded_by, created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    id,
-    title,
-    String(form.get("description") ?? "").slice(0, 400),
-    String(form.get("alt") ?? "").slice(0, 200),
-    String(form.get("category") ?? "").slice(0, 80),
-    mime,
-    ext,
-    file.size,
-    key,
-    publicUrl,
-    String(form.get("associatedType") ?? "").slice(0, 40),
-    String(form.get("associatedId") ?? "").slice(0, 80),
-    gated.ctx.auth.user.id,
-    nowMs(),
-  );
+  const stored = await storeImage(gated.ctx.db, file, {
+    userId: gated.ctx.auth.user.id,
+    title: String(form.get("title") ?? ""),
+    description: String(form.get("description") ?? ""),
+    alt: String(form.get("alt") ?? ""),
+    category: String(form.get("category") ?? ""),
+    associatedType: String(form.get("associatedType") ?? ""),
+    associatedId: String(form.get("associatedId") ?? ""),
+  });
+  if (!stored.ok) return apiError(400, stored.message);
+  const { id, title, publicUrl } = stored.image;
+  const upload = file as File;
 
   await audit({
     db: gated.ctx.db,
@@ -85,11 +44,11 @@ export async function POST(request: Request) {
     action: "MEDIA_UPLOADED",
     resourceType: "media",
     resourceId: id,
-    metadata: { mime, size: file.size, name: slugify(file.name) },
+    metadata: { mime: upload.type, size: upload.size, name: slugify(upload.name) },
     ip: requestIp(request),
   });
 
-  if (!bucket) {
+  if (!stored.image.stored) {
     return jsonNoStore(
       { ok: true, item: { id, title, publicUrl }, warning: "R2 is not bound. Metadata was stored, but the file was not saved." },
       { status: 201 },
