@@ -4,6 +4,14 @@ import { footerNav } from "@/lib/data/navigation";
 import { site } from "@/lib/data/site";
 import { isHttpsPublicUrl } from "@/lib/security";
 
+const SOCIAL_NAMES: Record<string, string> = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  linkedin: "LinkedIn",
+  youtube: "YouTube",
+};
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const social = Object.entries(site.social).filter(
@@ -44,11 +52,11 @@ export function SiteFooter() {
                   <a
                     key={name}
                     href={href}
-                    className="capitalize"
                     rel="noopener noreferrer"
                     target="_blank"
+                    aria-label={`Nazarene for She on ${SOCIAL_NAMES[name] ?? name} (opens in a new tab)`}
                   >
-                    {name}
+                    {SOCIAL_NAMES[name] ?? name}
                   </a>
                 ))
               : footerNav.legal.map((item) => (

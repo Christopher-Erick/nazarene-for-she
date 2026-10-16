@@ -44,12 +44,13 @@ export const site = {
     location: "Congo, Kawangware, Nairobi County, Kenya.",
     locationPlaceholder: false,
   },
+  // Official accounts (confirmed against each profile, October 2026). An env value overrides one.
   social: {
-    instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "",
-    facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "",
-    linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "",
-    youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL ?? "",
-    tiktok: process.env.NEXT_PUBLIC_TIKTOK_URL ?? "",
+    facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/NazareneforShe",
+    instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/nazareneforshe/",
+    tiktok: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://www.tiktok.com/@nazareneforshe",
+    linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL || "",
+    youtube: process.env.NEXT_PUBLIC_YOUTUBE_URL || "",
   },
   keywords: [
     "Nazarene for She",

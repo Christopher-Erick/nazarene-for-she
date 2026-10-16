@@ -26,6 +26,8 @@ export function JsonLd() {
       "@type": "AdministrativeArea",
       name: "Kawangware, Nairobi County, Kenya",
     },
+    // Tells search engines these profiles belong to the organisation.
+    sameAs: Object.values(site.social).filter((href) => href.startsWith("https://")),
     knowsAbout: [
       "Menstrual health Kenya",
       "Period poverty",
