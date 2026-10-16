@@ -2,10 +2,15 @@ import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
 
 export function JsonLd() {
-  const data = {
-    "@context": "https://schema.org",
+  const organization = {
     "@type": "NGO",
+    "@id": `${site.url}/#organization`,
     name: site.name,
+    logo: { "@type": "ImageObject", url: `${site.url}/images/logo.png`, width: 407, height: 296 },
+    image: `${site.url}/opengraph-image`,
+    ...(site.contact.email
+      ? { contactPoint: { "@type": "ContactPoint", contactType: "general enquiries", email: site.contact.email, areaServed: "KE", availableLanguage: ["en", "sw"] } }
+      : {}),
     legalName: site.legalName,
     alternateName: ["Nazarene for SHE", site.abbreviation],
     slogan: site.tagline,
@@ -39,6 +44,16 @@ export function JsonLd() {
       "Dignity kits",
     ],
   };
+
+  const website = {
+    "@type": "WebSite",
+    "@id": `${site.url}/#website`,
+    url: site.url,
+    name: site.name,
+    inLanguage: "en-KE",
+    publisher: { "@id": `${site.url}/#organization` },
+  };
+  const data = { "@context": "https://schema.org", "@graph": [organization, website] };
 
   return (
     <script

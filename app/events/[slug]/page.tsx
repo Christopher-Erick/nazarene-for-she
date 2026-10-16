@@ -17,6 +17,7 @@ import {
 } from "@/lib/events/dates";
 import { escapeJsonForScript } from "@/lib/security";
 import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbData } from "@/components/seo/BreadcrumbData";
 
 export const revalidate = 3600;
 
@@ -34,7 +35,7 @@ export async function generateMetadata({
   if (!event) return {};
   return pageMetadata({
     title: event.title,
-    description: event.summary,
+    description: `${event.summary} ${event.location ? `At ${event.location}, Nairobi.` : ""}`,
     path: `/events/${event.slug}`,
     image: event.visual,
   });
@@ -86,6 +87,7 @@ export default async function EventPage({
   return (
     <>
       <TrackView event={analyticsEvents.eventViewed} id={event.slug} />
+      <BreadcrumbData trail={[["Events", "/events"], [event.title, `/events/${event.slug}`]]} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}

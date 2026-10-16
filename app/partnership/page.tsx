@@ -5,7 +5,7 @@ import { pagePayload } from "@/lib/cms/shapes";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Partnership",
+  title: "Partner With Us: NGOs, Churches, Donors",
   description:
     "Churches, NGOs, donors and institutions can partner with Nazarene for She to build pathways to dignity, skills and independence in Kenya.",
   path: "/partnership",

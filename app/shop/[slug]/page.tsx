@@ -6,6 +6,7 @@ import { garments as staticGarments, shop } from "@/lib/data/shop";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
 import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbData } from "@/components/seo/BreadcrumbData";
 import { isReservedShopSlug } from "@/lib/shop/types";
 
 export async function generateStaticParams() {
@@ -27,8 +28,8 @@ export async function generateMetadata({
   const category = await publishedCategory(slug);
   if (!category) return {};
   return pageMetadata({
-    title: category.name,
-    description: category.summary,
+    title: `Handmade ${category.name} from Kawangware`,
+    description: `${category.summary} Handmade in the Nazarene for She workshop in Kawangware, Nairobi.`,
     path: `${shop.path}/${category.slug}`,
   });
 }
@@ -57,6 +58,7 @@ export default async function ShopCategoryPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}
       />
+      <BreadcrumbData trail={[["Shop", "/shop"], [category.name, `/shop/${category.slug}`]]} />
       <ShopFloor categorySlug={category.slug} title={category.name} />
     </>
   );

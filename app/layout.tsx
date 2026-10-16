@@ -24,13 +24,17 @@ const fraunces = localFont({
   preload: false,
 });
 
+const HOME_TITLE = `${site.name} | Empowering Girls in Kawangware, Nairobi`;
+const HOME_DESCRIPTION =
+  "Nazarene for She keeps girls in Kawangware, Nairobi in school with sanitary pads, menstrual health education, mentorship and tailoring skills.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
+    default: HOME_TITLE,
     template: `%s — ${site.name}`,
   },
-  description: site.description,
+  description: HOME_DESCRIPTION,
   keywords: [...site.keywords],
   applicationName: site.name,
   authors: [{ name: site.name }],
@@ -43,8 +47,8 @@ export const metadata: Metadata = {
     locale: site.locale,
     url: site.url,
     siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
-    description: site.tenSecondStory,
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     images: [
       {
         url: "/opengraph-image",
@@ -56,8 +60,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
-    description: site.tenSecondStory,
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     images: ["/opengraph-image"],
   },
   robots: {

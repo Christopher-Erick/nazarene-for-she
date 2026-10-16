@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Donate: Keep a Girl in School",
   description:
-    "Give toward dignity kits, menstrual health, vocational training, entrepreneurship or general support. M-Pesa, bank and M-Changa details are published when the organisation confirms them.",
+    "Donate to Nazarene for She: fund sanitary pads, dignity kits, menstrual health and vocational training for girls in Kawangware, Nairobi, Kenya.",
   path: "/donate",
 });
 

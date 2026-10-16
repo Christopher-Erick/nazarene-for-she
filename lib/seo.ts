@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/data/site";
+import { fitDescription } from "@/lib/seo-text";
+
+export { fitDescription };
 
 export const defaultTitle = {
   default: `${site.name} — ${site.tagline}`,
   template: `%s — ${site.name}`,
 };
+
+/** BreadcrumbList for search results: [["Home", "/"], ["Programmes", "/programs"], ...]. */
+export function breadcrumbJsonLd(trail: Array<[name: string, path: string]>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map(([name, path], index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name,
+      item: `${site.url}${path === "/" ? "" : path}`,
+    })),
+  };
+}
 
 /** The site-wide share card (app/opengraph-image.tsx). */
 const DEFAULT_SHARE_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: `${site.name} — ${site.tagline}` };
@@ -29,12 +46,12 @@ export function pageMetadata({
   const images = image ? [{ url: image, alt: title }] : [DEFAULT_SHARE_IMAGE];
   return {
     title,
-    description,
+    description: fitDescription(description),
     alternates: noindex ? {} : { canonical: url },
     ...(noindex ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title: `${title} | ${site.name}`,
-      description,
+      description: fitDescription(description, 200),
       url,
       type: "website",
       siteName: site.name,
@@ -44,7 +61,7 @@ export function pageMetadata({
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${site.name}`,
-      description,
+      description: fitDescription(description, 200),
       images: images.map((item) => item.url),
     },
   };

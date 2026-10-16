@@ -6,9 +6,9 @@ import { aboutContent as aboutDefaults } from "@/lib/data/about";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Why We Exist",
+  title: "About Us: Girls' Empowerment in Nairobi",
   description:
-    "Nazarene for She is a community-based organisation in Congo, Kawangware, Nairobi. Its mission is to empower young girls through sanitary pads, vocational skills, and economic opportunity.",
+    "Nazarene for She is a community organisation in Kawangware, Nairobi, ending period poverty with sanitary pads, education, mentorship and vocational skills.",
   path: "/about",
 });
 

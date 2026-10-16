@@ -11,9 +11,9 @@ import { pageMetadata } from "@/lib/seo";
 export const revalidate = 3600;
 
 export const metadata = pageMetadata({
-  title: "Events",
+  title: "Events: Pad Drives & Mentorship in Nairobi",
   description:
-    "Upcoming pad distributions, mentorship gatherings and community events with Nazarene for She in Kawangware, Nairobi.",
+    "Upcoming sanitary pad distributions, mentorship gatherings and skills workshops with Nazarene for She in Kawangware, Nairobi. Come along, volunteer or give.",
   path: "/events",
 });
 

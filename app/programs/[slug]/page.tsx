@@ -9,6 +9,7 @@ import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { programs } from "@/lib/data/programs";
 import { publishedProgram, publishedStories } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbData } from "@/components/seo/BreadcrumbData";
 import { site } from "@/lib/data/site";
 import { escapeJsonForScript } from "@/lib/security";
 
@@ -26,7 +27,7 @@ export async function generateMetadata({
   if (!program) return {};
   return pageMetadata({
     title: program.name,
-    description: program.summary,
+    description: `${program.summary} A Nazarene for She programme for girls in Kawangware, Nairobi.`,
     path: `/programs/${program.slug}`,
     image: program.visual,
   });
@@ -54,6 +55,7 @@ export default async function ProgramPage({
   return (
     <>
       <TrackView event={analyticsEvents.programViewed} id={program.slug} />
+      <BreadcrumbData trail={[["Programmes", "/programs"], [program.name, `/programs/${program.slug}`]]} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonForScript(jsonLd) }}

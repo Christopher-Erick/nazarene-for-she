@@ -4,6 +4,7 @@ import { ShopProductView } from "@/components/shop/ShopProductView";
 import { publishedCategory, publishedProduct, publishedProducts } from "@/lib/cms/public-content";
 import { productHref, staticProducts } from "@/lib/shop/catalog";
 import { pageMetadata } from "@/lib/seo";
+import { BreadcrumbData } from "@/components/seo/BreadcrumbData";
 
 export async function generateStaticParams() {
   const live = await publishedProducts();
@@ -24,7 +25,7 @@ export async function generateMetadata({
   if (!item) return {};
   return pageMetadata({
     title: item.name,
-    description: item.summary,
+    description: `${item.summary} Handmade in the Nazarene for She workshop in Kawangware, Nairobi.`,
     path: productHref(item),
   });
 }
@@ -43,12 +44,21 @@ export default async function ShopProductPage({
     .slice(0, 3);
 
   return (
-    <ShopProductView
-      product={item}
-      category={category}
-      related={related}
-      backHref={`/shop/${item.categorySlug}`}
-      backLabel={`Back to ${category?.name ?? "this category"}`}
-    />
+    <>
+      <BreadcrumbData
+        trail={[
+          ["Shop", "/shop"],
+          [category?.name ?? "Category", `/shop/${item.categorySlug}`],
+          [item.name, productHref(item)],
+        ]}
+      />
+      <ShopProductView
+        product={item}
+        category={category}
+        related={related}
+        backHref={`/shop/${item.categorySlug}`}
+        backLabel={`Back to ${category?.name ?? "this category"}`}
+      />
+    </>
   );
 }

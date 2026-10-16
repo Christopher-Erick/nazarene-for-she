@@ -7,9 +7,9 @@ import { escapeJsonForScript } from "@/lib/security";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: shop.name,
+  title: "Shop Handmade Kenyan Garments",
   description:
-    "Buy dresses, skirts, blouses, palazzos, kimonos, uniforms, totes, kitenges and more made in the Nazarene for She workshop in Kawangware.",
+    "Buy handmade dresses, skirts, kitenge, school uniforms and tote bags sewn by young women in the Nazarene for She workshop in Kawangware, Nairobi.",
   path: shop.path,
 });
 

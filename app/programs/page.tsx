@@ -5,9 +5,9 @@ import { publishedPrograms } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "How We Empower",
+  title: "Programmes for Girls in Kawangware",
   description:
-    "From sanitary pads to mentorship, tailoring and enterprise — how Nazarene for She walks with girls and young women in Kawangware, Nairobi.",
+    "Menstrual health, dignity kits, mentorship, tailoring and enterprise: how Nazarene for She helps girls in Kawangware, Nairobi stay in school and thrive.",
   path: "/programs",
 });
 

@@ -4,7 +4,7 @@ import { publishedImpact } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Impact",
+  title: "Our Impact: 600+ Girls Supported",
   description:
     "Nazarene for She currently supports 600+ girls. Further impact figures are published only when the organisation has verified them.",
   path: "/impact",

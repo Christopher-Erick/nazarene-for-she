@@ -6,9 +6,9 @@ import { involvePathsFrom } from "@/lib/cms/shapes";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Get Involved",
+  title: "Get Involved: Volunteer, Mentor or Give",
   description:
-    "Donate, buy a garment from the workshop, mentor, pray, partner or give resources. Walk with Nazarene for She as girls and young women move from dignity to independence.",
+    "Donate, mentor, pray, partner or shop handmade garments. Help girls in Kawangware, Nairobi move from period poverty to dignity and independence.",
   path: "/get-involved",
 });
 

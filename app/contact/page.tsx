@@ -6,7 +6,7 @@ import { site } from "@/lib/data/site";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Start a Conversation",
+  title: "Contact Us",
   description: site.contact.email
     ? `Contact Nazarene for She in Kawangware, Nairobi. Email ${site.contact.email} for partnership, mentorship, donations or general questions.`
     : "Contact Nazarene for She in Kawangware, Nairobi for partnership, mentorship, donations or general questions.",

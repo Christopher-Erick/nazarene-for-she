@@ -6,9 +6,9 @@ import { publishedStories } from "@/lib/cms/public-content";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Stories",
+  title: "Stories of Girls in Kawangware",
   description:
-    "Real stories from Nazarene for She are published only with explicit consent. Placeholders mark where those stories will live.",
+    "Stories of girls and young women in Kawangware, Nairobi, told only with their consent: what they face and how dignity, faith and skills change their path.",
   path: "/stories",
 });
 
