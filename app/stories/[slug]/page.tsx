@@ -30,6 +30,8 @@ export async function generateMetadata({
     title: story.firstName,
     description: `A story frame from ${site.name}. Published stories appear only with consent.`,
     path: `/stories/${story.slug}`,
+    // Placeholder frames are thin content: index a story only once it is real and consented.
+    noindex: story.status === "placeholder",
   });
 }
 

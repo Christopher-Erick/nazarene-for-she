@@ -17,6 +17,7 @@ export const metadata = pageMetadata({
   title: "Order received",
   description: "Your workshop order reference and how to pay.",
   path: `${shop.path}/order`,
+  noindex: true,
 });
 
 export default async function ShopOrderPage({

@@ -10,6 +10,7 @@ const responses = [
     title: "Menstrual health",
     body: "Knowledge about her body, her cycle, and her right to stay in school.",
     image: libraryImages.menstrualHealth,
+    alt: "Girls in Kawangware learning about menstrual health with Nazarene for She.",
   },
   {
     href: "/programs/dignity-kits",
@@ -17,6 +18,7 @@ const responses = [
     title: "Dignity kits",
     body: "Pads, underwear and hygiene — access without humiliation.",
     image: libraryImages.dignityKit,
+    alt: "A Nazarene for She dignity kit with sanitary pads and essentials for a girl.",
   },
   {
     href: "/programs/mentorship",
@@ -24,6 +26,7 @@ const responses = [
     title: "Mentorship",
     body: "Someone walking beside her as she makes hard, ordinary decisions.",
     image: libraryImages.mentorship,
+    alt: "A mentorship session with girls and young women in Kawangware, Nairobi.",
   },
   {
     href: "/programs/discipleship",
@@ -31,6 +34,7 @@ const responses = [
     title: "Community",
     body: "A gathering that holds faith, friendship and practical care together.",
     image: libraryImages.community,
+    alt: "The Nazarene for She community gathered together in Kawangware.",
   },
 ];
 
@@ -52,7 +56,7 @@ export function ResponseSection() {
                 <div className="photo-frame photo-frame--library relative aspect-[3/2] overflow-hidden">
                   <Image
                     src={item.image}
-                    alt=""
+                    alt={item.alt}
                     fill
                     sizes="(min-width: 640px) 45vw, 100vw"
                     className="library-photo object-cover object-center"

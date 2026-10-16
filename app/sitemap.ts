@@ -1,4 +1,11 @@
-import { publishedEvents, publishedGarments, publishedPrograms, publishedStories } from "@/lib/cms/public-content";
+import {
+  publishedEvents,
+  publishedGarments,
+  publishedProducts,
+  publishedPrograms,
+  publishedStories,
+} from "@/lib/cms/public-content";
+import { productHref } from "@/lib/shop/catalog";
 import { site } from "@/lib/data/site";
 
 export default async function sitemap() {
@@ -19,11 +26,12 @@ export default async function sitemap() {
   ];
 
   const now = new Date();
-  const [programs, stories, events, garments] = await Promise.all([
+  const [programs, stories, events, garments, products] = await Promise.all([
     publishedPrograms(),
     publishedStories(),
     publishedEvents(),
     publishedGarments(),
+    publishedProducts(),
   ]);
 
   return [
@@ -39,7 +47,14 @@ export default async function sitemap() {
       url: `${site.url}/shop/${garment.slug}`,
       lastModified: now,
     })),
-    ...stories.map((story) => ({
+    ...products.map((product) => ({
+      url: `${site.url}${productHref(product)}`,
+      lastModified: now,
+    })),
+    // Placeholder story frames are noindex, so they stay out of the sitemap too.
+    ...stories
+      .filter((story) => story.status !== "placeholder")
+      .map((story) => ({
       url: `${site.url}/stories/${story.slug}`,
       lastModified: now,
     })),

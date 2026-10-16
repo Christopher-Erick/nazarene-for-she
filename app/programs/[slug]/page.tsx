@@ -28,6 +28,7 @@ export async function generateMetadata({
     title: program.name,
     description: program.summary,
     path: `/programs/${program.slug}`,
+    image: program.visual,
   });
 }
 

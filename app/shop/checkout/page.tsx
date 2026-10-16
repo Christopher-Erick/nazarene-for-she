@@ -10,6 +10,7 @@ export const metadata = pageMetadata({
   title: "Checkout",
   description: "Place an order from the Kawangware workshop and pay through official channels.",
   path: `${shop.path}/checkout`,
+  noindex: true,
 });
 
 export default async function CheckoutPage() {

@@ -36,6 +36,7 @@ export async function generateMetadata({
     title: event.title,
     description: event.summary,
     path: `/events/${event.slug}`,
+    image: event.visual,
   });
 }
 
